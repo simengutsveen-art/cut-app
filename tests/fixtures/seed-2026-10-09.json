@@ -1,0 +1,2679 @@
+{
+  "schemaVersion": 1,
+  "seedVersion": "2026-10-09",
+  "generatedFrom": "12-ukers cut-plan (Claude Docs) + Cut-tracker.xlsx",
+  "disclaimer": "Næringsverdier er typiske verdier fra norske deklarasjoner (ca.). Priser er fra SeSum 9. okt. 2026 (priceSource=sesum-2026-10-09) eller anslag (priceSource=anslag). Ikke medisinske råd.",
+  "settings": {
+    "startDate": "2026-10-12",
+    "weeks": 12,
+    "person": {
+      "name": "Simen",
+      "age": 22,
+      "heightCm": 185,
+      "sex": "mann"
+    },
+    "startWeightKg": 80.2,
+    "startWaistCm": 92,
+    "goalWeightRangeKg": [
+      75,
+      76
+    ],
+    "goalWaistRangeCm": [
+      85,
+      87
+    ],
+    "kcalTarget": 2400,
+    "kcalTolerance": 100,
+    "kcalFloor": 2100,
+    "maintenanceEstimateKcal": 2850,
+    "bmrKcal": 1853,
+    "proteinTargetG": [
+      170,
+      190
+    ],
+    "fatTargetG": [
+      55,
+      70
+    ],
+    "carbTargetG": [
+      250,
+      290
+    ],
+    "fiberMinG": 30,
+    "waterL": [
+      2.5,
+      3.5
+    ],
+    "plannedLossKgPerWeek": 0.4,
+    "steps": [
+      {
+        "weeks": [
+          1,
+          1
+        ],
+        "daily": 7000,
+        "wednesday": 8000
+      },
+      {
+        "weeks": [
+          2,
+          2
+        ],
+        "daily": 8500,
+        "wednesday": 10000
+      },
+      {
+        "weeks": [
+          3,
+          12
+        ],
+        "daily": 10000,
+        "wednesday": 12000
+      }
+    ],
+    "dislikedFoods": [
+      "paprika",
+      "bønner",
+      "tomat"
+    ],
+    "stores": [
+      "Rema 1000",
+      "Kiwi",
+      "Coop Extra"
+    ],
+    "weeklySchedule": {
+      "1": "okt1",
+      "2": "okt2",
+      "3": "hvile",
+      "4": "okt3",
+      "5": "okt4",
+      "6": "okt5",
+      "7": "hvile"
+    },
+    "mealPrepDays": [
+      7,
+      3
+    ]
+  },
+  "ingredients": [
+    {
+      "id": "havregryn",
+      "name": "Havregryn",
+      "per100g": {
+        "kcal": 370,
+        "protein": 13,
+        "carbs": 58,
+        "fat": 7
+      },
+      "pack": {
+        "label": "Havregryn 1,1 kg (Bjørn)",
+        "grams": 1100,
+        "priceNok": 19.4,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "tørrvarer",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "lettmelk",
+      "name": "Lettmelk 0,5 %",
+      "per100g": {
+        "kcal": 37,
+        "protein": 3.5,
+        "carbs": 4.7,
+        "fat": 0.5
+      },
+      "pack": {
+        "label": "Lettmelk 1,75 L",
+        "grams": 1750,
+        "priceNok": 29.9,
+        "store": "Rema / Extra",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "meieri",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "whey",
+      "name": "Proteinpulver (whey)",
+      "per100g": {
+        "kcal": 380,
+        "protein": 77,
+        "carbs": 6,
+        "fat": 5
+      },
+      "pack": {
+        "label": "Proteinpulver 1 kg",
+        "grams": 1000,
+        "priceNok": 400.0,
+        "store": "–",
+        "priceSource": "anslag"
+      },
+      "category": "tilskudd",
+      "dislikeTags": [],
+      "unit": {
+        "name": "scoop",
+        "grams": 30
+      },
+      "isPantryStaple": true
+    },
+    {
+      "id": "egg",
+      "name": "Egg",
+      "per100g": {
+        "kcal": 140,
+        "protein": 12.5,
+        "carbs": 0.5,
+        "fat": 10
+      },
+      "pack": {
+        "label": "Egg 18 stk (Prima)",
+        "grams": 1080,
+        "priceNok": 64.3,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "meieri",
+      "dislikeTags": [],
+      "unit": {
+        "name": "stk",
+        "grams": 60
+      },
+      "isPantryStaple": false
+    },
+    {
+      "id": "banan",
+      "name": "Banan",
+      "per100g": {
+        "kcal": 88,
+        "protein": 1.1,
+        "carbs": 20,
+        "fat": 0.3
+      },
+      "pack": {
+        "label": "Bananer per kg",
+        "grams": 1000,
+        "priceNok": 25.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "frukt og grønt",
+      "dislikeTags": [],
+      "unit": {
+        "name": "stk",
+        "grams": 120
+      },
+      "isPantryStaple": false
+    },
+    {
+      "id": "kyllingfilet",
+      "name": "Kyllingfilet",
+      "per100g": {
+        "kcal": 105,
+        "protein": 23,
+        "carbs": 0,
+        "fat": 1.5
+      },
+      "pack": {
+        "label": "Kyllingfilet First Price 1,4 kg",
+        "grams": 1400,
+        "priceNok": 164.8,
+        "store": "Kiwi",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "kjøtt",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "kyllingkjottdeig",
+      "name": "Kyllingkjøttdeig",
+      "per100g": {
+        "kcal": 155,
+        "protein": 18,
+        "carbs": 0,
+        "fat": 9
+      },
+      "pack": {
+        "label": "Kyllingkjøttdeig 600 g (Prima / First Price)",
+        "grams": 600,
+        "priceNok": 66.4,
+        "store": "Rema / Kiwi",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "kjøtt",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "ris",
+      "name": "Ris (rå)",
+      "per100g": {
+        "kcal": 350,
+        "protein": 7,
+        "carbs": 78,
+        "fat": 0.6
+      },
+      "pack": {
+        "label": "Middagsris 2 kg",
+        "grams": 2000,
+        "priceNok": 35.9,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "tørrvarer",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "pasta",
+      "name": "Pasta (rå)",
+      "per100g": {
+        "kcal": 355,
+        "protein": 12,
+        "carbs": 72,
+        "fat": 1.5
+      },
+      "pack": {
+        "label": "Pasta 1 kg (Prima)",
+        "grams": 1000,
+        "priceNok": 20.9,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "tørrvarer",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "poteter",
+      "name": "Poteter",
+      "per100g": {
+        "kcal": 75,
+        "protein": 2,
+        "carbs": 16,
+        "fat": 0.1
+      },
+      "pack": {
+        "label": "Poteter per kg",
+        "grams": 1000,
+        "priceNok": 25.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "frukt og grønt",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "brokkoli_frossen",
+      "name": "Brokkoli, frossen",
+      "per100g": {
+        "kcal": 34,
+        "protein": 3,
+        "carbs": 4,
+        "fat": 0.4
+      },
+      "pack": {
+        "label": "Frossen brokkoli 450 g",
+        "grams": 450,
+        "priceNok": 21.9,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "frys",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "blomkalblanding",
+      "name": "Blomkålblanding, frossen",
+      "per100g": {
+        "kcal": 30,
+        "protein": 2,
+        "carbs": 4,
+        "fat": 0.3
+      },
+      "pack": {
+        "label": "Blomkålblanding 500 g",
+        "grams": 500,
+        "priceNok": 24.9,
+        "store": "Extra",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "frys",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "erter",
+      "name": "Erter, frosne",
+      "per100g": {
+        "kcal": 70,
+        "protein": 5,
+        "carbs": 10,
+        "fat": 0.5
+      },
+      "pack": {
+        "label": "Erter 350 g (First Price)",
+        "grams": 350,
+        "priceNok": 17.4,
+        "store": "Kiwi",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "frys",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "mais",
+      "name": "Maiskorn (avrent)",
+      "per100g": {
+        "kcal": 80,
+        "protein": 2.5,
+        "carbs": 15,
+        "fat": 1
+      },
+      "pack": {
+        "label": "Maiskorn 340 g",
+        "grams": 340,
+        "priceNok": 12.9,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "tørrvarer",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "lok",
+      "name": "Gul løk",
+      "per100g": {
+        "kcal": 40,
+        "protein": 1,
+        "carbs": 8,
+        "fat": 0.1
+      },
+      "pack": {
+        "label": "Gul løk per kg",
+        "grams": 1000,
+        "priceNok": 25.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "frukt og grønt",
+      "dislikeTags": [],
+      "unit": {
+        "name": "stk",
+        "grams": 150
+      },
+      "isPantryStaple": false
+    },
+    {
+      "id": "skyr",
+      "name": "Skyr naturell",
+      "per100g": {
+        "kcal": 60,
+        "protein": 11,
+        "carbs": 4,
+        "fat": 0.2
+      },
+      "pack": {
+        "label": "Skyr naturell 450 g",
+        "grams": 450,
+        "priceNok": 32.9,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "meieri",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "grovbrod",
+      "name": "Grovbrød",
+      "per100g": {
+        "kcal": 240,
+        "protein": 10,
+        "carbs": 40,
+        "fat": 3.5
+      },
+      "pack": {
+        "label": "Grovbrød 750 g",
+        "grams": 750,
+        "priceNok": 17.9,
+        "store": "Rema / Kiwi",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "brød",
+      "dislikeTags": [],
+      "unit": {
+        "name": "skive",
+        "grams": 40
+      },
+      "isPantryStaple": false
+    },
+    {
+      "id": "olje",
+      "name": "Rapsolje",
+      "per100g": {
+        "kcal": 900,
+        "protein": 0,
+        "carbs": 0,
+        "fat": 100
+      },
+      "pack": {
+        "label": "Rapsolje 1 L",
+        "grams": 900,
+        "priceNok": 40.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "basis",
+      "dislikeTags": [],
+      "unit": {
+        "name": "ss",
+        "grams": 10
+      },
+      "isPantryStaple": true
+    },
+    {
+      "id": "jordbaer_frosne",
+      "name": "Jordbær, frosne",
+      "per100g": {
+        "kcal": 35,
+        "protein": 0.7,
+        "carbs": 7,
+        "fat": 0.3
+      },
+      "pack": {
+        "label": "Frosne jordbær 400 g (First Price)",
+        "grams": 400,
+        "priceNok": 24.9,
+        "store": "Kiwi",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "frys",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "lettost",
+      "name": "Lettost 16 % (Norvegia Lett)",
+      "per100g": {
+        "kcal": 270,
+        "protein": 30,
+        "carbs": 0,
+        "fat": 16
+      },
+      "pack": {
+        "label": "Norvegia Lett ca. 1 kg",
+        "grams": 1000,
+        "priceNok": 99.0,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "meieri",
+      "dislikeTags": [],
+      "isPantryStaple": true
+    },
+    {
+      "id": "tortilla",
+      "name": "Tortillalefse",
+      "per100g": {
+        "kcal": 300,
+        "protein": 8.5,
+        "carbs": 50,
+        "fat": 7
+      },
+      "pack": {
+        "label": "Tortillalefser 8 stk",
+        "grams": 320,
+        "priceNok": 30.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "brød",
+      "dislikeTags": [],
+      "unit": {
+        "name": "lefse",
+        "grams": 40
+      },
+      "isPantryStaple": false
+    },
+    {
+      "id": "lettromme",
+      "name": "Lettrømme",
+      "per100g": {
+        "kcal": 105,
+        "protein": 3.5,
+        "carbs": 4,
+        "fat": 8
+      },
+      "pack": {
+        "label": "Lettrømme 300 g",
+        "grams": 300,
+        "priceNok": 25.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "meieri",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "peanottsmor",
+      "name": "Peanøttsmør",
+      "per100g": {
+        "kcal": 620,
+        "protein": 26,
+        "carbs": 12,
+        "fat": 50
+      },
+      "pack": {
+        "label": "Peanøttsmør 350 g",
+        "grams": 350,
+        "priceNok": 40.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "basis",
+      "dislikeTags": [],
+      "isPantryStaple": true
+    },
+    {
+      "id": "cottage",
+      "name": "Cottage cheese",
+      "per100g": {
+        "kcal": 80,
+        "protein": 13,
+        "carbs": 2.5,
+        "fat": 2
+      },
+      "pack": {
+        "label": "Cottage cheese 400 g",
+        "grams": 400,
+        "priceNok": 30.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "meieri",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "eple",
+      "name": "Eple",
+      "per100g": {
+        "kcal": 52,
+        "protein": 0.3,
+        "carbs": 12,
+        "fat": 0.2
+      },
+      "pack": {
+        "label": "Epler 1 kg",
+        "grams": 1000,
+        "priceNok": 28.9,
+        "store": "Rema / Kiwi / Extra",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "frukt og grønt",
+      "dislikeTags": [],
+      "unit": {
+        "name": "stk",
+        "grams": 150
+      },
+      "isPantryStaple": false
+    },
+    {
+      "id": "matflote_lett",
+      "name": "Matfløte lett 10 %",
+      "per100g": {
+        "kcal": 120,
+        "protein": 3,
+        "carbs": 4,
+        "fat": 10
+      },
+      "pack": {
+        "label": "Matfløte lett 10 % 3 dl",
+        "grams": 300,
+        "priceNok": 23.4,
+        "store": "Kiwi",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "meieri",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "agurk",
+      "name": "Agurk",
+      "per100g": {
+        "kcal": 12,
+        "protein": 0.6,
+        "carbs": 2,
+        "fat": 0.1
+      },
+      "pack": {
+        "label": "Agurk 1 stk",
+        "grams": 350,
+        "priceNok": 27.9,
+        "store": "Rema",
+        "priceSource": "sesum-2026-10-09"
+      },
+      "category": "frukt og grønt",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "brun_saus",
+      "name": "Brun saus, pulver",
+      "per100g": {
+        "kcal": 380,
+        "protein": 8,
+        "carbs": 60,
+        "fat": 12
+      },
+      "pack": {
+        "label": "Brun saus, pose",
+        "grams": 50,
+        "priceNok": 15.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "basis",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    },
+    {
+      "id": "soyasaus",
+      "name": "Soyasaus",
+      "per100g": {
+        "kcal": 60,
+        "protein": 6,
+        "carbs": 6,
+        "fat": 0
+      },
+      "pack": {
+        "label": "Soyasaus 250 ml",
+        "grams": 250,
+        "priceNok": 25.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "basis",
+      "dislikeTags": [],
+      "unit": {
+        "name": "ss",
+        "grams": 15
+      },
+      "isPantryStaple": true
+    },
+    {
+      "id": "tacokrydder",
+      "name": "Tacokrydder",
+      "per100g": {
+        "kcal": 300,
+        "protein": 8,
+        "carbs": 50,
+        "fat": 6
+      },
+      "pack": {
+        "label": "Tacokrydder, pose",
+        "grams": 28,
+        "priceNok": 10.0,
+        "store": "Alle",
+        "priceSource": "anslag"
+      },
+      "category": "basis",
+      "dislikeTags": [],
+      "isPantryStaple": false
+    }
+  ],
+  "meals": [
+    {
+      "id": "F1",
+      "slot": "frokost",
+      "name": "Proteingrøt",
+      "description": "Havregrøt med whey, banan og peanøttsmør",
+      "isMealPrep": false,
+      "batchPortions": 1,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "havregryn",
+          "grams": 70
+        },
+        {
+          "ingredientId": "lettmelk",
+          "grams": 250
+        },
+        {
+          "ingredientId": "whey",
+          "grams": 30
+        },
+        {
+          "ingredientId": "banan",
+          "grams": 120
+        },
+        {
+          "ingredientId": "peanottsmor",
+          "grams": 15
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Kok havregryn og melk i 3–4 min.",
+        "Ta kjelen av platen og rør inn whey.",
+        "Topp med banan i skiver og peanøttsmør."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "F2",
+      "slot": "frokost",
+      "name": "Eggerøre",
+      "description": "3 egg, 2 grovskiver, skyr med jordbær",
+      "isMealPrep": false,
+      "batchPortions": 1,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "egg",
+          "grams": 180
+        },
+        {
+          "ingredientId": "grovbrod",
+          "grams": 80
+        },
+        {
+          "ingredientId": "skyr",
+          "grams": 170
+        },
+        {
+          "ingredientId": "jordbaer_frosne",
+          "grams": 100
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Rør sammen eggene med en skvett vann, salt og pepper. Stek på middels varme.",
+        "Server med 2 grovskiver og skyr med tinte jordbær."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "F3",
+      "slot": "frokost",
+      "name": "Overnight oats",
+      "description": "Lages kvelden før",
+      "isMealPrep": false,
+      "batchPortions": 1,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "havregryn",
+          "grams": 70
+        },
+        {
+          "ingredientId": "skyr",
+          "grams": 200
+        },
+        {
+          "ingredientId": "lettmelk",
+          "grams": 150
+        },
+        {
+          "ingredientId": "jordbaer_frosne",
+          "grams": 100
+        },
+        {
+          "ingredientId": "peanottsmor",
+          "grams": 15
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Bland havregryn, skyr og melk i en boks.",
+        "Legg frosne jordbær og peanøttsmør på toppen.",
+        "Stå i kjøleskapet over natta."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "L1",
+      "slot": "lunsj",
+      "name": "Kylling-risbowl",
+      "description": "Kylling, ris og brokkoli med soyasaus",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingfilet",
+          "grams": 170
+        },
+        {
+          "ingredientId": "ris",
+          "grams": 85
+        },
+        {
+          "ingredientId": "brokkoli_frossen",
+          "grams": 200
+        },
+        {
+          "ingredientId": "olje",
+          "grams": 10
+        },
+        {
+          "ingredientId": "soyasaus",
+          "grams": 15
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Kok risen.",
+        "Skjær kyllingen i biter og stek i halve oljen med hvitløk og chili. Ha i soyasausen på slutten.",
+        "Stek brokkolien i resten av oljen i 4–5 min.",
+        "Del alt likt i 4 bokser."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "L2",
+      "slot": "lunsj",
+      "name": "Kyllingwraps ×2",
+      "description": "Kylling med tacokrydder, ris, mais, agurk, lettrømme og ost",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingfilet",
+          "grams": 160
+        },
+        {
+          "ingredientId": "tacokrydder",
+          "grams": 7
+        },
+        {
+          "ingredientId": "tortilla",
+          "grams": 80
+        },
+        {
+          "ingredientId": "ris",
+          "grams": 40
+        },
+        {
+          "ingredientId": "mais",
+          "grams": 60
+        },
+        {
+          "ingredientId": "agurk",
+          "grams": 60
+        },
+        {
+          "ingredientId": "lettromme",
+          "grams": 30
+        },
+        {
+          "ingredientId": "lettost",
+          "grams": 15
+        }
+      ],
+      "servingNote": "Lefser, agurk, lettrømme og ost legges på ved servering",
+      "steps": [
+        "Stek kyllingstrimler med tacokrydder og litt vann.",
+        "Kok risen og bland inn maisen.",
+        "Lagre fyllet i bokser.",
+        "Fyll 2 lefser med fyll, agurk, lettrømme og ost når du skal spise."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "L3",
+      "slot": "lunsj",
+      "name": "Kremet kyllingpasta",
+      "description": "Kylling, pasta, brokkoli, lett matfløte og ost",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingfilet",
+          "grams": 160
+        },
+        {
+          "ingredientId": "pasta",
+          "grams": 85
+        },
+        {
+          "ingredientId": "brokkoli_frossen",
+          "grams": 150
+        },
+        {
+          "ingredientId": "matflote_lett",
+          "grams": 60
+        },
+        {
+          "ingredientId": "lettost",
+          "grams": 15
+        },
+        {
+          "ingredientId": "lok",
+          "grams": 40
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Kok pastaen al dente. Ha i brokkolien de siste 3 minuttene.",
+        "Stek kyllingbiter med løk og hvitløk.",
+        "Ha i matfløte og 1 kyllingbuljongterning og la det koke i 3 min.",
+        "Rør inn pasta, brokkoli og ost og del i 4 bokser."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "L4",
+      "slot": "lunsj",
+      "name": "Egg fried rice med kylling",
+      "description": "Kylling, ris, egg, erter, mais og soyasaus",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingfilet",
+          "grams": 130
+        },
+        {
+          "ingredientId": "ris",
+          "grams": 75
+        },
+        {
+          "ingredientId": "egg",
+          "grams": 60
+        },
+        {
+          "ingredientId": "erter",
+          "grams": 80
+        },
+        {
+          "ingredientId": "mais",
+          "grams": 50
+        },
+        {
+          "ingredientId": "lok",
+          "grams": 40
+        },
+        {
+          "ingredientId": "olje",
+          "grams": 8
+        },
+        {
+          "ingredientId": "soyasaus",
+          "grams": 15
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Kok risen gjerne dagen før og kjøl den ned.",
+        "Stek kyllingbitene i litt olje og legg dem til side.",
+        "Stek løk, erter og mais. Skyv til side, knekk eggene i panna og rør dem sammen.",
+        "Ha i kald ris, kylling og soyasaus og stek på høy varme i 3–4 min."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "D1",
+      "slot": "middag",
+      "name": "Kylling i karri",
+      "description": "Kylling, ris, blomkålblanding, løk, lett matfløte og karri",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingfilet",
+          "grams": 170
+        },
+        {
+          "ingredientId": "ris",
+          "grams": 85
+        },
+        {
+          "ingredientId": "blomkalblanding",
+          "grams": 150
+        },
+        {
+          "ingredientId": "lok",
+          "grams": 50
+        },
+        {
+          "ingredientId": "matflote_lett",
+          "grams": 60
+        },
+        {
+          "ingredientId": "olje",
+          "grams": 5
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Kok risen.",
+        "Fres løk og 2 ss karri i olje i 1 min.",
+        "Ha i kyllingbitene og stek dem til de får farge.",
+        "Tilsett matfløte, 1 buljongterning, litt vann og grønnsakene. La det putre i 10 min."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "D2",
+      "slot": "middag",
+      "name": "Taco-kjøttdeig med ris",
+      "description": "Kyllingkjøttdeig, tacokrydder, ris, mais, løk, lettrømme og ost",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingkjottdeig",
+          "grams": 150
+        },
+        {
+          "ingredientId": "tacokrydder",
+          "grams": 8
+        },
+        {
+          "ingredientId": "ris",
+          "grams": 75
+        },
+        {
+          "ingredientId": "mais",
+          "grams": 80
+        },
+        {
+          "ingredientId": "lok",
+          "grams": 50
+        },
+        {
+          "ingredientId": "lettromme",
+          "grams": 30
+        },
+        {
+          "ingredientId": "lettost",
+          "grams": 15
+        }
+      ],
+      "servingNote": "Lettrømme og ost legges på ved servering",
+      "steps": [
+        "Kok risen.",
+        "Brun kjøttdeigen med løk, og ha i tacokrydder og 1 dl vann.",
+        "Bland inn ris og mais og del i 4 bokser.",
+        "Topp med lettrømme og ost når du skal spise."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "D3",
+      "slot": "middag",
+      "name": "Ovnskylling med poteter",
+      "description": "Kylling, ovnsbakte poteter og brokkoli",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingfilet",
+          "grams": 180
+        },
+        {
+          "ingredientId": "poteter",
+          "grams": 350
+        },
+        {
+          "ingredientId": "brokkoli_frossen",
+          "grams": 200
+        },
+        {
+          "ingredientId": "olje",
+          "grams": 12
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Sett ovnen på 220 °C.",
+        "Skjær potetene i båter, vend dem i olje og krydder og stek i 15 min.",
+        "Legg på kyllingen (vendt i olje og krydder) og brokkolien. Stek 20–25 min til kyllingen er gjennomstekt."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "D4",
+      "slot": "middag",
+      "name": "Kjøttboller i brun saus",
+      "description": "Kyllingkjøttdeig, poteter, brokkoli og brun saus",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingkjottdeig",
+          "grams": 160
+        },
+        {
+          "ingredientId": "poteter",
+          "grams": 300
+        },
+        {
+          "ingredientId": "brokkoli_frossen",
+          "grams": 200
+        },
+        {
+          "ingredientId": "brun_saus",
+          "grams": 12
+        },
+        {
+          "ingredientId": "lettmelk",
+          "grams": 50
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Kok potetene.",
+        "Form 16–20 kjøttboller og brun dem i panna.",
+        "Rør ut brun saus med melk og vann etter posen. La kjøttbollene koke i sausen i 10 min.",
+        "Damp brokkolien og del alt i 4 bokser."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "D5",
+      "slot": "middag",
+      "name": "Kremet kjøttdeigpasta",
+      "description": "Kyllingkjøttdeig, pasta, løk, brokkoli, lett matfløte og ost",
+      "isMealPrep": true,
+      "batchPortions": 4,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "kyllingkjottdeig",
+          "grams": 150
+        },
+        {
+          "ingredientId": "pasta",
+          "grams": 75
+        },
+        {
+          "ingredientId": "lok",
+          "grams": 60
+        },
+        {
+          "ingredientId": "brokkoli_frossen",
+          "grams": 150
+        },
+        {
+          "ingredientId": "matflote_lett",
+          "grams": 60
+        },
+        {
+          "ingredientId": "lettost",
+          "grams": 10
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Kok pastaen al dente, med brokkolien de siste 3 minuttene.",
+        "Brun kjøttdeigen med løk og hvitløk.",
+        "Tilsett matfløte og 1 buljongterning og la det koke litt inn.",
+        "Bland med pastaen og strø over ost."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "K1",
+      "slot": "kveldsmat",
+      "name": "Skyr-bowl + 1 skive",
+      "description": "Skyr med jordbær og havregryn + grovskive med lettost",
+      "isMealPrep": false,
+      "batchPortions": 1,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "skyr",
+          "grams": 250
+        },
+        {
+          "ingredientId": "jordbaer_frosne",
+          "grams": 100
+        },
+        {
+          "ingredientId": "havregryn",
+          "grams": 20
+        },
+        {
+          "ingredientId": "grovbrod",
+          "grams": 40
+        },
+        {
+          "ingredientId": "lettost",
+          "grams": 10
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Bland skyr, tinte jordbær og havregryn.",
+        "Spis med 1 grovskive med lettost."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "K2",
+      "slot": "kveldsmat",
+      "name": "Cottage cheese",
+      "description": "Cottage cheese, 2 grovskiver og 1 eple",
+      "isMealPrep": false,
+      "batchPortions": 1,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "cottage",
+          "grams": 200
+        },
+        {
+          "ingredientId": "grovbrod",
+          "grams": 80
+        },
+        {
+          "ingredientId": "eple",
+          "grams": 150
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Spis cottage cheese på eller ved siden av brødskivene, sammen med et eple."
+      ],
+      "tags": [],
+      "active": true
+    },
+    {
+      "id": "K3",
+      "slot": "kveldsmat",
+      "name": "Proteinshake + banan + skive",
+      "description": "Whey i lettmelk, banan og 1 grovskive",
+      "isMealPrep": false,
+      "batchPortions": 1,
+      "ingredientsPerPortion": [
+        {
+          "ingredientId": "whey",
+          "grams": 30
+        },
+        {
+          "ingredientId": "lettmelk",
+          "grams": 300
+        },
+        {
+          "ingredientId": "banan",
+          "grams": 120
+        },
+        {
+          "ingredientId": "grovbrod",
+          "grams": 40
+        }
+      ],
+      "servingNote": null,
+      "steps": [
+        "Rist whey med melk.",
+        "Spis med en banan og en grovskive."
+      ],
+      "tags": [],
+      "active": true
+    }
+  ],
+  "standardDay": {
+    "frokost": "F1",
+    "lunsj": "L1",
+    "middag": "D1",
+    "kveldsmat": "K1"
+  },
+  "mealPrepRotation": [
+    {
+      "weeks": [
+        1,
+        5,
+        9
+      ],
+      "sunday": {
+        "lunsj": "L1",
+        "middag": "D1"
+      },
+      "wednesday": {
+        "lunsj": "L3",
+        "middag": "D2"
+      }
+    },
+    {
+      "weeks": [
+        2,
+        6,
+        10
+      ],
+      "sunday": {
+        "lunsj": "L2",
+        "middag": "D3"
+      },
+      "wednesday": {
+        "lunsj": "L4",
+        "middag": "D5"
+      }
+    },
+    {
+      "weeks": [
+        3,
+        7,
+        11
+      ],
+      "sunday": {
+        "lunsj": "L1",
+        "middag": "D4"
+      },
+      "wednesday": {
+        "lunsj": "L3",
+        "middag": "D1"
+      }
+    },
+    {
+      "weeks": [
+        4,
+        8,
+        12
+      ],
+      "sunday": {
+        "lunsj": "L4",
+        "middag": "D2"
+      },
+      "wednesday": {
+        "lunsj": "L2",
+        "middag": "D3"
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "benkpress",
+      "name": "Benkpress",
+      "imageSourceId": "Barbell_Bench_Press_-_Medium_Grip",
+      "loadType": "stang_overkropp",
+      "primaryMuscles": [
+        "bryst",
+        "triceps",
+        "fremre skulder"
+      ],
+      "cues": [
+        "Skulderbladene samlet og ned",
+        "Føttene i gulvet",
+        "Stangen ned til nedre del av brystet"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "skra_manualpress",
+      "name": "Skrå manualpress (30°)",
+      "imageSourceId": "Incline_Dumbbell_Press",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "øvre bryst",
+        "skulder"
+      ],
+      "cues": [
+        "Benk på ca. 30°",
+        "Kontrollert ned, press opp og litt inn"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "skulderpress_sittende",
+      "name": "Skulderpress, manualer, sittende med ryggstøtte",
+      "imageSourceId": "Seated_Dumbbell_Press",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "skuldre",
+        "triceps"
+      ],
+      "cues": [
+        "Ryggen inntil støtten",
+        "Ikke svai i korsryggen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "skulderpress_manualer",
+      "name": "Skulderpress, manualer",
+      "imageSourceId": "Dumbbell_Shoulder_Press",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "skuldre",
+        "triceps"
+      ],
+      "cues": [
+        "Spenn magen",
+        "Press rett opp"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "sidehev_manualer",
+      "name": "Sidehev, manualer",
+      "imageSourceId": "Side_Lateral_Raise",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "side-skulder"
+      ],
+      "cues": [
+        "Lett bøy i albuen",
+        "Løft til skulderhøyde, rolig ned"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "sidehev_kabel",
+      "name": "Sidehev i kabel, én arm",
+      "imageSourceId": "Cable_Seated_Lateral_Raise",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "side-skulder"
+      ],
+      "cues": [
+        "Kabelen bak kroppen",
+        "Rolig tempo"
+      ],
+      "alternative": null,
+      "perSide": true,
+      "backNote": null
+    },
+    {
+      "id": "pec_deck",
+      "name": "Pec deck",
+      "imageSourceId": "Butterfly",
+      "loadType": "maskin_overkropp",
+      "primaryMuscles": [
+        "bryst"
+      ],
+      "cues": [
+        "Lett bøy i albuene",
+        "Klem sammen og hold 1 sek"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "triceps_pushdown",
+      "name": "Triceps pushdown (tau)",
+      "imageSourceId": "Triceps_Pushdown_-_Rope_Attachment",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "cues": [
+        "Albuene inntil kroppen",
+        "Spre tauet i bunnen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "oh_triceps",
+      "name": "Overhead triceps extension, kabel",
+      "imageSourceId": "Cable_Rope_Overhead_Triceps_Extension",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "triceps"
+      ],
+      "cues": [
+        "Albuene peker frem",
+        "Full strekk"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "pullups",
+      "name": "Pull-ups (assistert ved behov)",
+      "imageSourceId": "Pullups",
+      "loadType": "kroppsvekt",
+      "primaryMuscles": [
+        "rygg",
+        "biceps"
+      ],
+      "cues": [
+        "Start fra strake armer",
+        "Bryst mot stanga"
+      ],
+      "alternative": "nedtrekk_bredt",
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "nedtrekk_bredt",
+      "name": "Nedtrekk, bredt grep",
+      "imageSourceId": "Wide-Grip_Lat_Pulldown",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "rygg",
+        "biceps"
+      ],
+      "cues": [
+        "Trekk stanga til øvre bryst",
+        "Ikke len deg langt bak"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "brystst_roing",
+      "name": "Brystsupportert roing (T-bar/maskin)",
+      "imageSourceId": "Lying_T-Bar_Row",
+      "loadType": "maskin_overkropp",
+      "primaryMuscles": [
+        "rygg",
+        "bakre skulder"
+      ],
+      "cues": [
+        "Brystet mot puten hele tiden",
+        "Trekk albuene bak"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": "Avlaster korsryggen"
+    },
+    {
+      "id": "enarms_roing",
+      "name": "Enarms manualroing med støtte",
+      "imageSourceId": "One-Arm_Dumbbell_Row",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "rygg"
+      ],
+      "cues": [
+        "Kne og hånd på benk",
+        "Nøytral rygg",
+        "Trekk mot hofta"
+      ],
+      "alternative": null,
+      "perSide": true,
+      "backNote": null
+    },
+    {
+      "id": "face_pull",
+      "name": "Face pull",
+      "imageSourceId": "Face_Pull",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "bakre skulder",
+        "øvre rygg"
+      ],
+      "cues": [
+        "Tau til panna",
+        "Albuene høyt"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "omvendt_pec_deck",
+      "name": "Omvendt pec deck (bakre skulder)",
+      "imageSourceId": "Reverse_Machine_Flyes",
+      "loadType": "maskin_overkropp",
+      "primaryMuscles": [
+        "bakre skulder"
+      ],
+      "cues": [
+        "Strake armer",
+        "Ikke bruk fart"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "ez_curl",
+      "name": "EZ-curl",
+      "imageSourceId": "Close-Grip_EZ_Bar_Curl",
+      "loadType": "stang_overkropp",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "cues": [
+        "Albuene i ro",
+        "Ikke sving"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "hammercurl",
+      "name": "Hammercurl",
+      "imageSourceId": "Hammer_Curls",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "biceps",
+        "underarm"
+      ],
+      "cues": [
+        "Nøytralt grep",
+        "Rolig ned"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "hack_squat",
+      "name": "Hack squat",
+      "imageSourceId": "Hack_Squat",
+      "loadType": "maskin_underkropp",
+      "primaryMuscles": [
+        "lår",
+        "sete"
+      ],
+      "cues": [
+        "Hele ryggen mot puten",
+        "Knærne følger tærne"
+      ],
+      "alternative": "beinpress",
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "beinpress",
+      "name": "Beinpress",
+      "imageSourceId": "Leg_Press",
+      "loadType": "maskin_underkropp",
+      "primaryMuscles": [
+        "lår",
+        "sete"
+      ],
+      "cues": [
+        "Korsryggen inntil setet",
+        "Ikke lås knærne"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "kneboy",
+      "name": "Knebøy",
+      "imageSourceId": "Barbell_Full_Squat",
+      "loadType": "stang_underkropp",
+      "primaryMuscles": [
+        "lår",
+        "sete"
+      ],
+      "cues": [
+        "Spenn magen 360°",
+        "Nøytral rygg"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": "Først fra uke 8 og bare når ryggen har vært smertefri i 4 uker"
+    },
+    {
+      "id": "rumensk_markloft",
+      "name": "Rumensk markløft (stang eller manualer)",
+      "imageSourceId": "Romanian_Deadlift",
+      "loadType": "stang_underkropp",
+      "primaryMuscles": [
+        "baklår",
+        "sete"
+      ],
+      "cues": [
+        "Hofta bakover, lett bøy i knærne",
+        "Rett rygg, stopp når baklåret strekkes"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": "RIR 3 i uke 1–4"
+    },
+    {
+      "id": "bulgarsk_utfall",
+      "name": "Bulgarsk utfall",
+      "imageSourceId": "Split_Squat_with_Dumbbells",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "lår",
+        "sete"
+      ],
+      "cues": [
+        "Bakre fot på benk",
+        "Overkroppen lett fremover"
+      ],
+      "alternative": null,
+      "perSide": true,
+      "backNote": null
+    },
+    {
+      "id": "leg_curl_liggende",
+      "name": "Liggende leg curl",
+      "imageSourceId": "Lying_Leg_Curls",
+      "loadType": "maskin_underkropp",
+      "primaryMuscles": [
+        "baklår"
+      ],
+      "cues": [
+        "Hofta ned i benken",
+        "Rolig ned"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "leg_extension",
+      "name": "Leg extension",
+      "imageSourceId": "Leg_Extensions",
+      "loadType": "maskin_underkropp",
+      "primaryMuscles": [
+        "lår"
+      ],
+      "cues": [
+        "Hold 1 sek på toppen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "hip_thrust",
+      "name": "Hip thrust",
+      "imageSourceId": "Barbell_Hip_Thrust",
+      "loadType": "stang_underkropp",
+      "primaryMuscles": [
+        "sete"
+      ],
+      "cues": [
+        "Haka mot brystet",
+        "Klem setet på toppen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": "Ikke svai i korsryggen på toppen"
+    },
+    {
+      "id": "tahev_staende",
+      "name": "Stående tåhev",
+      "imageSourceId": "Standing_Calf_Raises",
+      "loadType": "maskin_underkropp",
+      "primaryMuscles": [
+        "legger"
+      ],
+      "cues": [
+        "Full strekk i bunnen",
+        "Pause på toppen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "skra_benkpress",
+      "name": "Skrå benkpress (stang eller Smith)",
+      "imageSourceId": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+      "loadType": "stang_overkropp",
+      "primaryMuscles": [
+        "øvre bryst",
+        "skulder"
+      ],
+      "cues": [
+        "Benk på ca. 30°",
+        "Stangen til øvre bryst"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "kabelroing",
+      "name": "Sittende kabelroing",
+      "imageSourceId": "Seated_Cable_Rows",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "rygg"
+      ],
+      "cues": [
+        "Rett rygg",
+        "Trekk mot navlen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "dips",
+      "name": "Dips (assistert ved behov)",
+      "imageSourceId": "Dips_-_Chest_Version",
+      "loadType": "kroppsvekt",
+      "primaryMuscles": [
+        "bryst",
+        "triceps"
+      ],
+      "cues": [
+        "Lett lent frem",
+        "Ned til 90° i albuen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "nedtrekk_smalt",
+      "name": "Nedtrekk, smalt grep",
+      "imageSourceId": "Close-Grip_Front_Lat_Pulldown",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "rygg"
+      ],
+      "cues": [
+        "Brystet frem",
+        "Trekk til brystet"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "pallof",
+      "name": "Pallof press (kabel)",
+      "imageSourceId": "Pallof_Press",
+      "loadType": "core",
+      "primaryMuscles": [
+        "core"
+      ],
+      "cues": [
+        "Stå stødig",
+        "Ikke la kabelen vri deg"
+      ],
+      "alternative": null,
+      "perSide": true,
+      "backNote": null
+    },
+    {
+      "id": "suitcase_carry",
+      "name": "Suitcase carry (én manual)",
+      "imageSourceId": "Farmers_Walk",
+      "loadType": "core",
+      "primaryMuscles": [
+        "core",
+        "grep"
+      ],
+      "cues": [
+        "Bær én manual i én hånd",
+        "Stå rett, ikke len deg"
+      ],
+      "alternative": null,
+      "perSide": true,
+      "backNote": null
+    },
+    {
+      "id": "bakre_skulder_kabel",
+      "name": "Bakre skulder i kabel",
+      "imageSourceId": "Cable_Rear_Delt_Fly",
+      "loadType": "kabel",
+      "primaryMuscles": [
+        "bakre skulder"
+      ],
+      "cues": [
+        "Kryss kablene",
+        "Trekk ut til siden"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "smal_benk",
+      "name": "Smal benkpress",
+      "imageSourceId": "Close-Grip_Barbell_Bench_Press",
+      "loadType": "stang_overkropp",
+      "primaryMuscles": [
+        "triceps",
+        "bryst"
+      ],
+      "cues": [
+        "Skulderbreddes grep",
+        "Albuene inntil kroppen"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "skra_manualcurl",
+      "name": "Skrå manualcurl",
+      "imageSourceId": "Incline_Dumbbell_Curl",
+      "loadType": "manualer",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "cues": [
+        "Armene henger rett ned",
+        "Full strekk"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "preacher_curl",
+      "name": "Preacher curl",
+      "imageSourceId": "Preacher_Curl",
+      "loadType": "stang_overkropp",
+      "primaryMuscles": [
+        "biceps"
+      ],
+      "cues": [
+        "Overarmene mot puten",
+        "Ikke lås ut helt"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "hengende_kneloft",
+      "name": "Hengende kneløft",
+      "imageSourceId": "Hanging_Leg_Raise",
+      "loadType": "core",
+      "primaryMuscles": [
+        "mage"
+      ],
+      "cues": [
+        "Løft knærne mot brystet",
+        "Ikke sving"
+      ],
+      "alternative": null,
+      "perSide": false,
+      "backNote": null
+    },
+    {
+      "id": "dead_bug",
+      "name": "Dead bug",
+      "imageSourceId": "Dead_Bug",
+      "loadType": "core",
+      "primaryMuscles": [
+        "core"
+      ],
+      "cues": [
+        "Korsryggen i gulvet",
+        "Rolig tempo"
+      ],
+      "alternative": null,
+      "perSide": true,
+      "backNote": null
+    }
+  ],
+  "sessions": [
+    {
+      "id": "okt1",
+      "name": "Push",
+      "weekday": 1,
+      "exercises": [
+        {
+          "exerciseId": "benkpress",
+          "sets": 4,
+          "repMin": 5,
+          "repMax": 8,
+          "rir": "2",
+          "restSec": 150,
+          "startWeightNote": "60 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "skra_manualpress",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1-2",
+          "restSec": 120,
+          "startWeightNote": "22–24 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "skulderpress_sittende",
+          "sets": 3,
+          "repMin": 6,
+          "repMax": 10,
+          "rir": "2",
+          "restSec": 120,
+          "startWeightNote": "16–17,5 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "sidehev_manualer",
+          "sets": 4,
+          "repMin": 12,
+          "repMax": 20,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "8–10 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "pec_deck",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 15,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "triceps_pushdown",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 15,
+          "rir": "1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "oh_triceps",
+          "sets": 2,
+          "repMin": 10,
+          "repMax": 15,
+          "rir": "1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        }
+      ]
+    },
+    {
+      "id": "okt2",
+      "name": "Pull",
+      "weekday": 2,
+      "exercises": [
+        {
+          "exerciseId": "pullups",
+          "sets": 4,
+          "repMin": 6,
+          "repMax": 10,
+          "rir": "2",
+          "restSec": 120,
+          "startWeightNote": "Test",
+          "unit": "reps",
+          "note": "Bytt til nedtrekk bredt grep hvis du ikke klarer 6 reps"
+        },
+        {
+          "exerciseId": "brystst_roing",
+          "sets": 4,
+          "repMin": 6,
+          "repMax": 10,
+          "rir": "2",
+          "restSec": 120,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "enarms_roing",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1-2",
+          "restSec": 90,
+          "startWeightNote": "26–30 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "face_pull",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 15,
+          "rir": "1",
+          "restSec": 60,
+          "startWeightNote": "Lett",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "omvendt_pec_deck",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 20,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "ez_curl",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1",
+          "restSec": 75,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "hammercurl",
+          "sets": 2,
+          "repMin": 10,
+          "repMax": 12,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "12–14 kg",
+          "unit": "reps"
+        }
+      ]
+    },
+    {
+      "id": "okt3",
+      "name": "Bein",
+      "weekday": 4,
+      "exercises": [
+        {
+          "exerciseId": "hack_squat",
+          "sets": 4,
+          "repMin": 6,
+          "repMax": 10,
+          "rir": "2",
+          "restSec": 150,
+          "startWeightNote": "Test",
+          "unit": "reps",
+          "note": "Beinpress er greit alternativ"
+        },
+        {
+          "exerciseId": "kneboy",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 8,
+          "rir": "3",
+          "restSec": 150,
+          "startWeightNote": "40–50 kg",
+          "unit": "reps",
+          "note": "+5 kg/uke så lenge ryggen er rolig dagen etter",
+          "activeFromWeek": 8
+        },
+        {
+          "exerciseId": "rumensk_markloft",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 10,
+          "rir": "3 (uke 1–4), deretter 2",
+          "restSec": 120,
+          "startWeightNote": "40 kg / 2×16 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "bulgarsk_utfall",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1-2",
+          "restSec": 90,
+          "startWeightNote": "2×8 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "leg_curl_liggende",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 12,
+          "rir": "1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "leg_extension",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 15,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "hip_thrust",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "2",
+          "restSec": 90,
+          "startWeightNote": "60 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "tahev_staende",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 15,
+          "rir": "1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        }
+      ]
+    },
+    {
+      "id": "okt4",
+      "name": "Overkropp",
+      "weekday": 5,
+      "exercises": [
+        {
+          "exerciseId": "skra_benkpress",
+          "sets": 4,
+          "repMin": 6,
+          "repMax": 10,
+          "rir": "2",
+          "restSec": 150,
+          "startWeightNote": "50 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "kabelroing",
+          "sets": 4,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1-2",
+          "restSec": 90,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "dips",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1-2",
+          "restSec": 90,
+          "startWeightNote": "Kroppsvekt",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "nedtrekk_smalt",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1-2",
+          "restSec": 90,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "sidehev_manualer",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 20,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "8–10 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "pallof",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 10,
+          "rir": "–",
+          "restSec": 45,
+          "startWeightNote": "Lett",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "suitcase_carry",
+          "sets": 3,
+          "repMin": 30,
+          "repMax": 40,
+          "rir": "–",
+          "restSec": 60,
+          "startWeightNote": "20–24 kg",
+          "unit": "meter"
+        }
+      ]
+    },
+    {
+      "id": "okt5",
+      "name": "Skuldre og armer",
+      "weekday": 6,
+      "exercises": [
+        {
+          "exerciseId": "skulderpress_manualer",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 12,
+          "rir": "1-2",
+          "restSec": 120,
+          "startWeightNote": "16 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "sidehev_kabel",
+          "sets": 4,
+          "repMin": 12,
+          "repMax": 15,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "Lett",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "bakre_skulder_kabel",
+          "sets": 3,
+          "repMin": 12,
+          "repMax": 15,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "Lett",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "smal_benk",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 10,
+          "rir": "2",
+          "restSec": 120,
+          "startWeightNote": "50 kg",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "skra_manualcurl",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 12,
+          "rir": "1",
+          "restSec": 60,
+          "startWeightNote": "10 kg",
+          "unit": "reps",
+          "note": "Supersett med neste øvelse"
+        },
+        {
+          "exerciseId": "oh_triceps",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 15,
+          "rir": "1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "preacher_curl",
+          "sets": 2,
+          "repMin": 10,
+          "repMax": 15,
+          "rir": "0-1",
+          "restSec": 60,
+          "startWeightNote": "Test",
+          "unit": "reps"
+        },
+        {
+          "exerciseId": "dead_bug",
+          "sets": 3,
+          "repMin": 8,
+          "repMax": 8,
+          "rir": "2",
+          "restSec": 60,
+          "startWeightNote": "Kroppsvekt",
+          "unit": "reps",
+          "activeUntilWeek": 2
+        },
+        {
+          "exerciseId": "hengende_kneloft",
+          "sets": 3,
+          "repMin": 10,
+          "repMax": 15,
+          "rir": "2",
+          "restSec": 60,
+          "startWeightNote": "Kroppsvekt",
+          "unit": "reps",
+          "activeFromWeek": 3
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "name": "Oppstart",
+      "weeks": [
+        1,
+        2
+      ],
+      "setsDelta": -1,
+      "rirOverride": "3",
+      "note": "Ett sett mindre per øvelse. Finn startvekter og lær teknikken."
+    },
+    {
+      "name": "Bygg 1",
+      "weeks": [
+        3,
+        6
+      ],
+      "setsDelta": 0,
+      "note": "Fullt volum. Øk vekter etter progresjonsregelen."
+    },
+    {
+      "name": "Lett uke (deload)",
+      "weeks": [
+        7,
+        7
+      ],
+      "setsFactor": 0.5,
+      "rirOverride": "3-4",
+      "note": "Halvparten av settene, samme vekter."
+    },
+    {
+      "name": "Bygg 2",
+      "weeks": [
+        8,
+        11
+      ],
+      "setsDelta": 0,
+      "note": "Fullt volum. Knebøy kommer inn hvis ryggen har vært smertefri i 4 uker."
+    },
+    {
+      "name": "Test",
+      "weeks": [
+        12,
+        12
+      ],
+      "setsDelta": 0,
+      "note": "Test benk og skulderpress på RIR 1. Ta bilder og mål."
+    }
+  ],
+  "progression": {
+    "rule": "double_progression",
+    "description": "Behold vekten til toppen av rep-spennet er nådd på alle sett med riktig RIR. Øk da vekten.",
+    "incrementsKg": {
+      "stang_overkropp": 2.5,
+      "stang_underkropp": 5,
+      "maskin_underkropp": 10,
+      "maskin_overkropp": 5,
+      "kabel": 2.5,
+      "manualer": 2,
+      "kroppsvekt": 0,
+      "core": 0
+    },
+    "isolationRepsFirst": true,
+    "stallRule": "Hvis et løft går ned 3 økter på rad: sjekk søvn og protein, og fjern deretter 1 sett på øvelsen."
+  },
+  "coreRoutine": {
+    "when": "Hver dag, tidligst 1 time etter at du har stått opp. Ca. 10 min.",
+    "items": [
+      {
+        "name": "Katt-kamel",
+        "imageSourceId": "Cat_Stretch",
+        "dose": "6–8 rolige reps",
+        "cue": "Rull ryggen opp og ned. Ikke press ytterstillingene."
+      },
+      {
+        "name": "McGill curl-up",
+        "imageSourceId": null,
+        "dose": "6 + 4 + 2 reps à 10 s",
+        "cue": "Ett kne bøyd og hendene under korsryggen. Løft hode og skuldre et par cm. Bytt bein halvveis."
+      },
+      {
+        "name": "Sideplanke",
+        "imageSourceId": "Side_Bridge",
+        "dose": "6 + 4 + 2 reps à 10 s per side",
+        "cue": "Start på knærne. Gå over til strake bein når det er lett."
+      },
+      {
+        "name": "Bird dog",
+        "imageSourceId": null,
+        "dose": "6 + 4 + 2 reps à 10 s per side",
+        "cue": "Strekk motsatt arm og bein. Hold hoften helt rolig."
+      },
+      {
+        "name": "Dead bug",
+        "imageSourceId": "Dead_Bug",
+        "dose": "2 × 6–8 per side",
+        "cue": "Hold korsryggen inntil gulvet hele tiden."
+      },
+      {
+        "name": "Glute bridge",
+        "imageSourceId": "Butt_Lift_Bridge",
+        "dose": "2 × 12, 2 s hold",
+        "cue": "Klem setet. Løft med hoftene, ikke med korsryggen."
+      }
+    ],
+    "progression": [
+      "Uke 1–3: som oppsatt.",
+      "Uke 4–6: sideplanke på strake bein og +2 reps per runde.",
+      "Fra uke 7, hvis ryggen er smertefri: legg til 3 × 8 ab wheel fra knærne på to treningsdager.",
+      "Øk antall reps, ikke holdetiden (maks 10 s per hold)."
+    ],
+    "painScale": [
+      {
+        "level": "grønn",
+        "range": [
+          0,
+          3
+        ],
+        "action": "Fortsett som planlagt."
+      },
+      {
+        "level": "gul",
+        "range": [
+          4,
+          5
+        ],
+        "action": "Hold samme nivå og senk vekten på øvelsen som provoserer. Gjelder også hvis du er stivere neste morgen."
+      },
+      {
+        "level": "rød",
+        "range": [
+          6,
+          10
+        ],
+        "action": "Stopp øvelsen og bytt til et lettere alternativ. Skarp og stikkende smerte er alltid rødt."
+      }
+    ],
+    "redFlags": [
+      "Smerter som stråler ned i beinet",
+      "Nummenhet, prikking eller svakhet i beinet",
+      "Smerter om natta eller i hvile",
+      "Ingen bedring på 4–6 uker"
+    ],
+    "emergency": "Problemer med å kontrollere urin eller avføring, eller nummenhet i setet: ring legevakt på 116 117 med en gang."
+  },
+  "adjustmentRules": {
+    "startFromWeek": 3,
+    "windowWeeks": 2,
+    "rules": [
+      {
+        "id": "for_raskt",
+        "when": "Snittvekta går ned mer enn 0,7 kg/uke",
+        "condition": "lossPerWeek > 0.7",
+        "action": "+150 kcal (karbohydrater)",
+        "kcalDelta": 150
+      },
+      {
+        "id": "i_rute",
+        "when": "Ned 0,3–0,7 kg/uke",
+        "condition": "0.3 <= lossPerWeek <= 0.7",
+        "action": "Ingenting, fortsett",
+        "kcalDelta": 0
+      },
+      {
+        "id": "recomp",
+        "when": "Ned 0,1–0,3 kg/uke og livvidden går ned",
+        "condition": "0.1 <= lossPerWeek < 0.3 && waistDrop > 0",
+        "action": "Ingenting. Du bygger muskler samtidig",
+        "kcalDelta": 0
+      },
+      {
+        "id": "folg_med",
+        "when": "Ned 0,1–0,3 kg/uke og livvidden står stille",
+        "condition": "0.1 <= lossPerWeek < 0.3 && waistDrop <= 0",
+        "action": "Fortsett, følg med neste uke",
+        "kcalDelta": 0
+      },
+      {
+        "id": "stopp",
+        "when": "Under 0,1 kg/uke og livvidden står stille i 2 uker",
+        "condition": "lossPerWeek < 0.1 && waistDrop <= 0",
+        "action": "Først +2 000 skritt. Står det fortsatt stille etter 2 nye uker: −150 kcal fra karbohydrater",
+        "kcalDelta": -150,
+        "stepsDelta": 2000,
+        "stepsFirst": true
+      },
+      {
+        "id": "recomp_lav",
+        "when": "Under 0,1 kg/uke men livvidden går ned",
+        "condition": "lossPerWeek < 0.1 && waistDrop > 0",
+        "action": "Fortsett (recomp)",
+        "kcalDelta": 0
+      }
+    ],
+    "notes": [
+      "Ikke juster etter uke 1. Den første uka går ofte 1–1,5 kg rett ned, og det er mest vann og glykogen.",
+      "Ikke gå under kcalFloor uten å se på planen på nytt."
+    ]
+  },
+  "guides": {
+    "sovn": "Sikt på 8 timer med faste tider, også i helgene (±1 time), for eksempel 00:30–08:30. Kutt koffein etter kl. 16, og ha det mørkt og kjølig på soverommet.",
+    "tilskudd": [
+      "Kreatin monohydrat: 5 g hver dag, også på hviledager. Vekta kan gå opp 0,5–1 kg første uka hvis du nettopp har begynt. Det er vann.",
+      "Proteinpulver: buffer for å nå proteinmålet.",
+      "Tran eller D-vitamin fra oktober til april.",
+      "Koffein 30–60 min før trening er valgfritt."
+    ],
+    "alkohol": "0,5–0,7 L Fireball er ca. 11–15 alkoholenheter og 1 200–1 800 kcal, før Pepsien er regnet med. Med 3–4 slike kvelder i måneden blir 30–50 % av underskuddet borte. Alternativer: 1–2 kvelder i måneden, halv mengde med Pepsi Max, protein og grønnsaker på drikkedagen, og følg planen som vanlig dagen etter.",
+    "skritt": "Gå til og fra treningssenteret og skolen, ta en tur på 20–30 min etter middag, og del resten på 2–3 korte turer. Ligger du etter, tar du 20 min skrå gåing på mølla etter økta.",
+    "ryggTeknikk": "Pust inn i magen og spenn deg rundt hele midjen før hver tung rep. Hold nøytral rygg. Kjør aldri en rep der ryggen runder seg for å få den opp.",
+    "maaling": {
+      "vekt": "Hver morgen etter toalett, før mat og drikke.",
+      "livvidde": "Søndag morgen, målebånd rundt navlen, avslappet mage.",
+      "bilder": "Annenhver søndag: forfra, fra siden og bakfra, med samme lys og positur."
+    }
+  },
+  "imageSource": {
+    "name": "Free Exercise DB",
+    "license": "Unlicense (public domain)",
+    "repo": "https://github.com/yuhonas/free-exercise-db",
+    "pathPattern": "exercises/{imageSourceId}/0.jpg og /1.jpg (start og slutt)"
+  }
+}
