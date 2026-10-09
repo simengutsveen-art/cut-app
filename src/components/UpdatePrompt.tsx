@@ -8,10 +8,14 @@ export function UpdatePrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(_url, registration) {
-      // Se etter oppdateringer hver time når appen er åpen.
-      if (registration) {
-        setInterval(() => void registration.update().catch(() => undefined), 60 * 60 * 1000);
-      }
+      if (!registration) return;
+      const check = () => void registration.update().catch(() => undefined);
+      // Se etter ny versjon hver gang appen åpnes fra bakgrunnen (iPhone holder den ofte i minnet),
+      // og hvert 15. minutt mens den er åpen.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') check();
+      });
+      setInterval(check, 15 * 60 * 1000);
     },
   });
 
