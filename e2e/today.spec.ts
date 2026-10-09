@@ -12,6 +12,7 @@ test('registrer vekt 80,2 og skritt 9 500 → verdiene vises igjen etter omlasti
   await steps.fill('9 500');
   await steps.press('Enter');
   await expect(steps).toHaveValue('9 500');
+  await expect(page.getByRole('status').filter({ hasText: 'Lagret' })).toHaveCount(1);
 
   await page.reload();
   await expect(page.getByRole('textbox', { name: 'Morgenvekt' })).toHaveValue('80,2');
@@ -24,7 +25,14 @@ test('core-rutine og smerte med trafikklys', async ({ page }) => {
   await page.getByRole('button', { name: 'Smerte 6 (rød)' }).click();
   await expect(page.getByRole('alert', { name: 'Ryggvarsel' })).toBeVisible();
   await expect(page.getByText('116 117')).toBeVisible();
+  const note = page.getByRole('textbox', { name: 'Notat for dagen' });
+  await note.fill('Stiv i korsryggen');
+  await note.blur();
+  await page.waitForTimeout(300);
   await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Notat for dagen' })).toHaveValue(
+    'Stiv i korsryggen',
+  );
   await expect(page.getByRole('checkbox', { name: /Core-rutinen er gjort/ })).toBeChecked();
   await expect(page.getByRole('button', { name: 'Smerte 6 (rød)' })).toHaveAttribute(
     'aria-pressed',

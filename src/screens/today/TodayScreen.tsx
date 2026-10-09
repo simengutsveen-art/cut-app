@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BackAlertCard } from '../../components/BackAlertCard';
 import { PainPicker } from '../../components/PainPicker';
@@ -20,6 +20,7 @@ import {
   Page,
   PageHeader,
   SectionTitle,
+  TextArea,
 } from '../../components/ui';
 import { patchDayLog } from '../../data/dayLogs';
 import { isNewerSeed } from '../../data/seedSync';
@@ -39,7 +40,7 @@ import {
   planStatusLabel,
   todayISO,
 } from '../../lib/dates';
-import { formatNumber } from '../../lib/format';
+import { formatNumber, parseInteger } from '../../lib/format';
 import { capitalize } from '../../lib/labels';
 import { prepEventOnDate } from '../../lib/mealPrep';
 import { backAlert } from '../../lib/pain';
@@ -88,6 +89,11 @@ export function TodayScreen() {
 
   const [coreDone, setCoreDone] = useOptimistic(day.log.coreDone);
   const [pain, setPain] = useOptimistic(day.log.pain ?? null);
+  const [savedField, setSavedField] = useState<'weight' | 'steps' | null>(null);
+  const saveField = async (field: 'weight' | 'steps', patch: Parameters<typeof patchDayLog>[2]) => {
+    await patchDayLog(db, today, patch);
+    setSavedField(field);
+  };
 
   const dp = dayPlanFor(settings, weekday);
   const session = dp.kind === 'session' ? sessionsById.get(dp.sessionId) : undefined;
@@ -156,8 +162,9 @@ export function TodayScreen() {
             placeholder={lastWeight?.weightKg ? formatNumber(lastWeight.weightKg, 1) : '0,0'}
             min={20}
             max={400}
-            onCommit={(v) => void patchDayLog(db, today, { weightKg: v })}
+            onCommit={(v) => void saveField('weight', { weightKg: v })}
           />
+          {savedField === 'weight' && <SavedTick />}
           <p className="mt-1 text-xs text-muted">
             {lastWeight?.weightKg
               ? `Forrige: ${formatNumber(lastWeight.weightKg, 1)} kg (${formatDate(lastWeight.date)})`
@@ -177,8 +184,10 @@ export function TodayScreen() {
             placeholder="0"
             min={0}
             max={200000}
-            onCommit={(v) => void patchDayLog(db, today, { steps: v })}
+            onCommit={(v) => void saveField('steps', { steps: v })}
           />
+          {savedField === 'steps' && <SavedTick />}
+          <PasteStepsButton onSteps={(v) => void saveField('steps', { steps: v })} />
           <p className="mt-1 text-xs text-muted">
             Mål i dag: {formatNumber(goal)}
             {day.log.steps != null && day.log.steps >= goal && (
@@ -300,7 +309,71 @@ export function TodayScreen() {
           />
         </div>
       </Card>
+
+      <SectionTitle>Notat</SectionTitle>
+      <DayNote
+        key={today}
+        value={day.log.note ?? ''}
+        onSave={(note) => void patchDayLog(db, today, { note })}
+      />
     </Page>
+  );
+}
+
+/** Fritt notat for dagen. Lagres når feltet forlates. */
+function DayNote({ value, onSave }: { value: string; onSave: (note: string) => void }) {
+  const [text, setText] = useState(value);
+  const [focused, setFocused] = useState(false);
+  const shown = focused ? text : value;
+  return (
+    <TextArea
+      aria-label="Notat for dagen"
+      placeholder="F.eks. sov dårlig, stiv i ryggen, middag ute …"
+      value={shown}
+      onFocus={() => {
+        setText(value);
+        setFocused(true);
+      }}
+      onChange={(e) => setText(e.target.value)}
+      onBlur={() => {
+        setFocused(false);
+        if (text.trim() !== value.trim()) onSave(text.trim());
+      }}
+    />
+  );
+}
+
+function SavedTick() {
+  return (
+    <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-good" role="status">
+      <IconCheck size={14} /> Lagret
+    </p>
+  );
+}
+
+/** Leser skritt fra utklippstavla (f.eks. kopiert av en iOS-snarvei fra Helse). */
+function PasteStepsButton({ onSteps }: { onSteps: (steps: number) => void }) {
+  const [error, setError] = useState(false);
+  if (typeof navigator === 'undefined' || !navigator.clipboard?.readText) return null;
+  return (
+    <button
+      type="button"
+      className="mt-1 min-h-11 text-sm font-semibold text-accent"
+      onClick={async () => {
+        try {
+          const text = await navigator.clipboard.readText();
+          const steps = parseInteger(text.trim()) ?? NaN;
+          if (Number.isFinite(steps) && steps >= 0 && steps <= 200000) {
+            setError(false);
+            onSteps(steps);
+          } else setError(true);
+        } catch {
+          setError(true);
+        }
+      }}
+    >
+      {error ? 'Fant ingen skritt å lime inn' : 'Lim inn skritt'}
+    </button>
   );
 }
 

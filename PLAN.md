@@ -41,6 +41,22 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 - **Sletting:** seed-elementer kan bare deaktiveres (ellers ville «Oppdater plan» lagt dem til igjen).
   Egne elementer kan slettes hvis de ikke brukes i logger eller av andre elementer.
 
+- **Offline-test:** Playwrights `setOffline` blokkerer også svar fra service workeren i WebKit, så
+  testen stopper serveren appen ble lastet fra i stedet. Da kan ingenting hentes fra nett.
+- **Skritt-snarvei:** `#/logg?steps=…` er laget, men på iOS har Hjem-skjerm-appen egen lagring
+  (atskilt fra Safari). Derfor finnes også «Lim inn skritt» fra utklippstavla.
+- **Seriefarger i grafer:** aksent + blå (`--c-series-2`), validert for fargeblindhet. Grønn/gul/rød
+  brukes bare som status.
+
+## Kvalitet
+
+- Lighthouse 11.7.1 mot `npm run preview`: PWA 1,0 (alle automatiske sjekker), tilgjengelighet 1,0,
+  beste praksis 1,0.
+- E2E kjørt både med `base` `/` og `/cut/` (som på GitHub Pages).
+
 ## TODO
 
-- (fylles inn underveis)
+- **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som
+  ingredienser i `seed-data.json`. De er derfor ikke med i kcal, pris eller handleliste. Legg dem
+  til i seed-fila (med næring og pris) hvis de skal telles.
+- **Kreatin** (fra `guides.tilskudd`) er ikke en ingrediens og kommer ikke på handlelista.

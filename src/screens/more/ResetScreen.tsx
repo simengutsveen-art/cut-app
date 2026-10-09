@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { IconWarning } from '../../components/icons';
 import { Button, Card, Field, Page, PageHeader, TextInput } from '../../components/ui';
-import { db } from '../../db';
+import Dexie from 'dexie';
+import { db, DB_NAME } from '../../db';
 
 const CONFIRM_WORD = 'NULLSTILL';
 
@@ -13,7 +14,9 @@ export function ResetScreen() {
 
   const reset = async () => {
     setBusy(true);
-    await db.delete();
+    // Lukk uten automatisk gjenåpning, så live-spørringer ikke åpner databasen igjen.
+    db.close({ disableAutoOpen: true });
+    await Dexie.delete(DB_NAME);
     window.location.replace(`${import.meta.env.BASE_URL}#/`);
     window.location.reload();
   };

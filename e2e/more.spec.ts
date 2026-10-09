@@ -54,6 +54,7 @@ test('eksporter → nullstill → importer → dataene er tilbake', async ({ pag
   await weight.fill('80,2');
   await weight.press('Enter');
   await expect(weight).toHaveValue('80,2');
+  await expect(page.getByRole('status').filter({ hasText: 'Lagret' })).toBeVisible();
 
   await page.goto('./#/mer/backup');
   const downloadPromise = page.waitForEvent('download');
