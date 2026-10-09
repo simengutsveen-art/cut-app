@@ -23,7 +23,6 @@ import { SLOTS, WEEKDAY_KEYS, type AppSettings, type NumRange, type ThemePref } 
 
 /** Feltene som kommer fra seed – endres de, røres de ikke av «Oppdater plan». */
 const SEED_KEYS: (keyof AppSettings)[] = [
-  'startDate',
   'startWeightKg',
   'startWaistCm',
   'goalWeightRangeKg',
@@ -77,7 +76,13 @@ export function SettingsScreen() {
     const seedChanged = SEED_KEYS.some(
       (k) => stableStringify(next[k]) !== stableStringify(settings[k]),
     );
-    await db.settings.put({ ...next, userModified: settings.userModified || seedChanged });
+    // Velger Simen startdato selv, regnes planen som startet (og datoen beholdes ved plan-oppdatering).
+    const startChanged = next.startDate !== settings.startDate;
+    await db.settings.put({
+      ...next,
+      planStarted: settings.planStarted || startChanged,
+      userModified: settings.userModified || seedChanged,
+    });
     setError(null);
     setSaved(true);
   };
@@ -114,9 +119,13 @@ export function SettingsScreen() {
 
       <Card className="flex flex-col gap-4">
         <Field
-          label="Startdato (mandag)"
+          label="Startdato"
           htmlFor="startDate"
-          hint={`Planen varer i ${draft.weeks} uker.`}
+          hint={
+            settings.planStarted
+              ? `Uke 1 begynte denne dagen. Planen varer i ${draft.weeks} uker.`
+              : 'Ikke startet ennå. Trykk «Start nå» på I dag, eller velg en dato her.'
+          }
         >
           <TextInput
             id="startDate"
@@ -305,7 +314,7 @@ export function SettingsScreen() {
       <div className="mt-6">
         <InlineConfirm
           label="Tilbakestill innstillinger til planen"
-          message="Startdato, mål, ukeplan og standardmåltider settes tilbake til seed-fila. Godtatte justeringer beholdes."
+          message="Mål, ukeplan og standardmåltider settes tilbake til seed-fila. Startdatoen og godtatte justeringer beholdes."
           confirmLabel="Tilbakestill"
           variant="primary"
           onConfirm={async () => {
@@ -317,6 +326,8 @@ export function SettingsScreen() {
                 fresh.kcalTarget + adjustments.reduce((n, a) => n + a.kcalDelta, 0),
               stepsBonus: adjustments.reduce((n, a) => n + a.stepsDelta, 0),
               weekMealChoices: settings.weekMealChoices,
+              startDate: settings.planStarted ? settings.startDate : fresh.startDate,
+              planStarted: settings.planStarted,
               theme: settings.theme,
             };
             await db.settings.put(next);

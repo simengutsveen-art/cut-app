@@ -23,7 +23,7 @@ import {
   formatDate,
   formatDateShort,
   isoWeekday,
-  planStatus,
+  planStatusFor,
   planStatusLabel,
   weekDates,
   weekdayName,
@@ -38,7 +38,7 @@ export function TrainingOverview() {
   const today = useToday();
   const navigate = useNavigate();
   const ctx = useWorkoutContext();
-  const status = planStatus(today, settings.startDate, settings.weeks);
+  const status = planStatusFor(settings, today);
   const [week, setWeek] = useState(status.week);
   const phase = phaseForWeek(plan.phases, week);
   const logs = useLiveQuery(() => db.workoutLogs.toArray(), []);

@@ -42,6 +42,7 @@ test('offline: alle faner og øvelsesbilder fungerer etter første lasting', asy
     await page.clock.install({ time: PLAN_START });
     await page.goto(url);
     await page.getByRole('navigation', { name: 'Hovedmeny' }).waitFor();
+    await page.getByRole('button', { name: 'Start nå' }).click();
 
     // Vent til service workeren er installert (precache ferdig) og styrer siden.
     await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));

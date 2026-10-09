@@ -40,6 +40,7 @@ export function settingsFromSeed(seed: SeedData): AppSettings {
     weekMealChoices: {},
     theme: 'dark',
     userModified: false,
+    planStarted: false,
   };
 }
 
@@ -230,14 +231,17 @@ export async function applySeedUpdate(db: CutDB, seed: SeedData): Promise<SeedUp
         await db.settings.put(settingsFromSeed(seed));
         summary.settingsUpdated = true;
       } else if (!settings.userModified) {
+        const keepStart = settings.planStarted ? { startDate: settings.startDate } : {};
         const before = stableStringify(pickSeedSettings(settings));
-        const after = stableStringify(pickSeedSettings(seed.settings));
+        const after = stableStringify({ ...pickSeedSettings(seed.settings), ...keepStart });
         if (before !== after) {
           const adjustments = await db.adjustments.toArray();
           const kcalAdj = adjustments.reduce((sum, a) => sum + a.kcalDelta, 0);
           await db.settings.put({
             ...settings,
             ...pickSeedSettings(seed.settings),
+            // Startdatoen Simen valgte med «Start nå», flyttes aldri av en plan-oppdatering.
+            ...(settings.planStarted ? { startDate: settings.startDate } : {}),
             currentKcalTarget: seed.settings.kcalTarget + kcalAdj,
             standardMeals: { ...seed.standardDay },
           });

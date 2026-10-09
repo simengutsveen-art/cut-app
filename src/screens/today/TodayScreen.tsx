@@ -23,6 +23,7 @@ import {
   TextArea,
 } from '../../components/ui';
 import { patchDayLog } from '../../data/dayLogs';
+import { startPlan } from '../../data/progressOps';
 import { isNewerSeed } from '../../data/seedSync';
 import { startWorkout } from '../../data/workouts';
 import { db } from '../../db';
@@ -36,7 +37,7 @@ import {
   formatDate,
   formatWeekdayLong,
   isoWeekday,
-  planStatus,
+  planStatusFor,
   planStatusLabel,
   todayISO,
 } from '../../lib/dates';
@@ -58,7 +59,7 @@ export function TodayScreen() {
   const navigate = useNavigate();
   const ctx = useWorkoutContext();
   const day = useDayPlan(today);
-  const status = planStatus(today, settings.startDate, settings.weeks);
+  const status = planStatusFor(settings, today);
   const week = status.week;
   const phase = phaseForWeek(plan.phases, week);
   const weekday = isoWeekday(today);
@@ -143,6 +144,22 @@ export function TodayScreen() {
             />
           )}
         </div>
+      )}
+
+      {status.kind === 'waiting' && (
+        <Card tone="accent" className="mb-4" aria-label="Start planen">
+          <h2 className="text-xl font-bold">Klar til å starte?</h2>
+          <p className="mt-1 text-sm">
+            Trykk når du vil begynne. Uke 1 starter i dag, og planen varer i {settings.weeks} uker,
+            til og med {formatDate(addDaysISO(today, settings.weeks * 7 - 1))}.
+          </p>
+          <Button className="mt-3" block size="lg" onClick={() => void startPlan(db, today)}>
+            <IconPlay size={20} /> Start nå
+          </Button>
+          <p className="mt-2 text-xs text-muted">
+            Ukene telles fra startdagen. Du kan endre startdato under Mer → Innstillinger.
+          </p>
+        </Card>
       )}
 
       {alert.show && <BackAlertCard reason={alert.reason} />}

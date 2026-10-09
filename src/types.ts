@@ -270,6 +270,8 @@ export interface AppSettings extends SeedSettings {
   weekMealChoices: Record<string, WeekMealChoice>;
   theme: ThemePref;
   userModified: boolean;
+  /** Simen har trykket «Start nå» (eller valgt startdato selv). Før det venter planen. */
+  planStarted?: boolean;
 }
 
 export interface ExtraFood {

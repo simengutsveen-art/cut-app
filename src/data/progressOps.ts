@@ -57,3 +57,8 @@ export function removePhoto(db: CutDB, date: string, index: number) {
     m.photos = m.photos.filter((_, i) => i !== index);
   });
 }
+
+/** «Start nå»: uke 1 begynner i dag. */
+export async function startPlan(db: CutDB, todayIso: string): Promise<void> {
+  await db.settings.update('app', { startDate: todayIso, planStarted: true });
+}

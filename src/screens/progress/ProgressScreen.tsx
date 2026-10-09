@@ -5,7 +5,13 @@ import { setWaist } from '../../data/progressOps';
 import { db } from '../../db';
 import { useToday } from '../../hooks/useToday';
 import { recommend } from '../../lib/adjustments';
-import { daysBetween, formatDate, isoWeekday, planStatus, planStatusLabel } from '../../lib/dates';
+import {
+  daysBetween,
+  formatDate,
+  isoWeekday,
+  planStatusFor,
+  planStatusLabel,
+} from '../../lib/dates';
 import { fmtSigned, formatNumber } from '../../lib/format';
 import { guideText } from '../../lib/labels';
 import { sessionsPerWeek } from '../../lib/prescription';
@@ -35,8 +41,8 @@ export function ProgressScreen() {
 
   const start = settings.startDate;
   const weeks = settings.weeks;
-  const status = planStatus(today, start, weeks);
-  const currentWeek = status.kind === 'before' ? 0 : status.week;
+  const status = planStatusFor(settings, today);
+  const currentWeek = status.kind === 'waiting' || status.kind === 'before' ? 0 : status.week;
 
   const data = useMemo(() => {
     const logs = dayLogs ?? [];

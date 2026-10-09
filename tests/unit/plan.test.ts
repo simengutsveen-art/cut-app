@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, isoWeekday, planStatus, planStatusLabel, planWeek } from '../../src/lib/dates';
+import {
+  formatDate,
+  isoWeekday,
+  planStatus,
+  planStatusFor,
+  planStatusLabel,
+  planWeek,
+} from '../../src/lib/dates';
 import { defaultMealsForDate, prepEventOnDate, prepEventsForWeek } from '../../src/lib/mealPrep';
 import {
   dayPlanFor,
@@ -25,10 +32,23 @@ describe('uke i planen', () => {
     expect(planWeek('2026-12-28', start, 12)).toBe(12);
   });
 
-  it('før start: «Starter om X dager»', () => {
-    expect(planStatusLabel(planStatus('2026-10-11', start, 12), 12)).toBe('Starter om 1 dag');
-    expect(planStatusLabel(planStatus('2026-10-09', start, 12), 12)).toBe('Starter om 3 dager');
+  it('før start: dager igjen beregnes, men appen viser «Klar til start»', () => {
+    expect(planStatus('2026-10-11', start, 12)).toEqual({ kind: 'before', daysUntil: 1, week: 1 });
+    expect(planStatus('2026-10-09', start, 12)).toEqual({ kind: 'before', daysUntil: 3, week: 1 });
+    expect(planStatusLabel(planStatus('2026-10-11', start, 12), 12)).toBe('Klar til start');
     expect(planWeek('2026-10-11', start, 12)).toBe(1);
+  });
+
+  it('planen venter til «Start nå» er trykket', () => {
+    const notStarted = { startDate: start, weeks: 12, planStarted: false };
+    expect(planStatusFor(notStarted, '2026-10-20')).toEqual({ kind: 'waiting', week: 1 });
+    const started = { startDate: '2026-10-09', weeks: 12, planStarted: true };
+    expect(planStatusFor(started, '2026-10-09')).toEqual({ kind: 'active', week: 1 });
+    expect(planStatusFor(started, '2026-10-16')).toEqual({ kind: 'active', week: 2 });
+    expect(planStatusFor({ ...started, startDate: '2026-11-02' }, '2026-10-20').kind).toBe(
+      'waiting',
+    );
+    expect(planStatusLabel({ kind: 'waiting', week: 1 }, 12)).toBe('Klar til start');
   });
 
   it('etter uke 12: «Planen er ferdig»', () => {

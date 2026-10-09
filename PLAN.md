@@ -35,6 +35,9 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
   (samme som eksemplet «60 × 8, 8, 7, 6 → prøv 60 × 8, 8, 8, 7»). Det svakeste settet får alltid +1.
 - **«Stall»:** beste e1RM har falt tre økter på rad (fire økter med synkende e1RM).
 - **Snitt tap per uke (prognose):** `(startvekt − ukesnitt siste uke med data) / ukenummer`.
+- **Start av planen (endret etter ønske fra Simen):** Ingen «Starter om X dager». Planen venter med
+  «Klar til start» til Simen trykker «Start nå». Da blir startdatoen i dag, og ukene telles fra den dagen.
+  Startdatoen kan endres under Innstillinger, og «Oppdater plan» flytter den aldri.
 - **Tema:** mørkt som standard, med valg for lyst og «følg systemet» (`prefers-color-scheme`).
 - **Faser, progresjon, core-rutine, justeringsregler og guider** er ikke redigerbare i appen. De lagres
   i `meta`-tabellen og byttes ut ved «Oppdater plan».

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { startPlan } from '../../src/data/progressOps';
 import { parseSeed } from '../../src/data/schema';
 import { applySeedUpdate, initDatabase, isNewerSeed, resetToSeed } from '../../src/data/seedSync';
 import { fixtureSeed, freshDb, rawFixture } from '../helpers';
@@ -59,6 +60,20 @@ describe('seed-oppdatering', () => {
     expect(await db.ingredients.get('min_egen')).toBeDefined();
     expect(await db.dayLogs.get('2026-10-12')).toMatchObject({ weightKg: 80.2 });
     expect(await db.getMeta('seedVersion')).toBe('2026-11-01');
+    db.close();
+  });
+
+  it('startdatoen fra «Start nå» flyttes ikke av en plan-oppdatering', async () => {
+    const db = freshDb();
+    await initDatabase(db, fixtureSeed());
+    await startPlan(db, '2026-10-09');
+    const summary = await applySeedUpdate(db, newerSeed());
+    expect(summary.settingsUpdated).toBe(false);
+    expect(await db.settings.get('app')).toMatchObject({
+      startDate: '2026-10-09',
+      planStarted: true,
+      userModified: false,
+    });
     db.close();
   });
 

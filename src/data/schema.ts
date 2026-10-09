@@ -377,6 +377,7 @@ export const settingsRowSchema = seedSettingsSchema.extend({
   ),
   theme: z.enum(['dark', 'light', 'system']),
   userModified: z.boolean(),
+  planStarted: z.boolean().optional(),
 });
 
 export const dayLogSchema = z.object({

@@ -43,6 +43,7 @@ export function planWeek(dateISO: string, startISO: string, weeks: number): numb
 }
 
 export type PlanStatus =
+  | { kind: 'waiting'; week: 1 }
   | { kind: 'before'; daysUntil: number; week: 1 }
   | { kind: 'active'; week: number }
   | { kind: 'after'; week: number };
@@ -55,10 +56,24 @@ export function planStatus(dateISO: string, startISO: string, weeks: number): Pl
   return { kind: 'active', week };
 }
 
+/**
+ * Status for appen: planen venter til Simen har trykket «Start nå» (planStarted),
+ * og så lenge startdatoen ligger fram i tid.
+ */
+export function planStatusFor(
+  settings: { startDate: string; weeks: number; planStarted?: boolean },
+  todayIso: string,
+): PlanStatus {
+  const status = planStatus(todayIso, settings.startDate, settings.weeks);
+  if (!settings.planStarted || status.kind === 'before') return { kind: 'waiting', week: 1 };
+  return status;
+}
+
 export function planStatusLabel(status: PlanStatus, weeks: number): string {
   switch (status.kind) {
+    case 'waiting':
     case 'before':
-      return `Starter om ${status.daysUntil} ${status.daysUntil === 1 ? 'dag' : 'dager'}`;
+      return 'Klar til start';
     case 'after':
       return 'Planen er ferdig';
     case 'active':

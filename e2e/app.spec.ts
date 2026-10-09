@@ -7,9 +7,20 @@ test('første oppstart seeder, og «I dag» viser riktig uke', async ({ page }) 
   await expect(page.getByText('onsdag 14. oktober')).toBeVisible();
 });
 
-test('viser «Starter om 1 dag» dagen før start', async ({ page }) => {
-  await startApp(page, new Date('2026-10-11T09:00:00+02:00'));
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Starter om 1 dag');
+test('planen venter på «Start nå», og uke 1 starter den dagen', async ({ page }) => {
+  await startApp(page, new Date('2026-10-09T09:00:00+02:00'), { start: false });
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Klar til start');
+  await expect(page.getByText(/Starter om/)).toHaveCount(0);
+  const card = page.getByRole('region', { name: 'Start planen' });
+  await expect(card).toContainText('til og med 31.12.2026');
+  await card.getByRole('button', { name: 'Start nå' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Uke 1 av 12 · Oppstart');
+  await expect(card).toHaveCount(0);
+
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Uke 1 av 12 · Oppstart');
+  await page.goto('./#/mer/innstillinger');
+  await expect(page.getByLabel('Startdato')).toHaveValue('2026-10-09');
 });
 
 test('fanelinja navigerer mellom de fem fanene', async ({ page }) => {
