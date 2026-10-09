@@ -19,3 +19,8 @@ export function initApp(): Promise<void> {
 export function resetInitState(): void {
   initPromise = null;
 }
+
+// Bare i utviklingsmodus: gjør databasen tilgjengelig i konsollen for feilsøking.
+if (import.meta.env.DEV) {
+  (window as unknown as { __cutDb: typeof db }).__cutDb = db;
+}

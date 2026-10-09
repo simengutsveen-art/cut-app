@@ -58,7 +58,7 @@ export function parseInteger(input: string): number | null {
 /** Viser et tall i et input-felt med desimalkomma. */
 export function toInputValue(value: number | null | undefined, decimals = 2): string {
   if (value === null || value === undefined || !Number.isFinite(value)) return '';
-  return formatNumber(value, decimals).replace(/ /g, '');
+  return formatNumber(value, decimals);
 }
 
 /** «2-3» → «2–3» */

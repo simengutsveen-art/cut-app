@@ -107,17 +107,18 @@ export function ExerciseHistoryScreen() {
                   dataKey="e1rm"
                   name="Beste e1RM"
                   stroke="var(--c-accent)"
-                  strokeWidth={2.5}
-                  dot={{ r: 3 }}
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
                   isAnimationActive={false}
                 />
                 <Line
                   type="monotone"
                   dataKey="heaviest"
                   name="Tyngste sett"
-                  stroke="var(--c-good)"
+                  stroke="var(--c-series-2)"
                   strokeWidth={2}
-                  dot={{ r: 3 }}
+                  strokeDasharray="6 4"
+                  dot={{ r: 4 }}
                   isAnimationActive={false}
                 />
               </LineChart>

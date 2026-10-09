@@ -19,6 +19,8 @@
   --c-bad: #ff5147;
   --c-on-status: #0b0b10;
   --c-chart-grid: #2c2c38;
+  /* Seriefarge 2 i grafer (validert mot aksenten for fargeblindhet) */
+  --c-series-2: #2b9fd1;
 }
 
 :root[data-theme='light'] {
@@ -38,6 +40,7 @@
   --c-bad: #d0261c;
   --c-on-status: #ffffff;
   --c-chart-grid: #e1e1e8;
+  --c-series-2: #0a7fb5;
 }
 
 @theme inline {
