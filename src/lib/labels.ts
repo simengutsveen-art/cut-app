@@ -23,3 +23,40 @@ export function guideText(
   if (Array.isArray(value)) return subKey ? undefined : value.join(' ');
   return subKey ? value[subKey] : undefined;
 }
+
+export const TABLE_SLUGS = {
+  ingredienser: 'ingredients',
+  maltider: 'meals',
+  ovelser: 'exercises',
+  okter: 'sessions',
+} as const;
+
+export type TableSlug = keyof typeof TABLE_SLUGS;
+
+export const TABLE_LABELS: Record<
+  (typeof TABLE_SLUGS)[TableSlug],
+  { plural: string; singular: string; slug: TableSlug }
+> = {
+  ingredients: { plural: 'Ingredienser', singular: 'ingrediens', slug: 'ingredienser' },
+  meals: { plural: 'Måltider', singular: 'måltid', slug: 'maltider' },
+  exercises: { plural: 'Øvelser', singular: 'øvelse', slug: 'ovelser' },
+  sessions: { plural: 'Økter', singular: 'økt', slug: 'okter' },
+};
+
+const GUIDE_LABELS: Record<string, string> = {
+  sovn: 'Søvn',
+  tilskudd: 'Tilskudd',
+  alkohol: 'Alkohol',
+  skritt: 'Skritt',
+  ryggTeknikk: 'Ryggteknikk',
+  maaling: 'Måling',
+  vekt: 'Vekt',
+  livvidde: 'Livvidde',
+  bilder: 'Bilder',
+};
+
+export function guideLabel(key: string): string {
+  return (
+    GUIDE_LABELS[key] ?? capitalize(key.replace(/([a-z])([A-Z])/g, '$1 $2').toLocaleLowerCase('nb'))
+  );
+}

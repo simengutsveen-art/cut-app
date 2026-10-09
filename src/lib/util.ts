@@ -41,3 +41,15 @@ export function newId(prefix = ''): string {
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
+
+/** Tekst med én verdi per linje → liste (tomme linjer fjernes). */
+export function linesToList(text: string): string[] {
+  return text
+    .split('\n')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+export function trimList(list: string[]): string[] {
+  return list.map((s) => s.trim()).filter(Boolean);
+}
