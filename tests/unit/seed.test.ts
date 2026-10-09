@@ -93,3 +93,22 @@ describe('første oppstart', () => {
     db.close();
   });
 });
+
+describe('øvelsesbilder', () => {
+  it('alle imageSourceId i seed-fila har bilder i public/exercises/', async () => {
+    const { existsSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const seed = realSeed();
+    const ids = new Set(
+      [...seed.exercises, ...seed.coreRoutine.items]
+        .map((x) => x.imageSourceId)
+        .filter((id): id is string => !!id),
+    );
+    const missing = [...ids].flatMap((id) =>
+      ['0.jpg', '1.jpg']
+        .map((f) => join(process.cwd(), 'public', 'exercises', id, f))
+        .filter((p) => !existsSync(p)),
+    );
+    expect(missing, 'Kjør «npm run images»').toEqual([]);
+  });
+});

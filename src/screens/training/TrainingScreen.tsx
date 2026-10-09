@@ -1,9 +1,15 @@
-import { Page, PageHeader } from '../../components/ui';
+import { Route, Routes } from 'react-router-dom';
+import { ExerciseHistoryScreen } from './ExerciseHistoryScreen';
+import { TrainingOverview } from './TrainingOverview';
+import { WorkoutScreen } from './WorkoutScreen';
 
 export function TrainingScreen() {
   return (
-    <Page>
-      <PageHeader title="Trening" />
-    </Page>
+    <Routes>
+      <Route index element={<TrainingOverview />} />
+      <Route path="okt/:logId" element={<WorkoutScreen />} />
+      <Route path="ovelse/:exerciseId" element={<ExerciseHistoryScreen />} />
+      <Route path="*" element={<TrainingOverview />} />
+    </Routes>
   );
 }

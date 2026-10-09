@@ -9,3 +9,4 @@ package-lock.json
 seed-data.json
 tests/fixtures
 PROMPT.md
+*.tmp.mjs

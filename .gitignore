@@ -8,3 +8,4 @@ blob-report
 *.local
 .DS_Store
 lighthouse-report*
+*.tmp.mjs

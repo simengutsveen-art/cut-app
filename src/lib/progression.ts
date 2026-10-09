@@ -200,3 +200,14 @@ export function kgStep(loadType: string, incrementsKg: Record<string, number>): 
   if (inc <= 0) return 1;
   return Math.min(inc, 5);
 }
+
+/** «60 × 8, 8 · 62,5 × 6» – sett gruppert etter vekt. */
+export function formatSets(sets: Pick<SetLog, 'kg' | 'reps'>[]): string {
+  const groups: { kg: number; reps: number[] }[] = [];
+  for (const s of sets) {
+    const last = groups[groups.length - 1];
+    if (last && last.kg === s.kg) last.reps.push(s.reps);
+    else groups.push({ kg: s.kg, reps: [s.reps] });
+  }
+  return groups.map((g) => `${formatNumber(g.kg, 2)} × ${g.reps.join(', ')}`).join(' · ');
+}

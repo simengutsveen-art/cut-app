@@ -15,6 +15,7 @@ export default defineConfig([
     'playwright-report',
     'test-results',
     'node_modules',
+    '*.tmp.mjs',
   ]),
   {
     files: ['**/*.{ts,tsx}'],
