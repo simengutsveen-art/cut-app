@@ -23,7 +23,7 @@ export interface ShoppingGroup {
 
 export interface ShoppingList {
   week: number;
-  mealsUsed: { meal: Meal; portions: number }[];
+  mealsUsed: { meal: Meal; portions: number; role: 'prep' | 'daily' }[];
   groups: ShoppingGroup[];
   /** Sum for alt som skal kjøpes (uten «har hjemme») */
   totalNok: number;
@@ -46,7 +46,7 @@ export function buildShoppingList(params: {
 }): ShoppingList {
   const { week, rotation, meals, ingredients } = params;
   const have = params.have ?? new Set<string>();
-  const used: { meal: Meal; portions: number }[] = [];
+  const used: ShoppingList['mealsUsed'] = [];
 
   const entry = rotationForWeek(rotation, week);
   if (entry) {
@@ -57,12 +57,12 @@ export function buildShoppingList(params: {
       entry.wednesday.middag,
     ]) {
       const meal = meals.get(id);
-      if (meal) used.push({ meal, portions: meal.batchPortions });
+      if (meal) used.push({ meal, portions: meal.batchPortions, role: 'prep' });
     }
   }
   for (const id of [params.breakfastId, params.eveningId]) {
     const meal = meals.get(id);
-    if (meal) used.push({ meal, portions: DAYS_PER_WEEK });
+    if (meal) used.push({ meal, portions: DAYS_PER_WEEK, role: 'daily' });
   }
 
   const gramsById = new Map<string, number>();

@@ -158,3 +158,10 @@ export function rangeStatus(value: number, [min, max]: [number, number]): Target
   if (v > max) return 'over';
   return 'ok';
 }
+
+/** Fargetone for status mot mål: grønn = i rute, gul = under, rød = over. */
+export const statusTone: Record<TargetStatus, 'good' | 'warn' | 'bad'> = {
+  ok: 'good',
+  under: 'warn',
+  over: 'bad',
+};
