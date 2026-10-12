@@ -5,6 +5,7 @@ import { BackAlertCard } from '../../components/BackAlertCard';
 import { PainPicker } from '../../components/PainPicker';
 import { PlanHero } from '../../components/PlanProgress';
 import { SessionCard } from '../../components/SessionCard';
+import { StopWorkoutButton } from '../../components/StopWorkout';
 import { Ring } from '../../components/Ring';
 import {
   IconCamera,
@@ -282,14 +283,16 @@ export function TodayScreen() {
           <h2 className="mt-1 text-[22px] font-bold tracking-[-0.02em]">
             {sessionsById.get(activeWorkout.sessionId)?.name}
           </h2>
-          <Button
-            className="mt-4"
-            block
-            size="lg"
-            onClick={() => navigate(`/trening/okt/${activeWorkout.id}`)}
-          >
-            <IconPlay size={18} /> Fortsett økta
-          </Button>
+          <div className="mt-4 flex gap-2">
+            <Button
+              className="flex-1"
+              size="lg"
+              onClick={() => navigate(`/trening/okt/${activeWorkout.id}`)}
+            >
+              <IconPlay size={18} /> Fortsett økta
+            </Button>
+            <StopWorkoutButton compact log={activeWorkout} className="min-h-14 rounded-2xl px-4" />
+          </div>
         </Card>
       ) : session ? (
         <SessionCard

@@ -16,6 +16,7 @@ import {
 } from '../../components/ui';
 import { ExerciseThumb } from '../../components/ExerciseImage';
 import { SessionCard } from '../../components/SessionCard';
+import { StopWorkoutButton } from '../../components/StopWorkout';
 import { startWorkout } from '../../data/workouts';
 import { db } from '../../db';
 import { useToday } from '../../hooks/useToday';
@@ -88,14 +89,16 @@ export function TrainingOverview() {
           <h2 className="mt-1 text-[24px] font-bold tracking-[-0.025em]">
             {sessionsById.get(active.sessionId)?.name}
           </h2>
-          <Button
-            className="mt-4"
-            block
-            size="lg"
-            onClick={() => navigate(`/trening/okt/${active.id}`)}
-          >
-            <IconPlay size={20} /> Fortsett økta
-          </Button>
+          <div className="mt-4 flex gap-2">
+            <Button
+              className="flex-1"
+              size="lg"
+              onClick={() => navigate(`/trening/okt/${active.id}`)}
+            >
+              <IconPlay size={20} /> Fortsett økta
+            </Button>
+            <StopWorkoutButton compact log={active} className="min-h-14 rounded-2xl px-4" />
+          </div>
         </Card>
       ) : todaySession ? (
         <SessionCard

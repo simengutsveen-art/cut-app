@@ -18,6 +18,7 @@ import { bestE1rm, exerciseHistory, isStalled, suggestionText } from '../../lib/
 import { useAppData } from '../../state/appData';
 import type { Exercise, SetLog, WorkoutLog } from '../../types';
 import { ExerciseThumb } from '../../components/ExerciseImage';
+import { StopWorkoutButton } from '../../components/StopWorkout';
 import { ExerciseCard } from './ExerciseCard';
 import { SwapSheet } from './SwapSheet';
 
@@ -128,6 +129,13 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
         title={session?.name ?? 'Økt'}
         subtitle={`Uke ${log.week}${phase ? ` · ${phase.name}` : ''} · ${formatWeekdayLong(log.date)}`}
         back="/trening"
+        actions={
+          <StopWorkoutButton
+            compact
+            log={log}
+            onStopped={() => navigate('/trening', { replace: true })}
+          />
+        }
       />
       <div className="surface mb-4 rounded-[22px] p-4">
         <div className="flex items-baseline justify-between gap-2">
@@ -181,15 +189,7 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
         >
           <IconCheck /> Fullfør økt
         </Button>
-        <InlineConfirm
-          label="Avbryt økt"
-          message="Økta og settene du har logget slettes."
-          confirmLabel="Slett økta"
-          onConfirm={async () => {
-            await discardWorkout(db, log.id);
-            navigate('/trening', { replace: true });
-          }}
-        />
+        <StopWorkoutButton log={log} onStopped={() => navigate('/trening', { replace: true })} />
       </div>
 
       {swapView && swapIndex !== null && (
