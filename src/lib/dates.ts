@@ -109,6 +109,27 @@ export function formatWeekdayLong(iso: string): string {
   return format(parseISO(iso), 'EEEE d. MMMM', { locale: nb });
 }
 
+/** «søndag 3. januar 2027» */
+export function formatWeekdayLongYear(iso: string): string {
+  return format(parseISO(iso), 'EEEE d. MMMM yyyy', { locale: nb });
+}
+
+/** «12. okt.» */
+export function formatDayMonth(iso: string): string {
+  return format(parseISO(iso), 'd. MMM', { locale: nb });
+}
+
+/** «12.–18. okt.» eller «26. okt. – 1. nov.» */
+export function formatDayMonthRange(startISO: string, endISO: string): string {
+  const start = parseISO(startISO);
+  const end = parseISO(endISO);
+  const endText = formatDayMonth(endISO);
+  if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+    return `${format(start, 'd.')}–${endText}`;
+  }
+  return `${formatDayMonth(startISO)} – ${endText}`;
+}
+
 export function weekdayName(weekday: number, style: 'long' | 'short' = 'long'): string {
   // 2024-01-01 var en mandag.
   const date = addDays(new Date(2024, 0, 1), weekday - 1);

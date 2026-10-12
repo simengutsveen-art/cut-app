@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useDoneWorkoutDates } from '../hooks/useDoneWorkoutDates';
-import { planProgress, WEEKDAY_LETTERS } from '../lib/calendar';
-import { cx } from '../lib/cx';
-import { formatDate, isoWeekday, parseDate, planStatusFor, weekDates } from '../lib/dates';
+import { dayLabel, planProgress } from '../lib/calendar';
+import { formatDate, isoWeekday, planStatusFor, weekDates } from '../lib/dates';
 import { formatNumber } from '../lib/format';
 import { dayPlanFor, phaseForWeek } from '../lib/prescription';
 import { useAppData } from '../state/appData';
+import { DayMark } from './DayMark';
 import { IconCalendar, IconChevronRight } from './icons';
 import { Ring } from './Ring';
 
@@ -16,34 +16,12 @@ export function WeekStrip({ week, today }: { week: number; today: string }) {
   return (
     <ol className="grid grid-cols-7 gap-1" aria-label={`Uke ${week}`}>
       {weekDates(week, settings.startDate).map((date) => {
-        const wd = isoWeekday(date);
-        const planned = dayPlanFor(settings, wd).kind === 'session';
-        const isToday = date === today;
+        const planned = dayPlanFor(settings, isoWeekday(date)).kind === 'session';
         const isDone = done.has(date);
-        const past = date < today;
         return (
-          <li key={date} className="flex flex-col items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-muted">{WEEKDAY_LETTERS[wd - 1]}</span>
-            <span
-              className={cx(
-                'num flex h-9 w-9 items-center justify-center rounded-full text-[15px] font-semibold',
-                isToday && 'pulse-today bg-accent text-on-accent',
-                !isToday && isDone && 'bg-accent/15 text-accent',
-                !isToday && !isDone && (past ? 'text-fg' : 'text-muted'),
-              )}
-            >
-              {parseDate(date).getDate()}
-            </span>
-            <span
-              aria-hidden="true"
-              className={cx(
-                'h-1.5 w-1.5 rounded-full',
-                isDone ? 'bg-accent' : planned ? 'bg-surface-3' : 'bg-transparent',
-              )}
-            />
-            <span className="sr-only">
-              {isDone ? 'Økt fullført' : planned ? 'Treningsdag' : 'Hviledag'}
-            </span>
+          <li key={date} className="flex justify-center">
+            <DayMark date={date} today={today} planned={planned} done={isDone} />
+            <span className="sr-only">{dayLabel(date, today, planned, isDone)}</span>
           </li>
         );
       })}

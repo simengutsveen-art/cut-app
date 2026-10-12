@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { EndPlanButton } from '../../components/PlanControls';
 import {
   Button,
   Card,
@@ -15,6 +16,7 @@ import {
 } from '../../components/ui';
 import { settingsFromSeed } from '../../data/seedSync';
 import { db } from '../../db';
+import { useToday } from '../../hooks/useToday';
 import { isValidISODate, weekdayName } from '../../lib/dates';
 import { formatNumber } from '../../lib/format';
 import { capitalize, SLOT_LABELS } from '../../lib/labels';
@@ -38,6 +40,7 @@ const SEED_KEYS: (keyof AppSettings)[] = [
 
 export function SettingsScreen() {
   const { settings, sessions, meals, seed, plan } = useAppData();
+  const today = useToday();
   const [draft, setDraft] = useState<AppSettings>(settings);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -325,7 +328,8 @@ export function SettingsScreen() {
         </Button>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col gap-2">
+        <EndPlanButton today={today} />
         <InlineConfirm
           label="Tilbakestill innstillinger til planen"
           message="Mål, ukeplan og standardmåltider settes tilbake til seed-fila. Startdatoen og godtatte justeringer beholdes."

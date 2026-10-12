@@ -62,3 +62,8 @@ export function removePhoto(db: CutDB, date: string, index: number) {
 export async function startPlan(db: CutDB, todayIso: string): Promise<void> {
   await db.settings.update('app', { startDate: todayIso, planStarted: true });
 }
+
+/** «Avslutt planen»: tilbake til «Klar til start». Det som er logget, blir liggende. */
+export async function endPlan(db: CutDB): Promise<void> {
+  await db.settings.update('app', { planStarted: false });
+}

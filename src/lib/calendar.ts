@@ -1,5 +1,6 @@
-import type { Phase } from '../types';
-import { addDaysISO, daysBetween, isoWeekday, parseDate } from './dates';
+import type { IsoWeekday, Phase } from '../types';
+import { addDaysISO, daysBetween, formatWeekdayLong, isoWeekday, parseDate } from './dates';
+import { capitalize } from './labels';
 import { phaseForWeek } from './prescription';
 
 export interface PlanProgress {
@@ -58,99 +59,104 @@ export function planProgress(
   };
 }
 
-export type DayState = 'outside' | 'past' | 'today' | 'future';
+export type DayState = 'past' | 'today' | 'future';
+export type PeriodState = 'past' | 'current' | 'future';
 
 export interface CalendarDay {
   date: string;
   /** Dato i måneden */
   day: number;
-  inPlan: boolean;
-  /** Planuke (1–weeks), eller null utenfor planen */
-  week: number | null;
+  weekday: IsoWeekday;
+  /** Planuke (1–weeks) */
+  week: number;
   phase: Phase | undefined;
   state: DayState;
 }
 
-export interface CalendarRow {
+export interface PlanWeek {
+  week: number;
+  startDate: string;
+  endDate: string;
+  phase: Phase | undefined;
+  state: PeriodState;
   days: CalendarDay[];
-  /** Planuka til den første dagen i raden som er med i planen */
-  week: number | null;
-  /** Månedsnavn når raden starter en ny måned (eller er første rad) */
-  month: string | null;
 }
 
-const MONTHS = [
-  'januar',
-  'februar',
-  'mars',
-  'april',
-  'mai',
-  'juni',
-  'juli',
-  'august',
-  'september',
-  'oktober',
-  'november',
-  'desember',
-];
-
-export function monthName(iso: string): string {
-  return MONTHS[parseDate(iso).getMonth()];
+function periodState(startISO: string, endISO: string, todayIso: string): PeriodState {
+  if (daysBetween(todayIso, endISO) < 0) return 'past';
+  if (daysBetween(todayIso, startISO) > 0) return 'future';
+  return 'current';
 }
 
-/**
- * Kalender med uker fra mandag til søndag som dekker hele planen.
- * Starter planen midt i en uke, er dagene før start med (men utenfor planen).
- */
-export function calendarRows(
+/** Planen uke for uke. Uke 1 starter på startdagen, uansett ukedag. */
+export function planWeeks(
   startISO: string,
   weeks: number,
   todayIso: string,
   phases: Phase[],
-): CalendarRow[] {
-  const totalDays = weeks * 7;
-  const endISO = addDaysISO(startISO, totalDays - 1);
-  const first = addDaysISO(startISO, -(isoWeekday(startISO) - 1));
-  const last = addDaysISO(endISO, 7 - isoWeekday(endISO));
-  const rows: CalendarRow[] = [];
-  let lastMonth = '';
-  for (let cursor = first; daysBetween(cursor, last) >= 0; cursor = addDaysISO(cursor, 7)) {
-    const days: CalendarDay[] = Array.from({ length: 7 }, (_, i) => {
-      const date = addDaysISO(cursor, i);
-      const diff = daysBetween(startISO, date);
-      const inPlan = diff >= 0 && diff < totalDays;
-      const week = inPlan ? Math.floor(diff / 7) + 1 : null;
+): PlanWeek[] {
+  return Array.from({ length: weeks }, (_, i) => {
+    const week = i + 1;
+    const startDate = addDaysISO(startISO, i * 7);
+    const endDate = addDaysISO(startDate, 6);
+    const phase = phaseForWeek(phases, week);
+    const days = Array.from({ length: 7 }, (_, d): CalendarDay => {
+      const date = addDaysISO(startDate, d);
       const rel = daysBetween(todayIso, date);
       return {
         date,
         day: parseDate(date).getDate(),
-        inPlan,
+        weekday: isoWeekday(date),
         week,
-        phase: week ? phaseForWeek(phases, week) : undefined,
-        state: !inPlan ? 'outside' : rel < 0 ? 'past' : rel === 0 ? 'today' : 'future',
+        phase,
+        state: rel < 0 ? 'past' : rel === 0 ? 'today' : 'future',
       };
     });
-    const firstInPlan = days.find((d) => d.inPlan);
-    const monthStart = days.find((d) => d.day === 1);
-    const month =
-      rows.length === 0 ? monthName(days[0].date) : monthStart ? monthName(monthStart.date) : null;
-    rows.push({ days, week: firstInPlan?.week ?? null, month: month !== lastMonth ? month : null });
-    if (month) lastMonth = month;
-  }
-  return rows;
+    return {
+      week,
+      startDate,
+      endDate,
+      phase,
+      state: periodState(startDate, endDate, todayIso),
+      days,
+    };
+  });
 }
 
-/** Fasene med datoer, for tidslinja over kalenderen. */
-export function phaseSpans(
-  startISO: string,
-  phases: Phase[],
-): { phase: Phase; startDate: string; endDate: string; days: number }[] {
-  return phases.map((phase) => ({
-    phase,
-    startDate: addDaysISO(startISO, (phase.weeks[0] - 1) * 7),
-    endDate: addDaysISO(startISO, phase.weeks[1] * 7 - 1),
-    days: (phase.weeks[1] - phase.weeks[0] + 1) * 7,
+export interface PhaseGroup {
+  phase: Phase | undefined;
+  weeks: PlanWeek[];
+  startDate: string;
+  endDate: string;
+  state: PeriodState;
+}
+
+/** Ukene samlet per fase, i rekkefølge. */
+export function groupByPhase(weeks: PlanWeek[]): PhaseGroup[] {
+  const lists: PlanWeek[][] = [];
+  for (const w of weeks) {
+    const last = lists[lists.length - 1];
+    if (last && last[0].phase === w.phase) last.push(w);
+    else lists.push([w]);
+  }
+  return lists.map((list) => ({
+    phase: list[0].phase,
+    weeks: list,
+    startDate: list[0].startDate,
+    endDate: list[list.length - 1].endDate,
+    state: list.some((w) => w.state === 'current')
+      ? 'current'
+      : list.every((w) => w.state === 'past')
+        ? 'past'
+        : 'future',
   }));
+}
+
+/** Skjermleser-tekst for en dag, f.eks. «Mandag 12. oktober, i dag, treningsdag». */
+export function dayLabel(date: string, today: string, planned: boolean, done: boolean): string {
+  const when = date === today ? ', i dag' : '';
+  const what = done ? ', økt fullført' : planned ? ', treningsdag' : ', hviledag';
+  return `${capitalize(formatWeekdayLong(date))}${when}${what}`;
 }
 
 /** Ukedagsbokstaver mandag–søndag. */

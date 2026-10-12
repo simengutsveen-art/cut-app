@@ -3,6 +3,7 @@ import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BackAlertCard } from '../../components/BackAlertCard';
 import { PainPicker } from '../../components/PainPicker';
+import { StartPlanButton } from '../../components/PlanControls';
 import { PlanHero } from '../../components/PlanProgress';
 import { SessionCard } from '../../components/SessionCard';
 import { StopWorkoutButton } from '../../components/StopWorkout';
@@ -29,7 +30,6 @@ import {
   TextArea,
 } from '../../components/ui';
 import { patchDayLog } from '../../data/dayLogs';
-import { startPlan } from '../../data/progressOps';
 import { isNewerSeed } from '../../data/seedSync';
 import { startWorkout } from '../../data/workouts';
 import { db } from '../../db';
@@ -186,9 +186,11 @@ export function TodayScreen() {
             Starter du i dag, varer planen i {settings.weeks} uker, til og med{' '}
             {formatDate(addDaysISO(today, settings.weeks * 7 - 1))}.
           </p>
-          <Button className="mt-4" block size="lg" onClick={() => void startPlan(db, today)}>
-            <IconPlay size={18} /> {plannedStart ? 'Start i dag i stedet' : 'Start nå'}
-          </Button>
+          <StartPlanButton
+            className="mt-4"
+            today={today}
+            label={plannedStart ? 'Start i dag i stedet' : 'Start nå'}
+          />
           <p className="mt-2.5 text-xs text-muted">
             Ukene telles fra startdagen. Du kan endre startdato under Mer → Innstillinger.
           </p>

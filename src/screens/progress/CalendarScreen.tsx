@@ -1,24 +1,29 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { DayMark, DayMarkLegend } from '../../components/DayMark';
 import { IconCheck } from '../../components/icons';
-import { Card, Page, PageHeader, SectionTitle, Sheet } from '../../components/ui';
+import { EndPlanButton } from '../../components/PlanControls';
+import { Badge, Card, Page, PageHeader, SectionTitle, Sheet } from '../../components/ui';
 import { db } from '../../db';
 import { useDoneWorkoutDates } from '../../hooks/useDoneWorkoutDates';
 import { useToday } from '../../hooks/useToday';
 import {
-  calendarRows,
-  phaseSpans,
+  dayLabel,
+  groupByPhase,
   planProgress,
-  WEEKDAY_LETTERS,
+  planWeeks,
   type CalendarDay,
+  type PhaseGroup,
+  type PlanWeek,
 } from '../../lib/calendar';
 import { cx } from '../../lib/cx';
 import {
   formatDate,
-  formatDateShort,
+  formatDayMonth,
+  formatDayMonthRange,
   formatWeekdayLong,
   isoWeekday,
-  planStatusFor,
 } from '../../lib/dates';
 import { formatNumber } from '../../lib/format';
 import { capitalize } from '../../lib/labels';
@@ -26,238 +31,266 @@ import { painEntry } from '../../lib/pain';
 import { dayPlanFor } from '../../lib/prescription';
 import { stepGoal } from '../../lib/progress';
 import { useAppData } from '../../state/appData';
-import type { Phase } from '../../types';
 
-/** Fasene får hver sin styrke av aksentfargen (deload lysest). */
-function phaseColor(phases: Phase[], phase: Phase | undefined): string {
-  if (!phase) return 'transparent';
-  const i = phases.indexOf(phase);
-  const deload = phase.setsFactor !== undefined && phase.setsFactor < 1;
-  const strength = deload ? 28 : ([45, 65, 28, 82, 100][i] ?? 60);
-  return `color-mix(in srgb, var(--c-accent) ${strength}%, var(--c-surface-3))`;
+function weekRangeLabel(first: number, last: number): string {
+  return first === last ? `Uke ${first}` : `Uke ${first}–${last}`;
 }
 
 export function CalendarScreen() {
   const { settings, plan } = useAppData();
   const today = useToday();
+  const navigate = useNavigate();
   const started = !!settings.planStarted;
   // Før start vises planen som om den starter i dag (det «Start nå» gjør).
   const startDate = started ? settings.startDate : today;
   const progress = planProgress(startDate, settings.weeks, today, started);
-  const status = planStatusFor(settings, today);
-  const rows = useMemo(
-    () => calendarRows(startDate, settings.weeks, today, plan.phases),
+  const weeks = useMemo(
+    () => planWeeks(startDate, settings.weeks, today, plan.phases),
     [startDate, settings.weeks, today, plan.phases],
   );
-  const spans = phaseSpans(startDate, plan.phases);
+  const groups = groupByPhase(weeks);
   const done = useDoneWorkoutDates();
   const [selected, setSelected] = useState<CalendarDay | null>(null);
+
+  const isPlanned = (date: string) => dayPlanFor(settings, isoWeekday(date)).kind === 'session';
+  const allDays = weeks.flatMap((w) => w.days);
+  const plannedTotal = allDays.filter((d) => isPlanned(d.date)).length;
+  const doneTotal = allDays.filter((d) => done.has(d.date)).length;
+  const current = started ? weeks.find((w) => w.state === 'current') : undefined;
 
   return (
     <Page>
       <PageHeader
-        eyebrow={`${settings.weeks} uker`}
+        eyebrow="Planen"
         title="Kalender"
         back
         subtitle={
           started
             ? `${formatDate(progress.startDate)} – ${formatDate(progress.endDate)}`
-            : `Ikke startet. Forhåndsvisning hvis du starter i dag: ${formatDate(progress.startDate)} – ${formatDate(progress.endDate)}`
+            : 'Ikke startet ennå. Slik blir planen hvis du starter i dag.'
         }
       />
 
-      <Card>
+      <Card className="rounded-[26px]">
         <div className="flex items-end justify-between gap-3">
-          <div>
-            <p className="eyebrow">Fremdrift</p>
-            <p className="num mt-1 text-[34px] leading-none font-bold">
-              {progress.dayNumber}
-              <span className="text-[18px] font-semibold text-muted">
-                {' '}
-                / {progress.totalDays} dager
-              </span>
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="num text-[22px] leading-none font-bold text-accent">
-              {formatNumber(progress.daysLeft)}
-            </p>
-            <p className="text-[13px] text-muted">dager igjen</p>
-          </div>
+          <p className="num text-[30px] leading-none font-bold tracking-[-0.02em]">
+            {progress.finished ? 'Ferdig' : `Dag ${progress.dayNumber}`}
+            {!progress.finished && (
+              <span className="text-[17px] font-semibold text-muted"> av {progress.totalDays}</span>
+            )}
+          </p>
+          <p className="text-right text-[15px] font-semibold">
+            <span className="num text-accent">{formatNumber(progress.daysLeft)}</span>{' '}
+            {progress.daysLeft === 1 ? 'dag' : 'dager'} igjen
+          </p>
         </div>
-
-        {/* Tidslinje med fasene, og en markør for i dag */}
-        <div className="relative mt-4" aria-hidden="true">
-          <div className="flex h-3 gap-[3px] overflow-hidden rounded-full">
-            {spans.map(({ phase, days }) => (
-              <div
-                key={phase.name}
-                className="h-full"
-                style={{ flexGrow: days, background: phaseColor(plan.phases, phase) }}
-              />
-            ))}
-          </div>
-          {started && !progress.finished && (
-            <div
-              className="absolute -top-1 h-5 w-1 -translate-x-1/2 rounded-full bg-fg shadow-[0_0_0_3px_var(--c-surface)]"
-              style={{ left: `${progress.fraction * 100}%` }}
-            />
-          )}
-        </div>
-        <ul className="mt-4 grid gap-2">
-          {spans.map(({ phase, startDate, endDate }) => {
-            const current =
-              started &&
-              phase ===
-                plan.phases.find((p) => status.week >= p.weeks[0] && status.week <= p.weeks[1]);
-            return (
-              <li key={phase.name} className="flex items-center gap-2.5 text-[14px]">
-                <span
-                  className="h-2.5 w-2.5 shrink-0 rounded-full"
-                  style={{ background: phaseColor(plan.phases, phase) }}
-                  aria-hidden="true"
-                />
-                <span className={cx('flex-1', current ? 'font-semibold' : 'text-fg/85')}>
-                  {phase.name}
-                  {current && <span className="ml-1.5 text-accent">· nå</span>}
-                </span>
-                <span className="num text-muted">
-                  {phase.weeks[0] === phase.weeks[1]
-                    ? `U${phase.weeks[0]}`
-                    : `U${phase.weeks[0]}–${phase.weeks[1]}`}{' '}
-                  · {formatDateShort(startDate)}–{formatDateShort(endDate)}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      </Card>
-
-      <SectionTitle>Alle dager</SectionTitle>
-      <Card className="px-2.5 py-3">
         <div
-          className="grid grid-cols-[28px_repeat(7,minmax(0,1fr))] gap-y-1"
-          role="group"
-          aria-label="Kalender for planen"
+          className="mt-3 h-2.5 overflow-hidden rounded-full bg-surface-3"
+          role="progressbar"
+          aria-label="Dager fullført i planen"
+          aria-valuemin={0}
+          aria-valuemax={progress.totalDays}
+          aria-valuenow={progress.dayNumber}
         >
-          <span aria-hidden="true" />
-          {WEEKDAY_LETTERS.map((l, i) => (
-            <span
-              key={i}
-              className="pb-1 text-center text-[11px] font-semibold text-muted"
-              aria-hidden="true"
-            >
-              {l}
-            </span>
-          ))}
-          {rows.map((row, ri) => (
-            <CalendarRowView
-              key={row.days[0].date}
-              row={row}
-              first={ri === 0}
-              done={done}
-              onSelect={setSelected}
-            />
-          ))}
+          <div
+            className="h-full rounded-full bg-accent transition-[width] duration-500"
+            style={{ width: `${progress.fraction * 100}%` }}
+          />
         </div>
-        <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 px-1.5 text-[12px] text-muted">
-          <li className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" /> Økt fullført
-          </li>
-          <li className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-muted/50" aria-hidden="true" /> Treningsdag
-          </li>
-          <li className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-full ring-2 ring-accent" aria-hidden="true" /> I dag
-          </li>
-        </ul>
+        <div className="mt-1.5 flex justify-between text-[12px] text-muted">
+          <span>Start {formatDayMonth(progress.startDate)}</span>
+          <span>Slutt {formatDayMonth(progress.endDate)}</span>
+        </div>
+        <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-[var(--c-hairline)] pt-3.5">
+          <div>
+            <dt className="text-[12px] text-muted">Uke</dt>
+            <dd className="num text-[17px] font-bold">
+              {current ? current.week : progress.finished ? settings.weeks : '–'}
+              <span className="text-[13px] font-semibold text-muted"> av {settings.weeks}</span>
+            </dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="text-[12px] text-muted">Fase</dt>
+            <dd className="truncate text-[17px] font-bold">{current?.phase?.name ?? '–'}</dd>
+          </div>
+          <div>
+            <dt className="text-[12px] text-muted">Økter</dt>
+            <dd className="num text-[17px] font-bold">
+              {formatNumber(doneTotal)}
+              <span className="text-[13px] font-semibold text-muted">
+                {' '}
+                av {formatNumber(plannedTotal)}
+              </span>
+            </dd>
+          </div>
+        </dl>
       </Card>
+
+      <SectionTitle>Uke for uke</SectionTitle>
+      <DayMarkLegend className="-mt-1 mb-3 px-1" />
+
+      <div className="flex flex-col gap-3">
+        {groups.map((group) => (
+          <PhaseCard
+            key={group.startDate}
+            group={group}
+            started={started}
+            today={today}
+            done={done}
+            isPlanned={isPlanned}
+            onSelect={setSelected}
+          />
+        ))}
+      </div>
+
+      {started && (
+        <div className="mt-8">
+          <EndPlanButton today={today} onEnded={() => navigate('/', { replace: true })} />
+          <p className="mt-2 px-1 text-[12px] text-muted">
+            Avslutter planen og går tilbake til «Klar til start». Det du har logget, beholdes.
+          </p>
+        </div>
+      )}
 
       {selected && <DaySheet day={selected} onClose={() => setSelected(null)} />}
     </Page>
   );
 }
 
-function CalendarRowView({
-  row,
-  first,
+function PhaseCard({
+  group,
+  started,
+  today,
   done,
+  isPlanned,
   onSelect,
 }: {
-  row: ReturnType<typeof calendarRows>[number];
-  first: boolean;
+  group: PhaseGroup;
+  started: boolean;
+  today: string;
   done: Set<string>;
+  isPlanned: (date: string) => boolean;
   onSelect: (day: CalendarDay) => void;
 }) {
-  const { settings, plan } = useAppData();
+  const first = group.weeks[0].week;
+  const last = group.weeks[group.weeks.length - 1].week;
+  const name = group.phase?.name ?? weekRangeLabel(first, last);
+  const isCurrent = started && group.state === 'current';
+  const isPast = started && group.state === 'past';
   return (
-    <>
-      {row.month && (
+    <section
+      aria-label={name}
+      className={cx(
+        'surface overflow-hidden rounded-[24px]',
+        isCurrent &&
+          'shadow-[inset_0_0_0_1.5px_color-mix(in_srgb,var(--c-accent)_55%,transparent)]',
+      )}
+    >
+      <header className="px-4 pt-4 pb-2">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-[18px] leading-tight font-bold tracking-[-0.01em]">{name}</h3>
+          {isCurrent && <Badge tone="accent">Nå</Badge>}
+          {isPast && (
+            <Badge tone="good">
+              <IconCheck size={13} /> Ferdig
+            </Badge>
+          )}
+        </div>
+        <p className="mt-0.5 text-[13px] text-muted">
+          {weekRangeLabel(first, last)} · {formatDayMonthRange(group.startDate, group.endDate)}
+        </p>
+        {group.phase?.note && (
+          <p className="mt-1.5 text-[14px] leading-snug text-fg/85">{group.phase.note}</p>
+        )}
+      </header>
+      <ol>
+        {group.weeks.map((week) => (
+          <WeekRow
+            key={week.week}
+            week={week}
+            showDates={group.weeks.length > 1}
+            started={started}
+            today={today}
+            done={done}
+            isPlanned={isPlanned}
+            onSelect={onSelect}
+          />
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+function WeekRow({
+  week,
+  started,
+  today,
+  done,
+  isPlanned,
+  onSelect,
+  showDates,
+}: {
+  week: PlanWeek;
+  /** Datoene står allerede i fasen når den bare har én uke. */
+  showDates: boolean;
+  started: boolean;
+  today: string;
+  done: Set<string>;
+  isPlanned: (date: string) => boolean;
+  onSelect: (day: CalendarDay) => void;
+}) {
+  const planned = week.days.filter((d) => isPlanned(d.date)).length;
+  const doneCount = week.days.filter((d) => done.has(d.date)).length;
+  const isCurrent = started && week.state === 'current';
+  const complete = planned > 0 && doneCount >= planned;
+  return (
+    <li
+      aria-label={`Uke ${week.week}`}
+      className={cx(
+        'border-t border-[var(--c-hairline)] px-3 pt-2.5 pb-3',
+        isCurrent && 'bg-accent/[0.07]',
+      )}
+    >
+      <div className="flex items-baseline justify-between gap-2 px-1">
+        <p className="text-[14px] font-semibold">
+          Uke {week.week}
+          {isCurrent && <span className="font-medium text-accent"> · denne uka</span>}
+          {showDates && (
+            <span className="font-normal text-muted">
+              {' '}
+              · {formatDayMonthRange(week.startDate, week.endDate)}
+            </span>
+          )}
+        </p>
         <p
           className={cx(
-            'col-span-8 px-1 pb-1 text-[13px] font-semibold capitalize',
-            !first && 'pt-3',
+            'num shrink-0 text-[12px]',
+            complete ? 'font-semibold text-good' : 'text-muted',
           )}
         >
-          {row.month}
+          {week.state === 'future' || !started
+            ? `${planned} økter`
+            : `${doneCount} av ${planned} økter`}
         </p>
-      )}
-      <span
-        className="num flex items-center justify-start pl-0.5 text-[11px] font-semibold text-muted"
-        aria-hidden="true"
-      >
-        {row.week ? `U${row.week}` : ''}
-      </span>
-      {row.days.map((d) => {
-        const planned = d.inPlan && dayPlanFor(settings, isoWeekday(d.date)).kind === 'session';
-        const isDone = done.has(d.date);
-        const style = { '--phase': phaseColor(plan.phases, d.phase) } as CSSProperties;
-        return (
-          <button
-            key={d.date}
-            type="button"
-            disabled={!d.inPlan}
-            onClick={() => onSelect(d)}
-            aria-label={`${capitalize(formatWeekdayLong(d.date))}${d.state === 'today' ? ', i dag' : ''}${isDone ? ', økt fullført' : planned ? ', treningsdag' : ''}`}
-            style={style}
-            className={cx(
-              'pressable relative mx-auto flex h-11 w-full max-w-11 flex-col items-center justify-center rounded-[14px] disabled:pointer-events-none',
-              d.state === 'outside' && 'opacity-25',
-              d.state === 'past' && 'bg-surface-2',
-              d.state === 'today' && 'pulse-today bg-accent text-on-accent',
-            )}
-          >
-            {d.inPlan && d.state !== 'today' && (
-              <span
-                aria-hidden="true"
-                className="absolute inset-x-2.5 top-0 h-[3px] rounded-b-full"
-                style={{ background: 'var(--phase)' }}
-              />
-            )}
-            <span
-              className={cx('num text-[15px] font-semibold', d.state === 'future' && 'text-fg/80')}
+      </div>
+      <div className="mt-2 grid grid-cols-7 gap-1">
+        {week.days.map((d) => {
+          const p = isPlanned(d.date);
+          const isDone = done.has(d.date);
+          return (
+            <button
+              key={d.date}
+              type="button"
+              onClick={() => onSelect(d)}
+              aria-label={dayLabel(d.date, today, p, isDone)}
+              className="pressable flex justify-center rounded-2xl py-0.5"
             >
-              {d.day}
-            </span>
-            <span
-              aria-hidden="true"
-              className={cx(
-                'mt-0.5 h-1.5 w-1.5 rounded-full',
-                isDone
-                  ? d.state === 'today'
-                    ? 'bg-on-accent'
-                    : 'bg-accent'
-                  : planned
-                    ? d.state === 'today'
-                      ? 'bg-on-accent/50'
-                      : 'bg-muted/50'
-                    : 'bg-transparent',
-              )}
-            />
-          </button>
-        );
-      })}
-    </>
+              <DayMark date={d.date} today={today} planned={p} done={isDone} />
+            </button>
+          );
+        })}
+      </div>
+    </li>
   );
 }
 
@@ -270,9 +303,7 @@ function DaySheet({ day, onClose }: { day: CalendarDay; onClose: () => void }) {
   );
   const dp = dayPlanFor(settings, isoWeekday(day.date));
   const planned = dp.kind === 'session' ? sessionsById.get(dp.sessionId) : undefined;
-  const goal = day.week
-    ? stepGoal(settings.steps, day.week, isoWeekday(day.date), settings.stepsBonus)
-    : null;
+  const goal = stepGoal(settings.steps, day.week, isoWeekday(day.date), settings.stepsBonus);
   const pain = painEntry(log?.pain, plan.coreRoutine.painScale);
   const doneWorkouts = (workouts ?? []).filter((w) => w.status === 'done');
 
@@ -285,10 +316,8 @@ function DaySheet({ day, onClose }: { day: CalendarDay; onClose: () => void }) {
       label: 'Skritt',
       value:
         log?.steps != null
-          ? `${formatNumber(log.steps)}${goal ? ` av ${formatNumber(goal)}` : ''}`
-          : goal
-            ? `mål ${formatNumber(goal)}`
-            : '–',
+          ? `${formatNumber(log.steps)} av ${formatNumber(goal)}`
+          : `mål ${formatNumber(goal)}`,
     },
     { label: 'Core-rutine', value: log?.coreDone ? 'Gjort' : '–' },
     {
@@ -300,8 +329,8 @@ function DaySheet({ day, onClose }: { day: CalendarDay; onClose: () => void }) {
   return (
     <Sheet open title={capitalize(formatWeekdayLong(day.date))} onClose={onClose}>
       <p className="text-sm text-muted">
-        {day.week ? `Uke ${day.week}${day.phase ? ` · ${day.phase.name}` : ''}` : 'Utenfor planen'}{' '}
-        · {formatDate(day.date)}
+        Uke {day.week}
+        {day.phase ? ` · ${day.phase.name}` : ''} · {formatDate(day.date)}
       </p>
 
       <div className="surface mt-3 rounded-2xl p-3.5">
@@ -314,7 +343,7 @@ function DaySheet({ day, onClose }: { day: CalendarDay; onClose: () => void }) {
             {doneWorkouts.map((w) => (
               <li key={w.id} className="flex items-center gap-1.5 text-sm text-good">
                 <IconCheck size={16} /> {sessionsById.get(w.sessionId)?.name ?? 'Økt'} fullført ·{' '}
-                {w.exercises.reduce((n, e) => n + e.sets.length, 0)} sett
+                {w.exercises.reduce((n, e) => n + e.sets.filter((s) => s.done).length, 0)} sett
               </li>
             ))}
           </ul>

@@ -36,8 +36,11 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 - **«Stall»:** beste e1RM har falt tre økter på rad (fire økter med synkende e1RM).
 - **Snitt tap per uke (prognose):** `(startvekt − ukesnitt siste uke med data) / ukenummer`.
 - **Start av planen (endret etter ønske fra Simen):** Ingen «Starter om X dager». Planen venter med
-  «Klar til start» til Simen trykker «Start nå». Da blir startdatoen i dag, og ukene telles fra den dagen.
-  Startdatoen kan endres under Innstillinger, og «Oppdater plan» flytter den aldri.
+  «Klar til start» til Simen trykker «Start nå» og bekrefter («Starte planen i dag?»). Da blir startdatoen
+  i dag, og ukene telles fra den dagen. Startdatoen kan endres under Innstillinger, og «Oppdater plan»
+  flytter den aldri.
+- **Avslutt planen** (Kalender og Innstillinger, med bekreftelse): appen går tilbake til «Klar til start».
+  Det som er logget, blir liggende. Vil man slette alt, er det Mer → Nullstill app.
 - **Tema:** mørkt som standard, med valg for lyst og «følg systemet» (`prefers-color-scheme`).
 - **Faser, progresjon, core-rutine, justeringsregler og guider** er ikke redigerbare i appen. De lagres
   i `meta`-tabellen og byttes ut ved «Oppdater plan».
@@ -67,8 +70,9 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
   ark som glir opp fra bunnen. Trykkfeedback (skalering) og trinnvis inntoning når en side åpnes.
   Alt respekterer «Reduser bevegelse» og «Reduser gjennomsiktighet».
 - **Kalender:** fremdriftskort på I dag og Fremgang (ring, dag X av 84, dager igjen, ukestripe), og en egen
-  kalender med fasetidslinje, alle 12 uker fra mandag til søndag, fullførte og planlagte økter, og detaljer
-  for hver dag.
+  kalender. Forenklet etter ønske (12.10.2026): planen uke for uke, samlet per fase (med fasens notat),
+  der uke 1 starter på startdagen. Én tegnforklaring brukt overalt: grønn = økt fullført, ring = planlagt
+  økt, blå = i dag, uten ring = hviledag. Toppen viser dag X av 84, dager igjen, uke, fase og økter fullført.
 - **Øvelsesanimasjon (Hevy-stil):** start- og sluttbildet fra Free Exercise DB veksler i en jevn løkke med myk
   overgang, med pause og «Vis slutt/start». Hevy bruker 3D-videoer; med bare to bilder per øvelse er dette den
   nærmeste ærlige varianten. Animasjonen spiller bare når den er på skjermen.

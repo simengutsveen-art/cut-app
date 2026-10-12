@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { calendarRows, phaseSpans, planProgress } from '../../src/lib/calendar';
+import { dayLabel, groupByPhase, planProgress, planWeeks } from '../../src/lib/calendar';
+import { formatDayMonthRange } from '../../src/lib/dates';
 import { fixtureSeed } from '../helpers';
 
 const seed = fixtureSeed();
@@ -40,49 +41,69 @@ describe('fremdrift i planen', () => {
   });
 });
 
-describe('kalender', () => {
-  it('start på mandag gir 12 hele uker', () => {
-    const rows = calendarRows('2026-10-12', 12, '2026-10-14', seed.phases);
-    expect(rows).toHaveLength(12);
-    expect(rows[0].days[0]).toMatchObject({
-      date: '2026-10-12',
-      inPlan: true,
+describe('kalender uke for uke', () => {
+  it('start på mandag: 12 uker fra mandag til søndag', () => {
+    const weeks = planWeeks('2026-10-12', 12, '2026-10-14', seed.phases);
+    expect(weeks).toHaveLength(12);
+    expect(weeks[0]).toMatchObject({
       week: 1,
+      startDate: '2026-10-12',
+      endDate: '2026-10-18',
+      state: 'current',
+    });
+    expect(weeks[0].days.map((d) => d.state)).toEqual([
+      'past',
+      'past',
+      'today',
+      'future',
+      'future',
+      'future',
+      'future',
+    ]);
+    expect(weeks[1].state).toBe('future');
+    expect(weeks[6].phase?.name).toBe('Lett uke (deload)');
+    expect(weeks[11]).toMatchObject({ week: 12, endDate: '2027-01-03' });
+  });
+
+  it('start på fredag: uke 1 starter på fredag, ingen dager utenfor planen', () => {
+    const weeks = planWeeks('2026-10-09', 12, '2026-10-09', seed.phases);
+    expect(weeks[0].days[0]).toMatchObject({ date: '2026-10-09', weekday: 5, state: 'today' });
+    expect(weeks[0].endDate).toBe('2026-10-15');
+    expect(weeks[1].startDate).toBe('2026-10-16');
+    expect(weeks.flatMap((w) => w.days)).toHaveLength(84);
+  });
+
+  it('ukene samlet per fase, med status', () => {
+    const groups = groupByPhase(planWeeks('2026-10-12', 12, '2026-11-15', seed.phases));
+    expect(groups.map((g) => [g.phase?.name, g.weeks.length])).toEqual([
+      ['Oppstart', 2],
+      ['Bygg 1', 4],
+      ['Lett uke (deload)', 1],
+      ['Bygg 2', 4],
+      ['Test', 1],
+    ]);
+    expect(groups[0]).toMatchObject({
+      startDate: '2026-10-12',
+      endDate: '2026-10-25',
       state: 'past',
     });
-    expect(rows[0].days[2].state).toBe('today');
-    expect(rows[0].days[3].state).toBe('future');
-    expect(rows[0].month).toBe('oktober');
-    expect(rows[2].month).toBe('november'); // 1. november er søndag i rad 3
-    expect(rows[3].month).toBeNull();
-    expect(rows[6].days[0].phase?.name).toBe('Lett uke (deload)');
-    expect(rows[11].days[6]).toMatchObject({ date: '2027-01-03', week: 12 });
-  });
-
-  it('start på fredag: uker fra mandag, dagene før start er utenfor planen', () => {
-    const rows = calendarRows('2026-10-09', 12, '2026-10-09', seed.phases);
-    expect(rows).toHaveLength(13);
-    expect(rows[0].days[0]).toMatchObject({ date: '2026-10-05', inPlan: false, state: 'outside' });
-    expect(rows[0].days[4]).toMatchObject({
-      date: '2026-10-09',
-      inPlan: true,
-      week: 1,
-      state: 'today',
+    expect(groups[1].state).toBe('current'); // 15.11 er i uke 5
+    expect(groups[2]).toMatchObject({
+      startDate: '2026-11-23',
+      endDate: '2026-11-29',
+      state: 'future',
     });
-    expect(rows[1].days[0]).toMatchObject({ date: '2026-10-12', week: 1 });
-    expect(rows[1].days[4]).toMatchObject({ date: '2026-10-16', week: 2 });
-    const last = rows[12].days;
-    expect(last.filter((d) => d.inPlan).map((d) => d.date)).toEqual([
-      '2026-12-28',
-      '2026-12-29',
-      '2026-12-30',
-      '2026-12-31',
-    ]);
   });
 
-  it('faser med datoer', () => {
-    const spans = phaseSpans('2026-10-12', seed.phases);
-    expect(spans[0]).toMatchObject({ startDate: '2026-10-12', endDate: '2026-10-25', days: 14 });
-    expect(spans[2]).toMatchObject({ startDate: '2026-11-23', endDate: '2026-11-29', days: 7 });
+  it('datoer og skjermlesertekst', () => {
+    expect(formatDayMonthRange('2026-10-12', '2026-10-18')).toBe('12.–18. okt.');
+    expect(formatDayMonthRange('2026-10-26', '2026-11-01')).toBe('26. okt. – 1. nov.');
+    expect(formatDayMonthRange('2026-12-28', '2027-01-03')).toBe('28. des. – 3. jan.');
+    expect(dayLabel('2026-10-14', '2026-10-14', false, false)).toBe(
+      'Onsdag 14. oktober, i dag, hviledag',
+    );
+    expect(dayLabel('2026-10-12', '2026-10-14', true, true)).toBe(
+      'Mandag 12. oktober, økt fullført',
+    );
   });
 });
