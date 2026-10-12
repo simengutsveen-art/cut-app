@@ -41,7 +41,7 @@ export function StopWorkoutButton({
   return (
     <>
       <Button
-        variant="secondary"
+        variant="danger"
         size={compact ? 'sm' : 'md'}
         block={!compact}
         className={className}
