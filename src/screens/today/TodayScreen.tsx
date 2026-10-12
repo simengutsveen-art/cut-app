@@ -49,7 +49,7 @@ import {
   planStatusLabel,
   todayISO,
 } from '../../lib/dates';
-import { formatNumber, parseInteger } from '../../lib/format';
+import { formatNumber } from '../../lib/format';
 import { prepEventOnDate } from '../../lib/mealPrep';
 import { backAlert } from '../../lib/pain';
 import { dayPlanFor, phaseForWeek } from '../../lib/prescription';
@@ -277,7 +277,6 @@ export function TodayScreen() {
           />
         </MetricTile>
       </div>
-      <PasteStepsButton onSteps={(v) => void saveField('steps', { steps: v })} />
 
       <SectionTitle
         action={
@@ -474,34 +473,6 @@ function SavedTick() {
     <p className="flex items-center gap-1 text-xs font-semibold text-good" role="status">
       <IconCheck size={14} /> Lagret
     </p>
-  );
-}
-
-/** Leser skritt fra utklippstavla (f.eks. kopiert av en iOS-snarvei fra Helse). */
-function PasteStepsButton({ onSteps }: { onSteps: (steps: number) => void }) {
-  const [error, setError] = useState(false);
-  if (typeof navigator === 'undefined' || !navigator.clipboard?.readText) return null;
-  return (
-    <div className="mt-1 flex justify-end">
-      <button
-        type="button"
-        className="pressable min-h-11 px-1 text-[14px] font-medium text-accent"
-        onClick={async () => {
-          try {
-            const text = await navigator.clipboard.readText();
-            const steps = parseInteger(text.trim()) ?? NaN;
-            if (Number.isFinite(steps) && steps >= 0 && steps <= 200000) {
-              setError(false);
-              onSteps(steps);
-            } else setError(true);
-          } catch {
-            setError(true);
-          }
-        }}
-      >
-        {error ? 'Fant ingen skritt å lime inn' : 'Lim inn skritt'}
-      </button>
-    </div>
   );
 }
 

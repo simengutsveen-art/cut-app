@@ -46,8 +46,8 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 
 - **Offline-test:** Playwrights `setOffline` blokkerer også svar fra service workeren i WebKit, så
   testen stopper serveren appen ble lastet fra i stedet. Da kan ingenting hentes fra nett.
-- **Skritt-snarvei:** `#/logg?steps=…` er laget, men på iOS har Hjem-skjerm-appen egen lagring
-  (atskilt fra Safari). Derfor finnes også «Lim inn skritt» fra utklippstavla.
+- **Skritt føres manuelt.** `#/logg?steps=…` finnes fortsatt, men på iOS har Hjem-skjerm-appen egen
+  lagring (atskilt fra Safari). «Lim inn skritt» er fjernet etter ønske (12.10.2026).
 - **Seriefarger i grafer:** aksent + blå (`--c-series-2`), validert for fargeblindhet. Grønn/gul/rød
   brukes bare som status.
 

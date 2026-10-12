@@ -134,7 +134,7 @@ eller tømmer nettstedsdata i Safari, forsvinner loggene. Appen ber om varig lag
 ## 6. Begrensninger
 
 - **Skritt fra Apple Helse:** En PWA kan ikke lese Helse-data automatisk. Skritt føres manuelt
-  på «I dag», eller via en snarvei (se under).
+  på «I dag».
 - **Varsler:** Pausetimeren piper når appen er åpen. Er telefonen låst når pausen er ferdig,
   vises riktig tid når du åpner den igjen (timeren bruker tidsstempler), men den piper ikke i
   bakgrunnen.
@@ -142,26 +142,6 @@ eller tømmer nettstedsdata i Safari, forsvinner loggene. Appen ber om varig lag
 - **Næringsverdier og priser er omtrentlige**, og appen gir ikke medisinske råd.
 - **Krydder, hvitløk, karri og buljong** som står i oppskriftene, er ikke ingredienser i seed-fila.
   De er derfor ikke med i kcal, pris eller handleliste.
-
-### Snarvei for skritt (valgfritt)
-
-Appen leser `#/logg?steps=1234&date=2026-10-12` fra adressen og lagrer skrittene (`date` er
-valgfri, standard er i dag; `weight=80,2` virker også).
-
-Lag snarveien i **Snarveier**-appen:
-
-1. **Ny snarvei → Legg til handling → «Finn helseeksempler»**: Type **Skritt**, filter
-   **Startdato er i dag**.
-2. **«Regn ut statistikk»**: **Sum** av helseeksemplene.
-3. Velg én av disse:
-   - **Sikrest: «Kopier til utklipp»** (resultatet fra steg 2). Åpne Cut og trykk
-     **«Lim inn skritt»** under skrittfeltet.
-   - **«Åpne URL»** med `https://DITT-BRUKERNAVN.github.io/cut/#/logg?steps=` og resultatet fra
-     steg 2 lagt til på slutten.
-
-Merk: På iPhone har appen på Hjem-skjermen vanligvis sin egen lagring, atskilt fra Safari.
-«Åpne URL» åpner lenka i Safari, så skrittene havner i Safari-utgaven, ikke i Hjem-skjerm-appen.
-Derfor er utklippstavla den sikre veien.
 
 ## Teknisk
 
