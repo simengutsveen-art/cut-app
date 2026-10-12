@@ -131,7 +131,8 @@ export function ExerciseMotion({
           alt={`${subject.name} – start`}
           decoding="async"
           onError={a.onError}
-          className="absolute inset-0 h-full w-full object-cover"
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-cover select-none [-webkit-touch-callout:none]"
         />
       )}
       {b.src && (
@@ -140,7 +141,8 @@ export function ExerciseMotion({
           alt={`${subject.name} – slutt`}
           decoding="async"
           onError={b.onError}
-          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[420ms] ease-in-out"
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[420ms] ease-in-out select-none [-webkit-touch-callout:none]"
           style={{ opacity: !a.src || frame === 1 ? 1 : 0 }}
         />
       )}
@@ -212,7 +214,8 @@ export function ExerciseThumb({
           loading="lazy"
           decoding="async"
           onError={onError}
-          className="h-full w-full object-cover"
+          draggable={false}
+          className="h-full w-full object-cover select-none [-webkit-touch-callout:none]"
         />
       ) : (
         initials

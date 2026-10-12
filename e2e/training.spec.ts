@@ -31,8 +31,17 @@ test('Push-økt: logg 3 sett, lukk siden midt i, åpne igjen og fullfør', async
   await expect(again.getByRole('article', { name: 'Benkpress' }).getByText('3/3')).toBeVisible();
 
   await again.getByRole('button', { name: 'Fullfør økt' }).click();
-  await expect(again.getByRole('heading', { level: 1 })).toHaveText('Trening');
+  // Oppsummering: tid, sett, volum og PR
+  const summary = again.getByRole('region', { name: 'Oppsummering' });
+  await expect(summary).toBeVisible();
+  await expect(summary).toContainText('Sett3');
+  await expect(summary).toContainText('Volum900 kg');
+  await summary.getByRole('button', { name: 'Ferdig' }).click();
   await expect(again.getByText('Fullført i dag')).toBeVisible();
+  await again
+    .getByRole('navigation', { name: 'Hovedmeny' })
+    .getByRole('link', { name: 'Trening' })
+    .click();
   await expect(again.getByRole('link', { name: /Benkpress/ })).toBeVisible();
 });
 
@@ -77,7 +86,11 @@ test('stopp med loggede sett: velg å fullføre eller slette', async ({ page }) 
     .getByRole('dialog', { name: 'Stoppe økta?' })
     .getByRole('button', { name: 'Fullfør med 1 sett' })
     .click();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Trening');
+  await expect(page.getByRole('region', { name: 'Oppsummering' })).toContainText('Sett1');
+  await page
+    .getByRole('navigation', { name: 'Hovedmeny' })
+    .getByRole('link', { name: 'Trening' })
+    .click();
   await expect(page.getByText('Fullført i dag')).toBeVisible();
 
   // Ny økt, og denne gangen slettes den

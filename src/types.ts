@@ -272,6 +272,8 @@ export interface AppSettings extends SeedSettings {
   userModified: boolean;
   /** Simen har trykket «Start nå» (eller valgt startdato selv). Før det venter planen. */
   planStarted?: boolean;
+  /** Hold skjermen på under økter (standard: på) */
+  keepAwake?: boolean;
 }
 
 export interface ExtraFood {

@@ -1,10 +1,19 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { IconCheck } from '../../components/icons';
-import { Button, Card, EmptyState, InlineConfirm, Page, PageHeader } from '../../components/ui';
+import { IconCheck, IconTrophy } from '../../components/icons';
+import {
+  Badge,
+  Button,
+  Card,
+  EmptyState,
+  InlineConfirm,
+  Page,
+  PageHeader,
+} from '../../components/ui';
 import { discardWorkout, finishWorkout, suggestionFor, swapExercise } from '../../data/workouts';
 import { db } from '../../db';
+import { useNow } from '../../hooks/useToday';
 import { formatDate, formatWeekdayLong } from '../../lib/dates';
 import { enDash, formatNumber } from '../../lib/format';
 import {
@@ -15,10 +24,11 @@ import {
   type WeekPrescription,
 } from '../../lib/prescription';
 import { bestE1rm, exerciseHistory, isStalled, suggestionText } from '../../lib/progression';
+import { formatElapsed, formatWorkoutDuration, workoutStats } from '../../lib/workoutStats';
 import { useAppData } from '../../state/appData';
 import type { Exercise, SetLog, WorkoutLog } from '../../types';
 import { ExerciseThumb } from '../../components/ExerciseImage';
-import { StopWorkoutButton } from '../../components/StopWorkout';
+import { StopWorkoutButton, type StopResult } from '../../components/StopWorkout';
 import { ExerciseCard } from './ExerciseCard';
 import { SwapSheet } from './SwapSheet';
 
@@ -122,6 +132,11 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
   const totalDone = log.exercises.reduce((n, e) => n + e.sets.filter((s) => s.done).length, 0);
   const totalSets = log.exercises.reduce((n, e) => n + e.sets.length, 0);
   const swapView = swapIndex !== null ? (views[swapIndex] ?? undefined) : undefined;
+  // Fullført: oppsummeringen vises på samme adresse. Avbrutt: tilbake til Trening.
+  const afterStop = (result: StopResult) => {
+    if (result === 'finished') window.scrollTo({ top: 0 });
+    else navigate('/trening', { replace: true });
+  };
 
   return (
     <Page>
@@ -129,13 +144,7 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
         title={session?.name ?? 'Økt'}
         subtitle={`Uke ${log.week}${phase ? ` · ${phase.name}` : ''} · ${formatWeekdayLong(log.date)}`}
         back="/trening"
-        actions={
-          <StopWorkoutButton
-            compact
-            log={log}
-            onStopped={() => navigate('/trening', { replace: true })}
-          />
-        }
+        actions={<StopWorkoutButton compact log={log} onStopped={afterStop} />}
       />
       <div className="surface mb-4 rounded-[22px] p-4">
         <div className="flex items-baseline justify-between gap-2">
@@ -143,7 +152,7 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
             {totalDone} av {totalSets} sett ferdig
           </p>
           <p className="num text-[13px] text-muted">
-            {totalSets ? Math.round((totalDone / totalSets) * 100) : 0} %
+            <Elapsed since={log.startedAt} />
           </p>
         </div>
         <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-surface-3" aria-hidden="true">
@@ -184,12 +193,12 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
           disabled={totalDone === 0}
           onClick={async () => {
             await finishWorkout(db, log.id);
-            navigate('/trening', { replace: true });
+            afterStop('finished');
           }}
         >
           <IconCheck /> Fullfør økt
         </Button>
-        <StopWorkoutButton log={log} onStopped={() => navigate('/trening', { replace: true })} />
+        <StopWorkoutButton log={log} onStopped={afterStop} />
       </div>
 
       {swapView && swapIndex !== null && (
@@ -215,17 +224,62 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
   );
 }
 
+/** Tid siden økta startet, oppdatert hvert sekund (egen komponent, så resten ikke tegnes på nytt). */
+function Elapsed({ since }: { since: number }) {
+  const now = useNow(1000);
+  return <span aria-label="Tid brukt">{formatElapsed(now - since)}</span>;
+}
+
 function DoneWorkout({ log }: { log: WorkoutLog }) {
   const { sessionsById, exercisesById } = useAppData();
   const navigate = useNavigate();
   const session = sessionsById.get(log.sessionId);
+  const allLogs = useLiveQuery(() => db.workoutLogs.toArray(), []);
+  const stats = workoutStats(log, allLogs ?? [], (id) => {
+    const loadType = exercisesById.get(id)?.loadType;
+    return loadType !== 'core';
+  });
+  const tiles = [
+    {
+      label: 'Tid',
+      value: stats.durationMs !== null ? formatWorkoutDuration(stats.durationMs) : '–',
+    },
+    { label: 'Sett', value: formatNumber(stats.sets) },
+    { label: 'Volum', value: `${formatNumber(stats.volumeKg)} kg` },
+    { label: 'PR', value: formatNumber(stats.prExerciseIds.length) },
+  ];
   return (
     <Page>
       <PageHeader
+        eyebrow={`Fullført ${formatDate(log.date)} · uke ${log.week}`}
         title={session?.name ?? 'Økt'}
-        subtitle={`Fullført ${formatDate(log.date)} · uke ${log.week}`}
         back="/trening"
       />
+      <Card tone="good" className="mb-4 rounded-[26px]" aria-label="Oppsummering">
+        <p className="eyebrow text-good">Oppsummering</p>
+        <dl className="mt-3 grid grid-cols-4 gap-2">
+          {tiles.map((t) => (
+            <div key={t.label} className="min-w-0">
+              <dt className="text-[12px] text-muted">{t.label}</dt>
+              <dd className="num truncate text-[19px] font-bold">{t.value}</dd>
+            </div>
+          ))}
+        </dl>
+        {stats.prExerciseIds.length > 0 && (
+          <ul className="mt-3 flex flex-wrap gap-1.5">
+            {stats.prExerciseIds.map((id) => (
+              <li key={id}>
+                <Badge tone="good">
+                  <IconTrophy size={13} /> {exercisesById.get(id)?.name ?? id}
+                </Badge>
+              </li>
+            ))}
+          </ul>
+        )}
+        <Button className="mt-4" block onClick={() => navigate('/', { replace: true })}>
+          Ferdig
+        </Button>
+      </Card>
       <div className="flex flex-col gap-3">
         {log.exercises.map((entry, i) => {
           const exercise = exercisesById.get(entry.exerciseId);

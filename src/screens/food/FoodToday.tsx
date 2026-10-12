@@ -48,7 +48,17 @@ export function FoodToday() {
           <div className="font-semibold">
             {date === today ? 'I dag' : capitalize(formatWeekdayLong(date))}
           </div>
-          <div className="text-xs text-muted">{formatDate(date)}</div>
+          {date === today ? (
+            <div className="text-xs text-muted">{formatDate(date)}</div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setDate(today)}
+              className="pressable min-h-8 text-[13px] font-medium text-accent"
+            >
+              {formatDate(date)} · Til i dag
+            </button>
+          )}
         </div>
         <IconButton label="Neste dag" onClick={() => setDate((d) => addDaysISO(d, 1))}>
           <IconChevronRight />

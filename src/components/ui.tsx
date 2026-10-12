@@ -13,6 +13,7 @@ import {
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { cx } from '../lib/cx';
+import { useSaveOnHide } from '../hooks/useSaveOnHide';
 import { parseDecimal, toInputValue } from '../lib/format';
 import { IconCheck, IconChevronLeft, IconChevronRight, IconX } from './icons';
 
@@ -375,6 +376,11 @@ export function NumberField({
     if (n !== value) onCommit(n);
     setText(toInputValue(n, integer ? 0 : decimals));
   };
+
+  // Lagre også hvis appen lukkes mens feltet er i bruk.
+  useSaveOnHide(() => {
+    if (focused.current) commit();
+  });
 
   return (
     <div className={cx('relative', className)}>

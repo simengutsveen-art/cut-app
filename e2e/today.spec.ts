@@ -39,3 +39,26 @@ test('core-rutine og smerte med trafikklys', async ({ page }) => {
     'true',
   );
 });
+
+test('vekt lagres også hvis appen lukkes mens feltet er i bruk', async ({ page }) => {
+  await startApp(page);
+  const weight = page.getByRole('textbox', { name: 'Morgenvekt' });
+  await weight.fill('80,4');
+  // Ingen Enter eller blur: appen går i bakgrunnen / lukkes.
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide')));
+  await page.waitForTimeout(300);
+  await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Morgenvekt' })).toHaveValue('80,4');
+});
+
+test('startdato valgt fram i tid vises som planlagt start', async ({ page }) => {
+  await startApp(page, new Date('2026-10-14T08:00:00+02:00'), { start: false });
+  await page.goto('./#/mer/innstillinger');
+  await page.getByLabel('Startdato').fill('2026-10-19');
+  await page.getByRole('button', { name: 'Lagre innstillinger' }).click();
+  await expect(page.getByText('Lagret.')).toBeVisible();
+  await page.goto('./#/');
+  const card = page.getByRole('region', { name: 'Start planen' });
+  await expect(card).toContainText('Planen starter mandag 19. oktober');
+  await expect(card.getByRole('button', { name: 'Start i dag i stedet' })).toBeVisible();
+});

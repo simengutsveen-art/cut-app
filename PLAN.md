@@ -75,6 +75,19 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 - **Trening i Hevy-stil:** miniatyrbilder, «Forrige»-kolonne per sett og fremdriftslinje for økta.
 - **Grafer:** seriefarger validert for fargeblindhet (blå `#2A9CDB` + magenta `#D55181` i mørkt tema).
 
+## Gjennomgang (12.10.2026)
+
+- **Stopp økt:** «Stopp» i toppen av økta og nederst. Uten loggede sett slettes økta med ett trykk; med sett
+  velger man «Fullfør med N sett», «Slett økta og settene» eller «Fortsett økta».
+- **Oppsummering etter økt:** tid, sett, volum (uten core) og PR (ny beste e1RM mot tidligere økter).
+  Fremdriftskortet i økta viser tid brukt i stedet for prosent.
+- **Hold skjermen på** under aktiv økt (Screen Wake Lock), kan slås av under Innstillinger → Under økta.
+- **Lagring ved lukking:** tall- og notatfelt lagres også når appen går i bakgrunnen mens feltet er i bruk.
+- **Raskere oppstart:** Fremgang, Mer og øvelseshistorikk lastes ved behov (startbunten 1,09 MB → 596 KB).
+- **Planlagt start:** startdato fram i tid (valgt i Innstillinger) vises som «Planen starter …».
+- **Småpuss:** «Til i dag» i Mat, «42 %» med mellomrom, ingen «Lagre bilde»-meny ved langt trykk på
+  øvelsesbilder, lagre-linja i Innstillinger ligger over menylinja.
+
 ## TODO
 
 - **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som

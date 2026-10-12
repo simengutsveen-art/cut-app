@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Button,
   Card,
+  Checkbox,
   Field,
   InlineConfirm,
   NumberField,
@@ -278,6 +279,19 @@ export function SettingsScreen() {
         </Field>
       </Card>
 
+      <SectionTitle>Under økta</SectionTitle>
+      <Card>
+        <Checkbox
+          checked={draft.keepAwake !== false}
+          onChange={(v) => {
+            set('keepAwake', v);
+            void db.settings.update('app', { keepAwake: v });
+          }}
+          label="Hold skjermen på under økter"
+          description="Så pausetimeren alltid er synlig. Bruker litt mer batteri."
+        />
+      </Card>
+
       <SectionTitle>Utseende</SectionTitle>
       <Card>
         <Segmented<ThemePref>
@@ -295,7 +309,7 @@ export function SettingsScreen() {
         />
       </Card>
 
-      <div className="sticky bottom-[calc(64px+env(safe-area-inset-bottom))] z-10 mt-6 flex flex-col gap-2 rounded-2xl bg-bg/90 py-2 backdrop-blur">
+      <div className="sticky-above-tabbar z-10 mt-6 flex flex-col gap-2 rounded-2xl bg-bg/90 py-2 backdrop-blur">
         {error && (
           <p className="text-sm text-bad" role="alert">
             {error}

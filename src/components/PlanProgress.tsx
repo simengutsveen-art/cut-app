@@ -72,7 +72,7 @@ export function PlanHero({ today }: { today: string }) {
           size={88}
           stroke={9}
         >
-          <span className="num text-[22px] leading-none font-bold">{percent}%</span>
+          <span className="num text-[22px] leading-none font-bold">{percent} %</span>
         </Ring>
         <div className="min-w-0 flex-1">
           {phase && <p className="eyebrow mb-1 text-accent">{phase.name}</p>}

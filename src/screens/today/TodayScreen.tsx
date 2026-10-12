@@ -35,6 +35,7 @@ import { startWorkout } from '../../data/workouts';
 import { db } from '../../db';
 import { useDayPlan } from '../../hooks/useDayPlan';
 import { useOptimistic } from '../../hooks/useOptimistic';
+import { useSaveOnHide } from '../../hooks/useSaveOnHide';
 import { useToday } from '../../hooks/useToday';
 import { useWorkoutContext } from '../../hooks/useWorkoutContext';
 import { cx } from '../../lib/cx';
@@ -126,6 +127,10 @@ export function TodayScreen() {
       ? `${planStatusLabel(status, settings.weeks)} · ${phase.name}`
       : planStatusLabel(status, settings.weeks);
 
+  // Startdato valgt fram i tid under Innstillinger
+  const plannedStart =
+    settings.planStarted && daysBetween(today, settings.startDate) > 0 ? settings.startDate : null;
+
   const weightDelta =
     day.log.weightKg != null && lastWeight?.weightKg != null
       ? day.log.weightKg - lastWeight.weightKg
@@ -166,9 +171,15 @@ export function TodayScreen() {
             </Ring>
             <div className="min-w-0 flex-1">
               <h2 className="text-[22px] leading-tight font-bold tracking-[-0.02em]">
-                Klar til å starte?
+                {plannedStart
+                  ? `Planen starter ${formatWeekdayLong(plannedStart)}`
+                  : 'Klar til å starte?'}
               </h2>
-              <p className="mt-1 text-[14px] text-muted">Uke 1 starter den dagen du trykker.</p>
+              <p className="mt-1 text-[14px] text-muted">
+                {plannedStart
+                  ? 'Startdatoen er valgt under Innstillinger.'
+                  : 'Uke 1 starter den dagen du trykker.'}
+              </p>
             </div>
           </div>
           <p className="mt-4 text-[15px]">
@@ -176,7 +187,7 @@ export function TodayScreen() {
             {formatDate(addDaysISO(today, settings.weeks * 7 - 1))}.
           </p>
           <Button className="mt-4" block size="lg" onClick={() => void startPlan(db, today)}>
-            <IconPlay size={18} /> Start nå
+            <IconPlay size={18} /> {plannedStart ? 'Start i dag i stedet' : 'Start nå'}
           </Button>
           <p className="mt-2.5 text-xs text-muted">
             Ukene telles fra startdagen. Du kan endre startdato under Mer → Innstillinger.
@@ -437,6 +448,9 @@ function DayNote({ value, onSave }: { value: string; onSave: (note: string) => v
   const [text, setText] = useState(value);
   const [focused, setFocused] = useState(false);
   const shown = focused ? text : value;
+  useSaveOnHide(() => {
+    if (focused && text.trim() !== value.trim()) onSave(text.trim());
+  });
   return (
     <TextArea
       aria-label="Notat for dagen"

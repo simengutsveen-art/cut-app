@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { extendRest, getActiveWorkout, setRest } from '../data/workouts';
 import { db } from '../db';
 import { useNow } from '../hooks/useToday';
+import { useWakeLock } from '../hooks/useWakeLock';
 import { cx } from '../lib/cx';
 import { formatDuration } from '../lib/format';
 import { beep } from '../services/sound';
@@ -21,6 +22,9 @@ export function WorkoutDock({ onVisibleChange }: { onVisibleChange?: (visible: b
   const active = useLiveQuery(() => getActiveWorkout(db).then((l) => l ?? null), []);
   const location = useLocation();
   const now = useNow(1000, !!active?.rest);
+  const { settings } = useAppData();
+  // Skjermen holdes på under økta, så pausetimeren alltid er synlig.
+  useWakeLock(!!active && settings.keepAwake !== false);
   const visible = !!active;
   useEffect(() => onVisibleChange?.(visible), [visible, onVisibleChange]);
   if (!active) return null;
