@@ -79,7 +79,7 @@ export function WeeklyCheck({
               </dd>
             </div>
           </dl>
-          <div className="mt-3 rounded-xl border border-line p-3">
+          <div className="mt-3 rounded-2xl bg-surface-2 p-3.5">
             <p className="text-sm text-muted">{rec.rule.when}</p>
             <p className="mt-1 font-semibold">{rec.rule.action}</p>
             {rec.blockedByFloor ? (

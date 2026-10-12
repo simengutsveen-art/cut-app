@@ -47,9 +47,9 @@ function ActiveWorkoutPill({ log }: { log: WorkoutLog }) {
   return (
     <Link
       to={`/trening/okt/${log.id}`}
-      className="flex min-h-12 items-center gap-3 rounded-2xl border border-accent/60 bg-surface px-4 py-2 shadow-lg"
+      className="glass pressable flex min-h-13 items-center gap-3 rounded-[22px] px-4 py-2.5"
     >
-      <span className="h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true" />
+      <span className="pulse-today h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true" />
       <span className="flex-1 font-semibold">
         {name} pågår · {done} sett
       </span>
@@ -90,12 +90,15 @@ function RestTimer({ log }: { log: WorkoutLog }) {
       aria-live={finished ? 'assertive' : 'off'}
       aria-label="Pausetimer"
       className={cx(
-        'relative overflow-hidden rounded-2xl border bg-surface shadow-lg',
-        finished ? 'border-good' : 'border-accent/60',
+        'glass relative overflow-hidden rounded-[22px]',
+        finished && 'shadow-[inset_0_0_0_1.5px_var(--c-good)]',
       )}
     >
       <div
-        className={cx('absolute inset-y-0 left-0 opacity-20', finished ? 'bg-good' : 'bg-accent')}
+        className={cx(
+          'absolute inset-y-0 left-0 opacity-20 transition-[width] duration-300 ease-linear',
+          finished ? 'bg-good' : 'bg-accent',
+        )}
         style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%` }}
         aria-hidden="true"
       />
@@ -110,7 +113,7 @@ function RestTimer({ log }: { log: WorkoutLog }) {
         {!finished && (
           <button
             type="button"
-            className="min-h-12 rounded-xl bg-surface-2 px-3 font-semibold"
+            className="pressable min-h-12 rounded-2xl bg-surface-2/80 px-3.5 font-semibold"
             onClick={() => void extendRest(db, log.id, 30)}
           >
             +30 s
@@ -118,7 +121,7 @@ function RestTimer({ log }: { log: WorkoutLog }) {
         )}
         <button
           type="button"
-          className="min-h-12 rounded-xl bg-surface-2 px-3 font-semibold"
+          className="pressable min-h-12 rounded-2xl bg-surface-2/80 px-3.5 font-semibold"
           onClick={() => void setRest(db, log.id, null)}
         >
           {finished ? 'Lukk' : 'Hopp over'}

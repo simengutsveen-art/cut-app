@@ -1,46 +1,68 @@
 @import 'tailwindcss';
 
-/* Fargetokens. Mørkt tema er standard (treningssenter). */
+/*
+ * Designsystem for Cut.
+ * Mørkt tema er standard (treningssenter). Kjølig, nesten svart bakgrunn, én is-blå aksent,
+ * grønn/gul/rød bare som status. Grafseriene er validert for fargeblindhet.
+ */
 :root,
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --c-bg: #0b0b10;
-  --c-surface: #15151c;
-  --c-surface-2: #1e1e27;
-  --c-surface-3: #2a2a35;
-  --c-line: #2c2c38;
-  --c-fg: #f3f3f7;
-  --c-muted: #a1a1b0;
-  --c-accent: #8b7bff;
-  --c-accent-strong: #a597ff;
-  --c-on-accent: #0b0b10;
-  --c-good: #32d74b;
-  --c-warn: #ffd60a;
-  --c-bad: #ff5147;
-  --c-on-status: #0b0b10;
-  --c-chart-grid: #2c2c38;
-  /* Seriefarge 2 i grafer (validert mot aksenten for fargeblindhet) */
-  --c-series-2: #2b9fd1;
+  --c-bg: #090b0f;
+  --c-surface: #12161c;
+  --c-surface-2: #1a1f27;
+  --c-surface-3: #252b35;
+  --c-line: #232933;
+  --c-hairline: rgb(255 255 255 / 0.07);
+  --c-highlight: rgb(255 255 255 / 0.05);
+  --c-fg: #edf1f6;
+  --c-muted: #8b95a4;
+  --c-accent: #5cc8ff;
+  --c-accent-strong: #8ad8ff;
+  --c-on-accent: #04121b;
+  --c-good: #3ddc97;
+  --c-warn: #ffc542;
+  --c-bad: #ff6b6b;
+  --c-on-status: #06110c;
+  --c-chart-grid: #232933;
+  --c-series-1: #2a9cdb;
+  --c-series-2: #d55181;
+  --c-glow: rgb(92 200 255 / 0.13);
+  --c-glass: rgb(18 22 28 / 0.82);
+  --shadow-card:
+    inset 0 0 0 1px var(--card-ring, var(--c-hairline)), inset 0 1px 0 0 var(--c-highlight),
+    0 18px 40px -24px rgb(0 0 0 / 0.75);
+  --shadow-float: inset 0 0 0 1px rgb(255 255 255 / 0.09), 0 18px 50px -12px rgb(0 0 0 / 0.7);
+  --grain-opacity: 0.045;
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --c-bg: #f3f3f6;
+  --c-bg: #f3f5f8;
   --c-surface: #ffffff;
-  --c-surface-2: #ececf1;
-  --c-surface-3: #dedee6;
-  --c-line: #d9d9e1;
-  --c-fg: #14141b;
-  --c-muted: #5c5c6b;
-  --c-accent: #5a46e0;
-  --c-accent-strong: #4532c9;
+  --c-surface-2: #eef1f5;
+  --c-surface-3: #e2e7ee;
+  --c-line: #e3e8ee;
+  --c-hairline: rgb(15 23 42 / 0.07);
+  --c-highlight: rgb(255 255 255 / 0.9);
+  --c-fg: #0c1117;
+  --c-muted: #5a6573;
+  --c-accent: #0872b6;
+  --c-accent-strong: #065c94;
   --c-on-accent: #ffffff;
-  --c-good: #1a8f3a;
-  --c-warn: #a87b00;
-  --c-bad: #d0261c;
+  --c-good: #0f7d51;
+  --c-warn: #9a6500;
+  --c-bad: #d23a3a;
   --c-on-status: #ffffff;
-  --c-chart-grid: #e1e1e8;
-  --c-series-2: #0a7fb5;
+  --c-chart-grid: #e3e8ee;
+  --c-series-1: #0a7cc4;
+  --c-series-2: #c2417a;
+  --c-glow: rgb(8 114 182 / 0.09);
+  --c-glass: rgb(255 255 255 / 0.86);
+  --shadow-card:
+    inset 0 0 0 1px var(--card-ring, var(--c-hairline)), 0 10px 30px -18px rgb(15 23 42 / 0.22);
+  --shadow-float: inset 0 0 0 1px rgb(15 23 42 / 0.08), 0 16px 40px -14px rgb(15 23 42 / 0.28);
+  --grain-opacity: 0.03;
 }
 
 @theme inline {
@@ -58,8 +80,20 @@
   --color-warn: var(--c-warn);
   --color-bad: var(--c-bad);
   --color-on-status: var(--c-on-status);
+  /* iPhone: SF Pro. Tall: SF Pro Rounded (som i Apple Fitness). */
   --font-sans:
     -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-rounded:
+    ui-rounded, 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI',
+    sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  /* Flytende fanelinje */
+  --tabbar-h: 64px;
+  --tabbar-gap: max(10px, calc(env(safe-area-inset-bottom) - 10px));
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -76,9 +110,21 @@
     background: var(--c-bg);
     color: var(--c-fg);
     font-family: var(--font-sans);
+    letter-spacing: -0.005em;
     overscroll-behavior-y: none;
     -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
     overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   button,
@@ -105,13 +151,212 @@
   }
 
   :focus-visible {
-    outline: 3px solid var(--c-accent);
-    outline-offset: 2px;
+    outline: 2px solid var(--c-accent);
+    outline-offset: 3px;
   }
 
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+}
+
+@layer components {
+  /* ---------- Typografi ---------- */
+
+  /* Tall: avrundet, tabellsifre, litt tettere. */
+  .num {
+    font-family: var(--font-rounded);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  /* ---------- Flater ---------- */
+
+  .surface {
+    background: var(--c-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass {
+    background: var(--c-glass);
+    -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%);
+    box-shadow: var(--shadow-float);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      background: var(--c-surface);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  /* Bakgrunn: svak lysglød øverst og et fint korn, så flatene ikke føles sterile. */
+  .app-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 60% at 50% -12%, var(--c-glow), transparent 62%),
+      radial-gradient(70% 40% at 100% 0%, var(--c-glow), transparent 70%);
+  }
+
+  .app-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  /* Toner for kort: farget kant og en svak farget gradient øverst. */
+  .tone-accent {
+    --card-ring: color-mix(in srgb, var(--c-accent) 45%, transparent);
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-accent) 10%, transparent),
+      transparent 75%
+    );
+  }
+  .tone-good {
+    --card-ring: color-mix(in srgb, var(--c-good) 40%, transparent);
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-good) 9%, transparent),
+      transparent 75%
+    );
+  }
+  .tone-warn {
+    --card-ring: color-mix(in srgb, var(--c-warn) 45%, transparent);
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-warn) 9%, transparent),
+      transparent 75%
+    );
+  }
+  .tone-bad {
+    --card-ring: color-mix(in srgb, var(--c-bad) 50%, transparent);
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-bad) 10%, transparent),
+      transparent 75%
+    );
+  }
+
+  .field {
+    background: var(--c-surface-2);
+    box-shadow: inset 0 0 0 1px var(--c-hairline);
+    transition: box-shadow 160ms ease;
+  }
+  .field:focus,
+  .field:focus-within {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--c-accent);
+  }
+  .field[aria-invalid='true'] {
+    box-shadow: inset 0 0 0 2px var(--c-bad);
+  }
+}
+
+/* ---------- Bevegelse ---------- */
+
+/* Trykkfeedback med en gang fingeren treffer. */
+.pressable {
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+}
+
+.pressable:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Innholdet glir inn trinnvis når en side åpnes. */
+.stagger > * {
+  animation: rise 520ms var(--ease-out) backwards;
+}
+.stagger > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+.stagger > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+.stagger > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+.stagger > *:nth-child(5) {
+  animation-delay: 160ms;
+}
+.stagger > *:nth-child(6) {
+  animation-delay: 200ms;
+}
+.stagger > *:nth-child(n + 7) {
+  animation-delay: 240ms;
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(32px) scale(0.985);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.animate-sheet {
+  animation: sheet-in 320ms var(--ease-out);
+}
+
+.animate-fade {
+  animation: fade-in 220ms ease-out;
+}
+
+/* Fremdriftsringer tegnes inn når de vises. */
+@keyframes ring-draw {
+  from {
+    stroke-dashoffset: var(--ring-circumference);
+  }
+}
+
+.ring-progress {
+  animation: ring-draw 900ms var(--ease-out) backwards;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-accent) 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--c-accent) 0%, transparent);
+  }
+}
+
+.pulse-today {
+  animation: pulse-ring 2.2s ease-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,6 +370,8 @@
   }
 }
 
+/* ---------- Layout ---------- */
+
 .safe-top {
   padding-top: env(safe-area-inset-top);
 }
@@ -133,30 +380,24 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Plass til fanelinja (56 px) + safe area + eventuell pausetimer */
+/* Plass til den flytende fanelinja (og pausetimeren når den vises). */
 .pb-tabbar {
-  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 28px);
 }
 
 .pb-tabbar-timer {
-  padding-bottom: calc(150px + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 112px);
+}
+
+.tabbar-position {
+  bottom: var(--tabbar-gap);
 }
 
 .bottom-tabbar {
-  bottom: calc(56px + env(safe-area-inset-bottom));
+  bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 10px);
 }
 
-@keyframes sheet-in {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.animate-sheet {
-  animation: sheet-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+.sticky-above-tabbar {
+  position: sticky;
+  bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 10px);
 }

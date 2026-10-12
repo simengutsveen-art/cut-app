@@ -174,7 +174,7 @@ export function BackupScreen() {
           <IconDownload /> Eksporter alt
         </Button>
         {ready && (
-          <div className="mt-3 rounded-xl border border-accent/60 bg-accent/10 p-3">
+          <div className="tone-accent surface mt-3 rounded-2xl p-3.5">
             <p className="text-sm">Fila er klar: {ready.file.name}</p>
             <Button
               className="mt-2"
@@ -225,7 +225,7 @@ export function BackupScreen() {
         )}
         {pending && (
           <div
-            className="mt-4 rounded-xl border border-line p-3"
+            className="mt-4 rounded-2xl bg-surface-2 p-3.5"
             aria-label="Forhåndsvisning av backup"
           >
             <h3 className="font-semibold">Innhold i backupen</h3>

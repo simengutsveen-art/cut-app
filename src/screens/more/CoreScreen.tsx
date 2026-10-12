@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { BackAlertCard } from '../../components/BackAlertCard';
-import { ExerciseImagePair } from '../../components/ExerciseImage';
+import { ExerciseMotion } from '../../components/ExerciseImage';
 import { IconWarning } from '../../components/icons';
 import { Card, Checkbox, Page, PageHeader, SectionTitle } from '../../components/ui';
 import { patchDayLog } from '../../data/dayLogs';
@@ -52,14 +52,12 @@ export function CoreScreen() {
               </h3>
               <p className="mb-2 font-semibold text-accent">{item.dose}</p>
               {item.imageSourceId ? (
-                <ExerciseImagePair
-                  subject={{ name: item.name, imageSourceId: item.imageSourceId }}
-                />
+                <ExerciseMotion subject={{ name: item.name, imageSourceId: item.imageSourceId }} />
               ) : (
                 <div
                   role="img"
                   aria-label={`${item.name} (ingen bilde)`}
-                  className="flex aspect-[3/1] items-center justify-center rounded-xl border border-dashed border-line bg-surface-2 p-3 text-center"
+                  className="flex aspect-[3/1] items-center justify-center rounded-2xl bg-surface-2 p-3 text-center shadow-[inset_0_0_0_1px_var(--c-hairline)]"
                 >
                   <span>
                     <span className="block font-semibold">{item.name}</span>

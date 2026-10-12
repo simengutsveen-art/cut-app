@@ -132,16 +132,16 @@ export function WeightChart({
             data={weekly}
             dataKey="y"
             name="Ukesnitt"
-            stroke="var(--c-accent)"
+            stroke="var(--c-series-1)"
             strokeWidth={2}
-            dot={{ r: 4, fill: 'var(--c-accent)', stroke: 'var(--c-surface)', strokeWidth: 2 }}
+            dot={{ r: 4, fill: 'var(--c-series-1)', stroke: 'var(--c-surface)', strokeWidth: 2 }}
             isAnimationActive={false}
           />
           <Line
             data={forecast}
             dataKey="y"
             name="Prognose"
-            stroke="var(--c-accent)"
+            stroke="var(--c-series-1)"
             strokeWidth={2}
             strokeDasharray="6 5"
             dot={false}
@@ -202,9 +202,9 @@ export function WaistChart({
           <Line
             dataKey="y"
             name="Livvidde"
-            stroke="var(--c-accent)"
+            stroke="var(--c-series-1)"
             strokeWidth={2}
-            dot={{ r: 4, fill: 'var(--c-accent)', stroke: 'var(--c-surface)', strokeWidth: 2 }}
+            dot={{ r: 4, fill: 'var(--c-series-1)', stroke: 'var(--c-surface)', strokeWidth: 2 }}
             isAnimationActive={false}
           />
         </LineChart>
@@ -240,7 +240,7 @@ export function StepsChart({
           <Bar
             dataKey="avg"
             name="Snitt"
-            fill="var(--c-accent)"
+            fill="var(--c-series-1)"
             radius={[4, 4, 0, 0]}
             isAnimationActive={false}
           />
@@ -288,7 +288,7 @@ export function AttendanceChart({
           <Bar
             dataKey="done"
             name="Økter"
-            fill="var(--c-accent)"
+            fill="var(--c-series-1)"
             radius={[4, 4, 0, 0]}
             isAnimationActive={false}
           />

@@ -33,7 +33,9 @@ export function MealLibrary() {
             onClick={() => update('slot', s)}
             className={cx(
               'min-h-11 rounded-full border px-4 text-sm font-semibold',
-              slot === s ? 'border-accent bg-accent text-on-accent' : 'border-line bg-surface-2',
+              slot === s
+                ? 'border-transparent bg-accent text-on-accent'
+                : 'border-transparent bg-surface-2 shadow-[inset_0_0_0_1px_var(--c-hairline)]',
             )}
           >
             {s ? SLOT_LABELS[s] : 'Alle'}
@@ -56,7 +58,7 @@ export function MealLibrary() {
               <li key={meal.id}>
                 <Link
                   to={`/mat/bibliotek/${meal.id}`}
-                  className="flex flex-col gap-1 rounded-2xl border border-line bg-surface px-4 py-3 hover:bg-surface-2"
+                  className="surface pressable flex flex-col gap-1 rounded-[22px] px-4 py-3.5"
                 >
                   <span className="flex flex-wrap items-center gap-2">
                     <span className="font-semibold">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Meter } from '../../components/Meter';
+import { Ring } from '../../components/Ring';
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -82,7 +82,7 @@ export function FoodToday() {
           {day.log.extras.map((x) => (
             <li
               key={x.id}
-              className="flex items-center gap-3 rounded-2xl border border-line bg-surface py-1 pr-1 pl-4"
+              className="surface flex items-center gap-3 rounded-[20px] py-1 pr-1 pl-4"
             >
               <span className="min-w-0 flex-1">
                 <span className="block font-medium">{x.name}</span>
@@ -124,44 +124,84 @@ export function FoodToday() {
   );
 }
 
+const STATUS_TEXT = { ok: 'I rute', under: 'Under målet', over: 'Over målet' } as const;
+
 export function DaySummary({ day, compact }: { day: DayPlan; compact?: boolean }) {
   const { settings } = useAppData();
   const target = settings.currentKcalTarget;
   const [pMin, pMax] = settings.proteinTargetG;
+  const rings = [
+    {
+      label: 'Kcal',
+      value: day.totals.kcal,
+      max: target,
+      main: formatNumber(day.totals.kcal),
+      unit: 'kcal',
+      target: `mål ${formatNumber(target)} ± ${formatNumber(settings.kcalTolerance)}`,
+      status: day.kcal,
+    },
+    {
+      label: 'Protein',
+      value: day.totals.protein,
+      max: pMin,
+      main: formatNumber(day.totals.protein),
+      unit: 'g protein',
+      target: `mål ${pMin}–${pMax} g`,
+      status: day.protein,
+    },
+  ];
+  const minis = [
+    {
+      label: 'Karbo',
+      value: `${formatNumber(day.totals.carbs)} g`,
+      hint: compact ? null : `mål ${settings.carbTargetG.join('–')}`,
+    },
+    {
+      label: 'Fett',
+      value: `${formatNumber(day.totals.fat)} g`,
+      hint: compact ? null : `mål ${settings.fatTargetG.join('–')}`,
+    },
+    { label: 'Dagens pris', value: fmtNok(day.totals.priceNok), hint: null, testId: 'day-price' },
+  ];
   return (
-    <Card>
-      <div className="grid grid-cols-2 gap-4">
-        <Meter
-          label="Kcal"
-          value={day.totals.kcal}
-          valueText={formatNumber(day.totals.kcal)}
-          targetText={`mål ${formatNumber(target)} ± ${formatNumber(settings.kcalTolerance)}`}
-          max={target * 1.2}
-          range={[target - settings.kcalTolerance, target + settings.kcalTolerance]}
-          tone={statusTone[day.kcal]}
-        />
-        <Meter
-          label="Protein"
-          value={day.totals.protein}
-          valueText={`${formatNumber(day.totals.protein)} g`}
-          targetText={`mål ${pMin}–${pMax}`}
-          max={pMax * 1.2}
-          range={[pMin, pMax]}
-          tone={statusTone[day.protein]}
-        />
+    <Card className="rounded-[26px]">
+      <div className="grid grid-cols-2 gap-3">
+        {rings.map((r) => (
+          <div key={r.label} className="flex flex-col items-center text-center">
+            <Ring
+              value={r.value}
+              max={r.max}
+              label={r.label}
+              tone={statusTone[r.status]}
+              size={118}
+              stroke={11}
+            >
+              <span className="num text-[24px] leading-none font-bold">{r.main}</span>
+              <span className="mt-1 text-[11px] font-medium text-muted">{r.unit}</span>
+            </Ring>
+            <p className="mt-2 text-[13px] text-muted">{r.target}</p>
+            <p
+              className={cx(
+                'text-[13px] font-semibold',
+                r.status === 'ok' ? 'text-good' : r.status === 'under' ? 'text-warn' : 'text-bad',
+              )}
+            >
+              {STATUS_TEXT[r.status]}
+            </p>
+          </div>
+        ))}
       </div>
-      {!compact && (
-        <p className="tabular mt-3 text-sm text-muted">
-          Karbo {formatNumber(day.totals.carbs)} g (mål {settings.carbTargetG.join('–')}) · Fett{' '}
-          {formatNumber(day.totals.fat)} g (mål {settings.fatTargetG.join('–')})
-        </p>
-      )}
-      <p className="mt-2 flex items-baseline justify-between text-sm">
-        <span className="text-muted">Dagens pris</span>
-        <span className="tabular font-semibold" data-testid="day-price">
-          {fmtNok(day.totals.priceNok)}
-        </span>
-      </p>
+      <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-[var(--c-hairline)] pt-3.5">
+        {minis.map((m) => (
+          <div key={m.label} className="min-w-0">
+            <dt className="text-[12px] text-muted">{m.label}</dt>
+            <dd className="num truncate text-[17px] font-semibold" data-testid={m.testId}>
+              {m.value}
+            </dd>
+            {m.hint && <dd className="text-[11px] text-muted">{m.hint}</dd>}
+          </div>
+        ))}
+      </dl>
     </Card>
   );
 }
@@ -177,7 +217,7 @@ function SlotCard({ slot, day, onPick }: { slot: Slot; day: DayPlan; onPick: () 
       type="button"
       onClick={onPick}
       aria-label={`${SLOT_LABELS[slot]}: ${meal?.name ?? 'ikke valgt'}. Trykk for å bytte.`}
-      className="flex w-full items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3 text-left hover:bg-surface-2"
+      className="surface pressable flex w-full items-center gap-3 rounded-[22px] px-4 py-3.5 text-left"
     >
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2 text-xs font-semibold tracking-wide text-muted uppercase">
@@ -236,8 +276,10 @@ function MealPickerSheet({
                 onClick={() => onPick(meal.id)}
                 aria-pressed={selected}
                 className={cx(
-                  'flex w-full flex-col gap-0.5 rounded-2xl border px-4 py-3 text-left',
-                  selected ? 'border-accent bg-accent/10' : 'border-line bg-surface-2',
+                  'pressable flex w-full flex-col gap-0.5 rounded-[20px] border px-4 py-3 text-left',
+                  selected
+                    ? 'border-transparent bg-accent/10 shadow-[inset_0_0_0_1.5px_var(--c-accent)]'
+                    : 'border-transparent bg-surface-2',
                 )}
               >
                 <span className="flex items-center justify-between gap-2">

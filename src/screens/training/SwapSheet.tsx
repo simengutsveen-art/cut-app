@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
+import { ExerciseThumb } from '../../components/ExerciseImage';
 import { IconSearch } from '../../components/icons';
+import { cx } from '../../lib/cx';
 import { Sheet, TextInput } from '../../components/ui';
 import type { Exercise } from '../../types';
 
@@ -36,7 +38,7 @@ export function SwapSheet({
     <Sheet open={open} title={`Bytt ut ${current.name}`} onClose={onClose}>
       {alternative && (
         <div className="mb-4">
-          <h3 className="mb-1 text-sm font-semibold text-muted">Anbefalt alternativ</h3>
+          <h3 className="eyebrow mb-1.5">Anbefalt alternativ</h3>
           <ExerciseOption exercise={alternative} onPick={onPick} highlight />
         </div>
       )}
@@ -75,14 +77,20 @@ function ExerciseOption({
     <button
       type="button"
       onClick={() => onPick(exercise)}
-      className={
+      className={cx(
+        'pressable flex min-h-14 w-full items-center gap-3 rounded-2xl px-2.5 py-2 text-left',
         highlight
-          ? 'flex min-h-12 w-full flex-col rounded-xl border border-accent bg-accent/10 px-3 py-2 text-left'
-          : 'flex min-h-12 w-full flex-col rounded-xl px-3 py-2 text-left hover:bg-surface-2'
-      }
+          ? 'bg-accent/10 shadow-[inset_0_0_0_1.5px_var(--c-accent)]'
+          : 'hover:bg-surface-2',
+      )}
     >
-      <span className="font-semibold">{exercise.name}</span>
-      <span className="text-sm text-muted">{exercise.primaryMuscles.join(', ')}</span>
+      <ExerciseThumb subject={exercise} size={44} />
+      <span className="min-w-0 flex-1">
+        <span className="block font-semibold tracking-[-0.01em]">{exercise.name}</span>
+        <span className="block truncate text-[13px] text-muted">
+          {exercise.primaryMuscles.join(', ')}
+        </span>
+      </span>
     </button>
   );
 }

@@ -1,5 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { IconCalendar, IconChevronRight } from '../../components/icons';
+import { PlanHero } from '../../components/PlanProgress';
 import { Card, NumberField, Page, PageHeader, SectionTitle } from '../../components/ui';
 import { setWaist } from '../../data/progressOps';
 import { db } from '../../db';
@@ -136,9 +139,20 @@ export function ProgressScreen() {
 
   return (
     <Page>
-      <PageHeader title="Fremgang" subtitle={planStatusLabel(status, weeks)} />
+      <PageHeader eyebrow={planStatusLabel(status, weeks)} title="Fremgang" />
 
-      <dl className="grid grid-cols-2 gap-2">
+      {status.kind === 'waiting' ? (
+        <LinkRowCard
+          to="/fremgang/kalender"
+          title="Kalender"
+          text="Se de 12 ukene og fasene før du starter."
+        />
+      ) : (
+        <PlanHero today={today} />
+      )}
+
+      <SectionTitle>Nøkkeltall</SectionTitle>
+      <dl className="grid grid-cols-2 gap-2.5">
         <Stat
           label="Ned totalt"
           value={lostTotal !== null ? `${formatNumber(lostTotal, 1)} kg` : '–'}
@@ -246,10 +260,25 @@ export function ProgressScreen() {
 
 function Stat({ label, value, hint }: { label: string; value: string; hint: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface p-3">
-      <dt className="text-sm text-muted">{label}</dt>
-      <dd className="tabular text-2xl font-bold">{value}</dd>
-      <dd className="text-xs text-muted">{hint}</dd>
+    <div className="surface rounded-[22px] p-3.5">
+      <dt className="text-[13px] font-medium text-muted">{label}</dt>
+      <dd className="num mt-1 text-[26px] leading-none font-bold">{value}</dd>
+      <dd className="mt-1.5 text-[12px] text-muted">{hint}</dd>
     </div>
+  );
+}
+
+function LinkRowCard({ to, title, text }: { to: string; title: string; text: string }) {
+  return (
+    <Link to={to} className="surface pressable flex items-center gap-3 rounded-[22px] p-4">
+      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/12 text-accent">
+        <IconCalendar size={22} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-semibold">{title}</span>
+        <span className="block text-sm text-muted">{text}</span>
+      </span>
+      <IconChevronRight size={18} className="text-muted" />
+    </Link>
   );
 }

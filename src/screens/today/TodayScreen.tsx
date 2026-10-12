@@ -3,6 +3,9 @@ import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BackAlertCard } from '../../components/BackAlertCard';
 import { PainPicker } from '../../components/PainPicker';
+import { PlanHero } from '../../components/PlanProgress';
+import { SessionCard } from '../../components/SessionCard';
+import { Ring } from '../../components/Ring';
 import {
   IconCamera,
   IconCheck,
@@ -10,6 +13,8 @@ import {
   IconFood,
   IconInfo,
   IconPlay,
+  IconScale,
+  IconSteps,
   IconWarning,
 } from '../../components/icons';
 import {
@@ -31,6 +36,7 @@ import { useDayPlan } from '../../hooks/useDayPlan';
 import { useOptimistic } from '../../hooks/useOptimistic';
 import { useToday } from '../../hooks/useToday';
 import { useWorkoutContext } from '../../hooks/useWorkoutContext';
+import { cx } from '../../lib/cx';
 import {
   addDaysISO,
   daysBetween,
@@ -42,10 +48,9 @@ import {
   todayISO,
 } from '../../lib/dates';
 import { formatNumber, parseInteger } from '../../lib/format';
-import { capitalize } from '../../lib/labels';
 import { prepEventOnDate } from '../../lib/mealPrep';
 import { backAlert } from '../../lib/pain';
-import { dayPlanFor, phaseForWeek, prescriptionForWeek } from '../../lib/prescription';
+import { dayPlanFor, phaseForWeek } from '../../lib/prescription';
 import { stepGoal } from '../../lib/progress';
 import { useAppData } from '../../state/appData';
 import { DaySummary } from '../food/FoodToday';
@@ -120,12 +125,17 @@ export function TodayScreen() {
       ? `${planStatusLabel(status, settings.weeks)} · ${phase.name}`
       : planStatusLabel(status, settings.weeks);
 
+  const weightDelta =
+    day.log.weightKg != null && lastWeight?.weightKg != null
+      ? day.log.weightKg - lastWeight.weightKg
+      : null;
+
   return (
     <Page>
-      <PageHeader title={title} subtitle={capitalize(formatWeekdayLong(today))} />
+      <PageHeader eyebrow={formatWeekdayLong(today)} title={title} />
 
       {(seedUpdate || backupDue) && (
-        <div className="mb-3 flex flex-col gap-2">
+        <div className="mb-4 flex flex-col gap-2">
           {seedUpdate && (
             <NoticeLink
               to="/mer/oppdater"
@@ -146,29 +156,69 @@ export function TodayScreen() {
         </div>
       )}
 
-      {status.kind === 'waiting' && (
-        <Card tone="accent" className="mb-4" aria-label="Start planen">
-          <h2 className="text-xl font-bold">Klar til å starte?</h2>
-          <p className="mt-1 text-sm">
-            Trykk når du vil begynne. Uke 1 starter i dag, og planen varer i {settings.weeks} uker,
-            til og med {formatDate(addDaysISO(today, settings.weeks * 7 - 1))}.
+      {status.kind === 'waiting' ? (
+        <Card tone="accent" className="rounded-[26px] p-5" aria-label="Start planen">
+          <div className="flex items-center gap-4">
+            <Ring value={0} max={1} label="Planen er ikke startet" size={76} stroke={8}>
+              <span className="num text-[18px] font-bold">{settings.weeks * 7}</span>
+              <span className="text-[10px] font-semibold text-muted">dager</span>
+            </Ring>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-[22px] leading-tight font-bold tracking-[-0.02em]">
+                Klar til å starte?
+              </h2>
+              <p className="mt-1 text-[14px] text-muted">Uke 1 starter den dagen du trykker.</p>
+            </div>
+          </div>
+          <p className="mt-4 text-[15px]">
+            Starter du i dag, varer planen i {settings.weeks} uker, til og med{' '}
+            {formatDate(addDaysISO(today, settings.weeks * 7 - 1))}.
           </p>
-          <Button className="mt-3" block size="lg" onClick={() => void startPlan(db, today)}>
-            <IconPlay size={20} /> Start nå
+          <Button className="mt-4" block size="lg" onClick={() => void startPlan(db, today)}>
+            <IconPlay size={18} /> Start nå
           </Button>
-          <p className="mt-2 text-xs text-muted">
+          <p className="mt-2.5 text-xs text-muted">
             Ukene telles fra startdagen. Du kan endre startdato under Mer → Innstillinger.
           </p>
         </Card>
+      ) : (
+        <PlanHero today={today} />
       )}
 
-      {alert.show && <BackAlertCard reason={alert.reason} />}
+      {alert.show && (
+        <div className="mt-4">
+          <BackAlertCard reason={alert.reason} />
+        </div>
+      )}
 
+      <SectionTitle>Logg i dag</SectionTitle>
       <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label htmlFor="weight" className="text-sm font-medium text-muted">
-            Morgenvekt
-          </label>
+        <MetricTile
+          icon={<IconScale size={18} />}
+          label="Morgenvekt"
+          htmlFor="weight"
+          footer={
+            savedField === 'weight' ? (
+              <SavedTick />
+            ) : (
+              <p className="text-xs text-muted">
+                {lastWeight?.weightKg
+                  ? `Forrige ${formatNumber(lastWeight.weightKg, 1)} kg`
+                  : `Start ${formatNumber(settings.startWeightKg, 1)} kg`}
+                {weightDelta !== null && Math.abs(weightDelta) >= 0.05 && (
+                  <span
+                    className={cx(
+                      'ml-1 font-semibold',
+                      weightDelta < 0 ? 'text-good' : 'text-muted',
+                    )}
+                  >
+                    {weightDelta < 0 ? '↓' : '↑'} {formatNumber(Math.abs(weightDelta), 1)}
+                  </span>
+                )}
+              </p>
+            )
+          }
+        >
           <NumberField
             id="weight"
             label="Morgenvekt"
@@ -181,17 +231,27 @@ export function TodayScreen() {
             max={400}
             onCommit={(v) => void saveField('weight', { weightKg: v })}
           />
-          {savedField === 'weight' && <SavedTick />}
-          <p className="mt-1 text-xs text-muted">
-            {lastWeight?.weightKg
-              ? `Forrige: ${formatNumber(lastWeight.weightKg, 1)} kg (${formatDate(lastWeight.date)})`
-              : `Start: ${formatNumber(settings.startWeightKg, 1)} kg`}
-          </p>
-        </div>
-        <div>
-          <label htmlFor="steps" className="text-sm font-medium text-muted">
-            Skritt
-          </label>
+        </MetricTile>
+        <MetricTile
+          icon={<IconSteps size={18} />}
+          label="Skritt"
+          htmlFor="steps"
+          footer={
+            <>
+              <StepsBar steps={day.log.steps ?? 0} goal={goal} />
+              {savedField === 'steps' ? (
+                <SavedTick />
+              ) : (
+                <p className="text-xs text-muted">
+                  Mål {formatNumber(goal)}
+                  {day.log.steps != null && day.log.steps >= goal && (
+                    <span className="ml-1 font-semibold text-good">✓ nådd</span>
+                  )}
+                </p>
+              )}
+            </>
+          }
+        >
           <NumberField
             id="steps"
             label="Skritt"
@@ -203,67 +263,56 @@ export function TodayScreen() {
             max={200000}
             onCommit={(v) => void saveField('steps', { steps: v })}
           />
-          {savedField === 'steps' && <SavedTick />}
-          <PasteStepsButton onSteps={(v) => void saveField('steps', { steps: v })} />
-          <p className="mt-1 text-xs text-muted">
-            Mål i dag: {formatNumber(goal)}
-            {day.log.steps != null && day.log.steps >= goal && (
-              <span className="text-good"> ✓</span>
-            )}
-          </p>
-        </div>
+        </MetricTile>
       </div>
+      <PasteStepsButton onSteps={(v) => void saveField('steps', { steps: v })} />
 
-      <SectionTitle>Trening</SectionTitle>
+      <SectionTitle
+        action={
+          <Link to="/trening" className="text-[15px] font-medium text-accent">
+            Trening
+          </Link>
+        }
+      >
+        Dagens økt
+      </SectionTitle>
       {activeWorkout ? (
         <Card tone="accent">
-          <p className="text-sm text-muted">Økt pågår</p>
-          <h2 className="text-xl font-bold">{sessionsById.get(activeWorkout.sessionId)?.name}</h2>
+          <p className="eyebrow text-accent">Økt pågår</p>
+          <h2 className="mt-1 text-[22px] font-bold tracking-[-0.02em]">
+            {sessionsById.get(activeWorkout.sessionId)?.name}
+          </h2>
           <Button
-            className="mt-3"
+            className="mt-4"
             block
             size="lg"
             onClick={() => navigate(`/trening/okt/${activeWorkout.id}`)}
           >
-            <IconPlay size={20} /> Fortsett økta
+            <IconPlay size={18} /> Fortsett økta
           </Button>
         </Card>
       ) : session ? (
-        <Card tone={sessionDone ? 'good' : undefined}>
-          <h2 className="text-xl font-bold">{session.name}</h2>
-          <p className="text-sm text-muted">
-            {prescriptionForWeek(session, plan.phases, week).length} øvelser
-            {phase ? ` · ${phase.name}` : ''}
-          </p>
-          {sessionDone ? (
-            <p className="mt-2 flex items-center gap-1 font-semibold text-good">
-              <IconCheck size={18} /> Fullført i dag
-            </p>
-          ) : (
-            <Button
-              className="mt-3"
-              block
-              size="lg"
-              onClick={async () => {
-                const id = await startWorkout(db, session, today, ctx);
-                navigate(`/trening/okt/${id}`);
-              }}
-            >
-              <IconPlay size={20} /> Start {session.name}
-            </Button>
-          )}
-        </Card>
+        <SessionCard
+          session={session}
+          week={week}
+          done={sessionDone}
+          onStart={async () => {
+            const id = await startWorkout(db, session, today, ctx);
+            navigate(`/trening/okt/${id}`);
+          }}
+        />
       ) : (
         <Card>
-          <h2 className="text-xl font-bold">Hviledag: lang tur</h2>
-          <p className="text-sm text-muted">Skrittmål i dag: {formatNumber(goal)}</p>
+          <p className="eyebrow">Hvile</p>
+          <h2 className="mt-1 text-[22px] font-bold tracking-[-0.02em]">Hviledag: lang tur</h2>
+          <p className="mt-1 text-[15px] text-muted">Skrittmål i dag: {formatNumber(goal)}</p>
         </Card>
       )}
 
       {(prep || isSunday) && (
         <>
           <SectionTitle>Påminnelser</SectionTitle>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5">
             {prep && (
               <ReminderLink
                 to="/mat/prep"
@@ -287,7 +336,7 @@ export function TodayScreen() {
 
       <SectionTitle
         action={
-          <Link to="/mat" className="text-sm font-semibold text-accent">
+          <Link to="/mat" className="text-[15px] font-medium text-accent">
             Dagens mat
           </Link>
         }
@@ -298,7 +347,7 @@ export function TodayScreen() {
 
       <SectionTitle
         action={
-          <Link to="/mer/core" className="text-sm font-semibold text-accent">
+          <Link to="/mer/core" className="text-[15px] font-medium text-accent">
             Rutinen
           </Link>
         }
@@ -315,7 +364,7 @@ export function TodayScreen() {
           label="Core-rutinen er gjort"
           description={plan.coreRoutine.when}
         />
-        <div className="mt-3">
+        <div className="mt-4 border-t border-[var(--c-hairline)] pt-4">
           <PainPicker
             value={pain}
             scale={plan.coreRoutine.painScale}
@@ -334,6 +383,49 @@ export function TodayScreen() {
         onSave={(note) => void patchDayLog(db, today, { note })}
       />
     </Page>
+  );
+}
+
+function MetricTile({
+  icon,
+  label,
+  htmlFor,
+  children,
+  footer,
+}: {
+  icon: ReactNode;
+  label: string;
+  htmlFor: string;
+  children: ReactNode;
+  footer: ReactNode;
+}) {
+  return (
+    <div className="surface flex min-w-0 flex-col gap-2 rounded-[22px] p-3">
+      <label
+        htmlFor={htmlFor}
+        className="flex items-center gap-1.5 text-[13px] font-semibold text-muted"
+      >
+        <span className="text-accent">{icon}</span>
+        {label}
+      </label>
+      {children}
+      <div className="flex flex-col gap-1.5">{footer}</div>
+    </div>
+  );
+}
+
+function StepsBar({ steps, goal }: { steps: number; goal: number }) {
+  const pct = goal > 0 ? Math.min(100, (steps / goal) * 100) : 0;
+  return (
+    <div className="h-1.5 overflow-hidden rounded-full bg-surface-3" aria-hidden="true">
+      <div
+        className={cx(
+          'h-full rounded-full transition-[width] duration-500',
+          pct >= 100 ? 'bg-good' : 'bg-accent',
+        )}
+        style={{ width: `${pct}%` }}
+      />
+    </div>
   );
 }
 
@@ -362,7 +454,7 @@ function DayNote({ value, onSave }: { value: string; onSave: (note: string) => v
 
 function SavedTick() {
   return (
-    <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-good" role="status">
+    <p className="flex items-center gap-1 text-xs font-semibold text-good" role="status">
       <IconCheck size={14} /> Lagret
     </p>
   );
@@ -373,24 +465,26 @@ function PasteStepsButton({ onSteps }: { onSteps: (steps: number) => void }) {
   const [error, setError] = useState(false);
   if (typeof navigator === 'undefined' || !navigator.clipboard?.readText) return null;
   return (
-    <button
-      type="button"
-      className="mt-1 min-h-11 text-sm font-semibold text-accent"
-      onClick={async () => {
-        try {
-          const text = await navigator.clipboard.readText();
-          const steps = parseInteger(text.trim()) ?? NaN;
-          if (Number.isFinite(steps) && steps >= 0 && steps <= 200000) {
-            setError(false);
-            onSteps(steps);
-          } else setError(true);
-        } catch {
-          setError(true);
-        }
-      }}
-    >
-      {error ? 'Fant ingen skritt å lime inn' : 'Lim inn skritt'}
-    </button>
+    <div className="mt-1 flex justify-end">
+      <button
+        type="button"
+        className="pressable min-h-11 px-1 text-[14px] font-medium text-accent"
+        onClick={async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            const steps = parseInteger(text.trim()) ?? NaN;
+            if (Number.isFinite(steps) && steps >= 0 && steps <= 200000) {
+              setError(false);
+              onSteps(steps);
+            } else setError(true);
+          } catch {
+            setError(true);
+          }
+        }}
+      >
+        {error ? 'Fant ingen skritt å lime inn' : 'Lim inn skritt'}
+      </button>
+    </div>
   );
 }
 
@@ -398,11 +492,10 @@ function NoticeLink({ to, text, warn }: { to: string; text: string; warn?: boole
   return (
     <Link
       to={to}
-      className={
-        warn
-          ? 'flex min-h-12 items-center gap-2 rounded-2xl border border-warn/60 bg-warn/10 px-4 py-2 text-sm font-semibold'
-          : 'flex min-h-12 items-center gap-2 rounded-2xl border border-accent/60 bg-accent/10 px-4 py-2 text-sm font-semibold'
-      }
+      className={cx(
+        'surface pressable flex min-h-12 items-center gap-2.5 rounded-2xl px-4 py-2.5 text-[14px] font-semibold',
+        warn ? 'tone-warn' : 'tone-accent',
+      )}
     >
       {warn ? (
         <IconWarning size={20} className="shrink-0 text-warn" />
@@ -410,7 +503,7 @@ function NoticeLink({ to, text, warn }: { to: string; text: string; warn?: boole
         <IconInfo size={20} className="shrink-0 text-accent" />
       )}
       <span className="flex-1">{text}</span>
-      <IconChevronRight size={18} />
+      <IconChevronRight size={18} className="text-muted" />
     </Link>
   );
 }
@@ -431,13 +524,18 @@ function ReminderLink({
   return (
     <Link
       to={to}
-      className="flex min-h-14 items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3"
+      className="surface pressable flex min-h-14 items-center gap-3 rounded-[22px] px-4 py-3"
     >
-      <span className={done ? 'text-good' : 'text-accent'}>
+      <span
+        className={cx(
+          'flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl',
+          done ? 'bg-good/15 text-good' : 'bg-accent/12 text-accent',
+        )}
+      >
         {done ? <IconCheck size={20} /> : icon}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block font-semibold">{title}</span>
+        <span className="block font-semibold tracking-[-0.01em]">{title}</span>
         <span className="block text-sm text-muted">{text}</span>
       </span>
       <IconChevronRight size={18} className="text-muted" />

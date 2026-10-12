@@ -16,7 +16,8 @@ import {
 } from '../../lib/prescription';
 import { bestE1rm, exerciseHistory, isStalled, suggestionText } from '../../lib/progression';
 import { useAppData } from '../../state/appData';
-import type { Exercise, WorkoutLog } from '../../types';
+import type { Exercise, SetLog, WorkoutLog } from '../../types';
+import { ExerciseThumb } from '../../components/ExerciseImage';
 import { ExerciseCard } from './ExerciseCard';
 import { SwapSheet } from './SwapSheet';
 
@@ -28,6 +29,8 @@ export interface ExerciseView {
   hasHistory: boolean;
   stalled: boolean;
   isPR: boolean;
+  /** Settene fra forrige gang øvelsen ble logget (for «Forrige»-kolonnen) */
+  previousSets: SetLog[] | null;
 }
 
 function fallbackPrescription(exerciseId: string, sets: number, week: number): WeekPrescription {
@@ -99,6 +102,7 @@ function useExerciseViews(log: WorkoutLog): (ExerciseView | null)[] {
         hasHistory: history.length > 0,
         stalled: isStalled(history.map((h) => h.bestE1rm)),
         isPR: history.length > 0 && currentBest > previousBest,
+        previousSets: history.length ? history[history.length - 1].sets : null,
       };
     });
   }, [log, otherLogs, sessionsById, exercisesById, plan]);
@@ -125,10 +129,23 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
         subtitle={`Uke ${log.week}${phase ? ` · ${phase.name}` : ''} · ${formatWeekdayLong(log.date)}`}
         back="/trening"
       />
-      {phase?.note && <p className="mb-3 text-sm text-muted">{phase.note}</p>}
-      <p className="mb-3 text-sm font-semibold" aria-live="polite">
-        {totalDone} av {totalSets} sett ferdig
-      </p>
+      <div className="surface mb-4 rounded-[22px] p-4">
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="text-[15px] font-semibold" aria-live="polite">
+            {totalDone} av {totalSets} sett ferdig
+          </p>
+          <p className="num text-[13px] text-muted">
+            {totalSets ? Math.round((totalDone / totalSets) * 100) : 0} %
+          </p>
+        </div>
+        <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-surface-3" aria-hidden="true">
+          <div
+            className="h-full rounded-full bg-accent transition-[width] duration-500"
+            style={{ width: `${totalSets ? (totalDone / totalSets) * 100 : 0}%` }}
+          />
+        </div>
+        {phase?.note && <p className="mt-3 text-[13px] text-muted">{phase.note}</p>}
+      </div>
 
       <div className="flex flex-col gap-3">
         {log.exercises.map((entry, i) => {
@@ -216,11 +233,12 @@ function DoneWorkout({ log }: { log: WorkoutLog }) {
             <Card key={i}>
               <Link
                 to={`/trening/ovelse/${entry.exerciseId}`}
-                className="font-semibold text-accent"
+                className="flex items-center gap-3 font-semibold"
               >
-                {exercise?.name ?? entry.exerciseId}
+                {exercise && <ExerciseThumb subject={exercise} size={40} />}
+                <span className="flex-1">{exercise?.name ?? entry.exerciseId}</span>
               </Link>
-              <ul className="mt-1 text-sm">
+              <ul className="num mt-2 flex flex-col gap-0.5 text-[14px] text-muted">
                 {entry.sets.map((s, j) => (
                   <li key={j} className="tabular">
                     Sett {j + 1}: {formatNumber(s.kg, 2)} kg × {s.reps}

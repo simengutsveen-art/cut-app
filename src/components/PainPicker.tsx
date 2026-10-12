@@ -35,7 +35,7 @@ export function PainPicker({
               aria-label={`Smerte ${v} (${level})`}
               onClick={() => onChange(on ? null : v)}
               className={cx(
-                'tabular h-12 rounded-xl border-2 text-lg font-bold',
+                'pressable num h-12 rounded-[14px] border-2 text-lg font-bold',
                 on ? levelClasses[level].on : cx('bg-surface-2', levelClasses[level].off),
               )}
             >

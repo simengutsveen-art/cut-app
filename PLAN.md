@@ -57,6 +57,24 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
   beste praksis 1,0.
 - E2E kjørt både med `base` `/` og `/cut/` (som på GitHub Pages).
 
+## Redesign (12.10.2026)
+
+- **Uttrykk:** kjølig, nesten svart bakgrunn med svak lysglød og fint korn, én is-blå aksent, grønn/gul/rød
+  bare som status. Lyst tema har egne, mørkere toner (alle tekstfarger ≥ 4,5:1 mot bakgrunnen).
+- **Typografi:** systemfonten (SF Pro på iPhone) med store titler og tett sporing, og SF Pro Rounded for tall,
+  slik Apple Fitness gjør. Ingen nedlastede fonter, så alt virker offline.
+- **Flater:** kort uten harde kanter (hårfin innerkant og myk skygge), flytende fanelinje og pausetimer i glass,
+  ark som glir opp fra bunnen. Trykkfeedback (skalering) og trinnvis inntoning når en side åpnes.
+  Alt respekterer «Reduser bevegelse» og «Reduser gjennomsiktighet».
+- **Kalender:** fremdriftskort på I dag og Fremgang (ring, dag X av 84, dager igjen, ukestripe), og en egen
+  kalender med fasetidslinje, alle 12 uker fra mandag til søndag, fullførte og planlagte økter, og detaljer
+  for hver dag.
+- **Øvelsesanimasjon (Hevy-stil):** start- og sluttbildet fra Free Exercise DB veksler i en jevn løkke med myk
+  overgang, med pause og «Vis slutt/start». Hevy bruker 3D-videoer; med bare to bilder per øvelse er dette den
+  nærmeste ærlige varianten. Animasjonen spiller bare når den er på skjermen.
+- **Trening i Hevy-stil:** miniatyrbilder, «Forrige»-kolonne per sett og fremdriftslinje for økta.
+- **Grafer:** seriefarger validert for fargeblindhet (blå `#2A9CDB` + magenta `#D55181` i mørkt tema).
+
 ## TODO
 
 - **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som

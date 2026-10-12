@@ -14,6 +14,8 @@ import {
   PageHeader,
   SectionTitle,
 } from '../../components/ui';
+import { ExerciseThumb } from '../../components/ExerciseImage';
+import { SessionCard } from '../../components/SessionCard';
 import { startWorkout } from '../../data/workouts';
 import { db } from '../../db';
 import { useToday } from '../../hooks/useToday';
@@ -76,16 +78,18 @@ export function TrainingOverview() {
   return (
     <Page>
       <PageHeader
+        eyebrow={`${planStatusLabel(status, settings.weeks)}${phase && status.kind === 'active' ? ` · ${phase.name}` : ''}`}
         title="Trening"
-        subtitle={`${planStatusLabel(status, settings.weeks)}${phase && status.kind === 'active' ? ` · ${phase.name}` : ''}`}
       />
 
       {active ? (
-        <Card tone="accent">
-          <p className="text-sm text-muted">Økt pågår</p>
-          <h2 className="text-xl font-bold">{sessionsById.get(active.sessionId)?.name}</h2>
+        <Card tone="accent" className="rounded-[26px]">
+          <p className="eyebrow text-accent">Økt pågår</p>
+          <h2 className="mt-1 text-[24px] font-bold tracking-[-0.025em]">
+            {sessionsById.get(active.sessionId)?.name}
+          </h2>
           <Button
-            className="mt-3"
+            className="mt-4"
             block
             size="lg"
             onClick={() => navigate(`/trening/okt/${active.id}`)}
@@ -94,32 +98,23 @@ export function TrainingOverview() {
           </Button>
         </Card>
       ) : todaySession ? (
-        <Card tone={todayDone ? 'good' : 'accent'}>
-          <p className="text-sm text-muted">Dagens økt</p>
-          <h2 className="text-xl font-bold">{todaySession.name}</h2>
-          <p className="text-sm text-muted">
-            {prescriptionForWeek(todaySession, plan.phases, status.week).length} øvelser
-          </p>
-          {todayDone ? (
-            <p className="mt-2 flex items-center gap-1 font-semibold text-good">
-              <IconCheck size={18} /> Fullført i dag
-            </p>
-          ) : (
-            <Button className="mt-3" block size="lg" onClick={() => void start(todaySession)}>
-              <IconPlay size={20} /> Start {todaySession.name}
-            </Button>
-          )}
-        </Card>
+        <SessionCard
+          session={todaySession}
+          week={status.week}
+          done={todayDone}
+          onStart={() => void start(todaySession)}
+        />
       ) : (
-        <Card>
-          <p className="text-sm text-muted">I dag</p>
-          <h2 className="text-xl font-bold">Hviledag: lang tur</h2>
+        <Card className="rounded-[26px]">
+          <p className="eyebrow">I dag</p>
+          <h2 className="mt-1 text-[24px] font-bold tracking-[-0.025em]">Hviledag: lang tur</h2>
+          <p className="mt-1 text-[15px] text-muted">Restitusjon er en del av planen.</p>
         </Card>
       )}
 
       {phase?.note && (
-        <p className="mt-3 text-sm text-muted">
-          <span className="font-semibold text-fg">{phase.name}:</span> {phase.note}
+        <p className="mt-3 rounded-2xl bg-surface-2/70 px-4 py-3 text-[14px] text-muted shadow-[inset_0_0_0_1px_var(--c-hairline)]">
+          <span className="font-semibold text-fg">{phase.name}.</span> {phase.note}
         </p>
       )}
 
@@ -133,7 +128,7 @@ export function TrainingOverview() {
             >
               <IconChevronLeft />
             </IconButton>
-            <span className="tabular w-16 text-center text-sm font-semibold">Uke {week}</span>
+            <span className="num w-16 text-center text-[15px] font-semibold">Uke {week}</span>
             <IconButton
               label="Neste uke"
               disabled={week >= settings.weeks}
@@ -147,7 +142,7 @@ export function TrainingOverview() {
         Ukeoversikt
       </SectionTitle>
       <ListCard>
-        <ul>
+        <ul className="divide-y divide-[var(--c-hairline)]">
           {weekDates(week, settings.startDate).map((date) => {
             const dp = dayPlanFor(settings, isoWeekday(date));
             const session = dp.kind === 'session' ? sessionsById.get(dp.sessionId) : undefined;
@@ -155,21 +150,30 @@ export function TrainingOverview() {
             const done = dayLogs.filter((l) => l.status === 'done');
             const isToday = date === today;
             return (
-              <li
-                key={date}
-                className={cx(
-                  'flex min-h-12 items-center gap-3 border-b border-line px-4 py-2 last:border-b-0',
-                  isToday && 'bg-accent/10',
-                )}
-              >
-                <span className="w-20 shrink-0 text-sm">
-                  <span className="font-semibold capitalize">
+              <li key={date} className="flex min-h-[60px] items-center gap-3 px-3.5 py-2">
+                <span
+                  className={cx(
+                    'flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-[14px] leading-none',
+                    isToday
+                      ? 'bg-accent text-on-accent'
+                      : done.length > 0
+                        ? 'bg-good/15 text-good'
+                        : 'bg-surface-2',
+                  )}
+                >
+                  <span className="text-[10px] font-semibold uppercase opacity-80">
                     {weekdayName(isoWeekday(date), 'short')}
-                  </span>{' '}
-                  <span className="text-muted">{formatDateShort(date)}</span>
+                  </span>
+                  <span className="num mt-0.5 text-[16px] font-bold">
+                    {formatDateShort(date).slice(0, 2)}
+                  </span>
                 </span>
                 <span className="min-w-0 flex-1 truncate">
-                  {session ? session.name : <span className="text-muted">Hvile</span>}
+                  {session ? (
+                    <span className="font-medium">{session.name}</span>
+                  ) : (
+                    <span className="text-muted">Hvile</span>
+                  )}
                   {done
                     .filter((l) => l.sessionId !== session?.id)
                     .map((l) => (
@@ -181,7 +185,7 @@ export function TrainingOverview() {
                 </span>
                 {done.length > 0 ? (
                   <Badge tone="good">
-                    <IconCheck size={14} /> Gjort
+                    <IconCheck size={13} /> Gjort
                   </Badge>
                 ) : dayLogs.some((l) => l.status === 'active') ? (
                   <Badge tone="accent">Pågår</Badge>
@@ -193,20 +197,30 @@ export function TrainingOverview() {
       </ListCard>
 
       <SectionTitle>Alle økter</SectionTitle>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2.5">
         {sessions
           .filter((s) => s.active)
           .map((s) => (
-            <Card key={s.id} className="flex items-center gap-3 py-3">
+            <Card key={s.id} className="flex items-center gap-3 py-3.5">
+              <div className="flex shrink-0 -space-x-3">
+                {prescriptionForWeek(s, plan.phases, status.week)
+                  .map((p) => exercisesById.get(p.exerciseId))
+                  .filter((e) => !!e)
+                  .slice(0, 2)
+                  .map((e) => (
+                    <ExerciseThumb
+                      key={e.id}
+                      subject={e}
+                      size={40}
+                      className="ring-[3px] ring-[var(--c-surface)]"
+                    />
+                  ))}
+              </div>
               <div className="min-w-0 flex-1">
-                <div className="font-semibold">{s.name}</div>
-                <div className="text-sm text-muted">
-                  {prescriptionForWeek(s, plan.phases, status.week)
-                    .map((p) => exercisesById.get(p.exerciseId)?.name)
-                    .filter(Boolean)
-                    .slice(0, 3)
-                    .join(', ')}
-                  …
+                <div className="font-semibold tracking-[-0.01em]">{s.name}</div>
+                <div className="truncate text-[13px] text-muted">
+                  {prescriptionForWeek(s, plan.phases, status.week).length} øvelser ·{' '}
+                  {weekdayName(s.weekday)}
                 </div>
               </div>
               <Button
@@ -255,6 +269,7 @@ export function TrainingOverview() {
                   <LinkRow
                     key={e.id}
                     to={`/trening/ovelse/${e.id}`}
+                    icon={<ExerciseThumb subject={e} size={36} className="rounded-[10px]" />}
                     title={e.name}
                     subtitle={last ? `Sist: ${formatSets(last.sets)}` : undefined}
                   />
@@ -264,7 +279,7 @@ export function TrainingOverview() {
         </>
       )}
       <p className="mt-6 text-center">
-        <Link to="/mer/core" className="text-sm font-semibold text-accent">
+        <Link to="/mer/core" className="text-[15px] font-medium text-accent">
           Core og rygg →
         </Link>
       </p>

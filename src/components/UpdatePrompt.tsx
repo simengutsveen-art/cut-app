@@ -23,7 +23,7 @@ export function UpdatePrompt() {
   return (
     <div
       role="status"
-      className="fixed inset-x-3 top-[calc(env(safe-area-inset-top)+8px)] z-50 mx-auto flex max-w-xl items-center gap-3 rounded-2xl border border-accent/60 bg-surface p-3 shadow-lg"
+      className="glass animate-sheet fixed inset-x-3 top-[calc(env(safe-area-inset-top)+8px)] z-50 mx-auto flex max-w-xl items-center gap-3 rounded-[22px] p-3"
     >
       <p className="flex-1 text-sm">Ny versjon av appen er klar.</p>
       <Button size="sm" variant="secondary" onClick={() => setNeedRefresh(false)}>

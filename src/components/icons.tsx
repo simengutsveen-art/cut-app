@@ -189,3 +189,71 @@ export const IconTrophy = (p: IconProps) => (
     <path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H4a3 3 0 0 0 4 4M16 6h4a3 3 0 0 1-4 4M12 13v4M8 21h8M9 17h6" />
   </Svg>
 );
+
+export const IconCalendar = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3.5" y="5" width="17" height="15.5" rx="3" />
+    <path d="M3.5 10h17M8 3v4M16 3v4" />
+  </Svg>
+);
+
+export const IconPause = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M9 5v14M15 5v14" />
+  </Svg>
+);
+
+export const IconFlame = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M12 21c-3.9 0-7-2.7-7-6.6 0-3.1 2-5.2 3.6-7.1.3 1.8 1.2 3 2.6 3.4C11 7.2 12.6 4.6 15 3c-.3 2.6.6 4.1 2.1 5.9A8.4 8.4 0 0 1 19 14.4C19 18.3 15.9 21 12 21z" />
+  </Svg>
+);
+
+export const IconSteps = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M7.5 3.5c1.7 0 2.7 2 2.7 4.3 0 1.9-.7 3.4-.9 4.7H5.7C5.5 11.2 4.8 9.7 4.8 7.8c0-2.3 1-4.3 2.7-4.3zM5.8 15.5h3.5v1a1.75 1.75 0 0 1-3.5 0v-1zM16.5 8c1.7 0 2.7 2 2.7 4.3 0 1.9-.7 3.4-.9 4.7h-3.6c-.2-1.3-.9-2.8-.9-4.7 0-2.3 1-4.3 2.7-4.3zM14.8 20h3.5v.5a1.75 1.75 0 0 1-3.5 0V20z" />
+  </Svg>
+);
+
+export const IconScale = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+    <path d="M7.5 11a4.5 4.5 0 0 1 9 0" />
+    <path d="M12 11l1.8-2.2" />
+  </Svg>
+);
+
+export const IconBook = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15z" />
+    <path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5" />
+  </Svg>
+);
+
+export const IconSliders = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" />
+    <circle cx="16" cy="6" r="2" />
+    <circle cx="10" cy="12" r="2" />
+    <circle cx="18" cy="18" r="2" />
+  </Svg>
+);
+
+export const IconRefresh = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M20 11a8 8 0 0 0-14.5-4.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.5 4.5L20 16M20 20v-4h-4" />
+  </Svg>
+);
+
+export const IconPulse = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 12h4l2.5-6 4 12 2.5-6H21" />
+  </Svg>
+);
+
+export const IconDatabase = (p: IconProps) => (
+  <Svg {...p}>
+    <ellipse cx="12" cy="6" rx="7.5" ry="3" />
+    <path d="M4.5 6v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6M4.5 12v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6" />
+  </Svg>
+);

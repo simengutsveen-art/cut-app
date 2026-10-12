@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
-import { ExerciseImagePair } from '../../../components/ExerciseImage';
+import { ExerciseMotion } from '../../../components/ExerciseImage';
 import { IconCamera, IconTrash } from '../../../components/icons';
 import {
   Button,
@@ -200,7 +200,7 @@ function ExerciseEditor({ isNew, stored }: { isNew: boolean; stored: Exercise })
 
       <SectionTitle>Bilder</SectionTitle>
       <Card className="flex flex-col gap-3">
-        <ExerciseImagePair subject={draft} />
+        <ExerciseMotion subject={draft} />
         <Field
           label="Bilde-ID fra Free Exercise DB"
           htmlFor="ex-img"

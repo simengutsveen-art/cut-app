@@ -5,26 +5,28 @@ import {
   useState,
   type ButtonHTMLAttributes,
   type HTMLAttributes,
-  type TextareaHTMLAttributes,
   type InputHTMLAttributes,
   type ReactNode,
   type SelectHTMLAttributes,
+  type TextareaHTMLAttributes,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { cx } from '../lib/cx';
 import { parseDecimal, toInputValue } from '../lib/format';
-import { IconChevronLeft, IconChevronRight, IconX } from './icons';
+import { IconCheck, IconChevronLeft, IconChevronRight, IconX } from './icons';
 
 // ---------- Knapper ----------
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'good';
 
 const buttonVariants: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-on-accent hover:bg-accent-strong',
-  secondary: 'bg-surface-2 text-fg hover:bg-surface-3 border border-line',
+  primary:
+    'bg-accent text-on-accent shadow-[0_10px_28px_-14px_var(--c-accent)] hover:bg-accent-strong',
+  secondary: 'bg-surface-2 text-fg shadow-[inset_0_0_0_1px_var(--c-hairline)] hover:bg-surface-3',
   ghost: 'bg-transparent text-accent hover:bg-surface-2',
   danger: 'bg-bad text-on-status',
-  good: 'bg-good text-on-status',
+  good: 'bg-good text-on-status shadow-[0_10px_28px_-14px_var(--c-good)]',
 };
 
 export function Button({
@@ -43,10 +45,10 @@ export function Button({
     <button
       type={type}
       className={cx(
-        'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors disabled:opacity-40',
-        size === 'sm' && 'min-h-11 px-3 text-sm',
-        size === 'md' && 'min-h-12 px-4 text-base',
-        size === 'lg' && 'min-h-14 px-5 text-lg',
+        'pressable inline-flex items-center justify-center gap-2 font-semibold tracking-[-0.01em] disabled:opacity-40',
+        size === 'sm' && 'min-h-11 rounded-xl px-3.5 text-[15px]',
+        size === 'md' && 'min-h-12 rounded-2xl px-4 text-base',
+        size === 'lg' && 'min-h-14 rounded-2xl px-5 text-[17px]',
         block && 'w-full',
         buttonVariants[variant],
         className,
@@ -69,7 +71,7 @@ export function IconButton({
       aria-label={label}
       title={label}
       className={cx(
-        'inline-flex h-11 min-w-11 items-center justify-center rounded-xl text-fg hover:bg-surface-2 disabled:opacity-40',
+        'pressable inline-flex h-11 min-w-11 items-center justify-center rounded-full text-fg hover:bg-surface-2 disabled:opacity-30',
         className,
       )}
       {...rest}
@@ -82,40 +84,52 @@ export function IconButton({
 // ---------- Layout ----------
 
 export function Page({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cx('mx-auto w-full max-w-xl px-4', className)}>{children}</div>;
+  return (
+    <div className={cx('stagger relative mx-auto w-full max-w-xl px-4', className)}>{children}</div>
+  );
 }
 
 export function PageHeader({
   title,
   subtitle,
+  eyebrow,
   back,
   actions,
 }: {
   title: ReactNode;
   subtitle?: ReactNode;
+  /** Liten tekst over tittelen (f.eks. dato) */
+  eyebrow?: ReactNode;
   back?: string | true;
   actions?: ReactNode;
 }) {
   const navigate = useNavigate();
   return (
-    <header className="flex items-start gap-1 pt-4 pb-3">
+    <header className="pt-5 pb-4">
       {back && (
         <IconButton
           label="Tilbake"
-          className="-ml-2 shrink-0"
+          className="mb-2 -ml-1 bg-surface-2/70 shadow-[inset_0_0_0_1px_var(--c-hairline)]"
           onClick={() => (back === true ? navigate(-1) : navigate(back))}
         >
-          <IconChevronLeft size={26} />
+          <IconChevronLeft size={22} />
         </IconButton>
       )}
-      <div className="min-w-0 flex-1 pt-1">
-        <h1 className="text-2xl leading-tight font-bold tracking-tight break-words">{title}</h1>
-        {subtitle && <p className="mt-0.5 text-sm text-muted">{subtitle}</p>}
+      <div className="flex items-end gap-2">
+        <div className="min-w-0 flex-1">
+          {eyebrow && <p className="eyebrow mb-1">{eyebrow}</p>}
+          <h1 className="text-[30px] leading-[1.08] font-bold tracking-[-0.03em] break-words">
+            {title}
+          </h1>
+          {subtitle && <p className="mt-1.5 text-[15px] text-muted">{subtitle}</p>}
+        </div>
+        {actions && <div className="flex shrink-0 items-center gap-1 pb-0.5">{actions}</div>}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-1">{actions}</div>}
     </header>
   );
 }
+
+type Tone = 'good' | 'warn' | 'bad' | 'accent';
 
 export function Card({
   children,
@@ -125,19 +139,11 @@ export function Card({
 }: {
   children: ReactNode;
   className?: string;
-  tone?: 'good' | 'warn' | 'bad' | 'accent';
+  tone?: Tone;
 } & Omit<HTMLAttributes<HTMLElement>, 'className' | 'children'>) {
   return (
     <section
-      className={cx(
-        'rounded-2xl border bg-surface p-4',
-        !tone && 'border-line',
-        tone === 'good' && 'border-good/50',
-        tone === 'warn' && 'border-warn/60',
-        tone === 'bad' && 'border-bad/60',
-        tone === 'accent' && 'border-accent/60',
-        className,
-      )}
+      className={cx('surface rounded-[22px] p-4', tone && `tone-${tone}`, className)}
       {...rest}
     >
       {children}
@@ -147,8 +153,8 @@ export function Card({
 
 export function SectionTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
-    <div className="mt-6 mb-2 flex items-center justify-between gap-2">
-      <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">{children}</h2>
+    <div className="mt-8 mb-3 flex items-end justify-between gap-2">
+      <h2 className="text-[19px] leading-tight font-semibold tracking-[-0.02em]">{children}</h2>
       {action}
     </div>
   );
@@ -166,7 +172,7 @@ export function Badge({
   return (
     <span
       className={cx(
-        'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold',
+        'inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold tracking-[0.01em]',
         tone === 'neutral' && 'bg-surface-3 text-fg',
         tone === 'good' && 'bg-good/15 text-good',
         tone === 'warn' && 'bg-warn/15 text-warn',
@@ -185,30 +191,39 @@ export function LinkRow({
   title,
   subtitle,
   right,
+  icon,
 }: {
   to: string;
   title: ReactNode;
   subtitle?: ReactNode;
   right?: ReactNode;
+  icon?: ReactNode;
 }) {
   return (
     <Link
       to={to}
-      className="flex min-h-14 items-center gap-3 border-b border-line px-4 py-3 last:border-b-0 hover:bg-surface-2"
+      className="flex min-h-14 items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2"
     >
+      {icon && (
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/12 text-accent">
+          {icon}
+        </span>
+      )}
       <div className="min-w-0 flex-1">
-        <div className="font-medium">{title}</div>
+        <div className="font-medium tracking-[-0.01em]">{title}</div>
         {subtitle && <div className="text-sm text-muted">{subtitle}</div>}
       </div>
       {right}
-      <IconChevronRight size={20} className="shrink-0 text-muted" />
+      <IconChevronRight size={18} className="shrink-0 text-muted" />
     </Link>
   );
 }
 
 export function ListCard({ children }: { children: ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-surface">{children}</div>
+    <div className="surface divide-y divide-[var(--c-hairline)] overflow-hidden rounded-[22px]">
+      {children}
+    </div>
   );
 }
 
@@ -224,7 +239,11 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div role="tablist" aria-label={label} className="flex gap-1 rounded-xl bg-surface-2 p-1">
+    <div
+      role="tablist"
+      aria-label={label}
+      className="flex gap-1 rounded-2xl bg-surface-2 p-1 shadow-[inset_0_0_0_1px_var(--c-hairline)]"
+    >
       {options.map((o) => (
         <button
           key={o.value}
@@ -233,8 +252,8 @@ export function Segmented<T extends string>({
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
           className={cx(
-            'min-h-10 flex-1 rounded-lg px-2 text-sm font-semibold transition-colors',
-            value === o.value ? 'bg-surface text-fg shadow-sm' : 'text-muted',
+            'pressable min-h-10 flex-1 rounded-xl px-2 text-sm font-semibold',
+            value === o.value ? 'surface text-fg' : 'text-muted hover:text-fg',
           )}
         >
           {o.label}
@@ -246,7 +265,7 @@ export function Segmented<T extends string>({
 
 export function EmptyState({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-2xl border border-dashed border-line p-4 text-center text-muted">
+    <p className="rounded-[22px] bg-surface-2/60 px-4 py-6 text-center text-[15px] text-muted shadow-[inset_0_0_0_1px_var(--c-hairline)]">
       {children}
     </p>
   );
@@ -266,8 +285,8 @@ export function Field({
   htmlFor?: string;
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-muted">
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <label htmlFor={htmlFor} className="text-[13px] font-medium text-muted">
         {label}
       </label>
       {children}
@@ -277,7 +296,7 @@ export function Field({
 }
 
 export const inputClass =
-  'min-h-12 w-full rounded-xl border border-line bg-surface-2 px-3 text-fg placeholder:text-muted/70 focus:border-accent focus:outline-none';
+  'field min-h-12 w-full rounded-2xl border-0 px-3.5 text-fg placeholder:text-muted/60';
 
 export function TextInput({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cx(inputClass, className)} {...rest} />;
@@ -289,14 +308,14 @@ export function SelectInput({
   ...rest
 }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select className={cx(inputClass, 'appearance-auto', className)} {...rest}>
+    <select className={cx(inputClass, 'min-w-0 appearance-auto', className)} {...rest}>
       {children}
     </select>
   );
 }
 
 export function TextArea({ className, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea className={cx(inputClass, 'min-h-24 py-2', className)} {...rest} />;
+  return <textarea className={cx(inputClass, 'min-h-24 py-3 leading-snug', className)} {...rest} />;
 }
 
 /**
@@ -382,14 +401,13 @@ export function NumberField({
         }}
         className={cx(
           inputClass,
-          'tabular',
-          big && 'min-h-16 text-3xl font-bold',
+          'num',
+          big && 'min-h-[68px] text-[34px] font-semibold',
           suffix && 'pr-12',
-          invalid && 'border-bad',
         )}
       />
       {suffix && (
-        <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-muted">
+        <span className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-[15px] text-muted">
           {suffix}
         </span>
       )}
@@ -410,14 +428,21 @@ export function Checkbox({
 }) {
   return (
     <label className="flex min-h-12 cursor-pointer items-center gap-3">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-        className="h-6 w-6 shrink-0 accent-[var(--c-accent)]"
-      />
+      <span className="relative flex h-7 w-7 shrink-0 items-center justify-center">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          className="peer pressable h-7 w-7 cursor-pointer appearance-none rounded-full bg-surface-2 shadow-[inset_0_0_0_2px_var(--c-surface-3)] checked:bg-accent checked:shadow-[0_6px_18px_-8px_var(--c-accent)]"
+        />
+        <IconCheck
+          size={16}
+          strokeWidth={3}
+          className="pointer-events-none absolute text-on-accent opacity-0 transition-opacity peer-checked:opacity-100"
+        />
+      </span>
       <span className="min-w-0 flex-1">
-        <span className="block">{label}</span>
+        <span className="block font-medium">{label}</span>
         {description && <span className="block text-sm text-muted">{description}</span>}
       </span>
     </label>
@@ -457,26 +482,33 @@ export function Sheet({
   }, [open, onClose]);
 
   if (!open) return null;
-  return (
+  // Portal til <body>, så arket ligger over fanelinja uansett hvor det brukes.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      <div className="absolute inset-0 bg-black/60" aria-hidden="true" onClick={onClose} />
+      <div
+        className="animate-fade absolute inset-0 bg-black/55 backdrop-blur-[2px]"
+        aria-hidden="true"
+        onClick={onClose}
+      />
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={typeof title === 'string' ? title : undefined}
         tabIndex={-1}
-        className="animate-sheet safe-bottom relative flex max-h-[88dvh] w-full max-w-xl flex-col rounded-t-3xl border border-line bg-surface focus:outline-none"
+        className="animate-sheet safe-bottom surface relative flex max-h-[88dvh] w-full max-w-xl flex-col rounded-t-[28px] focus:outline-none"
       >
-        <div className="flex items-center gap-2 border-b border-line px-4 py-2">
-          <h2 className="min-w-0 flex-1 text-lg font-bold">{title}</h2>
-          <IconButton label="Lukk" onClick={onClose}>
-            <IconX />
+        <div className="mx-auto mt-2 h-1.5 w-10 rounded-full bg-surface-3" aria-hidden="true" />
+        <div className="flex items-center gap-2 px-4 pt-1 pb-2">
+          <h2 className="min-w-0 flex-1 text-[19px] font-semibold tracking-[-0.02em]">{title}</h2>
+          <IconButton label="Lukk" onClick={onClose} className="bg-surface-2">
+            <IconX size={20} />
           </IconButton>
         </div>
-        <div className="overflow-y-auto overscroll-contain px-4 py-3">{children}</div>
+        <div className="overflow-y-auto overscroll-contain px-4 pt-1 pb-4">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -505,7 +537,7 @@ export function InlineConfirm({
     );
   }
   return (
-    <div className="rounded-2xl border border-bad/50 bg-bad/10 p-3" role="alert">
+    <div className="tone-bad surface animate-fade rounded-[22px] p-3.5" role="alert">
       <p className="mb-3 text-sm">{message}</p>
       <div className="flex gap-2">
         <Button variant="secondary" className="flex-1" onClick={() => setAsking(false)}>

@@ -2,7 +2,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { AppShell } from './components/AppShell';
 import { FoodScreen } from './screens/food/FoodScreen';
 import { MoreScreen } from './screens/more/MoreScreen';
-import { ProgressScreen } from './screens/progress/ProgressScreen';
+import { ProgressSection } from './screens/progress/ProgressSection';
 import { LogShortcutScreen } from './screens/today/LogShortcutScreen';
 import { TodayScreen } from './screens/today/TodayScreen';
 import { TrainingScreen } from './screens/training/TrainingScreen';
@@ -16,7 +16,7 @@ const router = createHashRouter([
       { path: '/logg', element: <LogShortcutScreen /> },
       { path: '/trening/*', element: <TrainingScreen /> },
       { path: '/mat/*', element: <FoodScreen /> },
-      { path: '/fremgang/*', element: <ProgressScreen /> },
+      { path: '/fremgang/*', element: <ProgressSection /> },
       { path: '/mer/*', element: <MoreScreen /> },
       { path: '*', element: <TodayScreen /> },
     ],

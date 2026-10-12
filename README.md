@@ -1,8 +1,9 @@
 # Cut – 12-ukers cut
 
 En installerbar PWA (web-app) for iPhone som erstatter _12-ukers cut-plan_ og `Cut-tracker.xlsx`.
-Trening, mat, meal prep, handleliste, vekt, livvidde, ukessjekk og core/rygg. Alt på norsk, og alt
-fungerer uten nett etter første lasting.
+Trening med animerte øvelser, mat, meal prep, handleliste, vekt, livvidde, ukessjekk, core/rygg og en
+kalender som viser hvor langt du har kommet og hvor mye som er igjen. Alt på norsk, og alt fungerer uten
+nett etter første lasting.
 
 - **Ingen server og ingen innlogging.** Alle data lagres i nettleseren på telefonen (IndexedDB).
 - **Planen** (mat, øvelser, økter, faser, regler og tekster) ligger i `seed-data.json`.

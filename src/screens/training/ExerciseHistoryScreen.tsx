@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { ExerciseImagePair } from '../../components/ExerciseImage';
+import { ExerciseMotion } from '../../components/ExerciseImage';
 import { IconTrophy, IconWarning } from '../../components/icons';
 import { Badge, Card, EmptyState, Page, PageHeader, SectionTitle } from '../../components/ui';
 import { db } from '../../db';
@@ -51,7 +51,7 @@ export function ExerciseHistoryScreen() {
   return (
     <Page>
       <PageHeader title={exercise.name} subtitle="Historikk" back />
-      <ExerciseImagePair subject={exercise} />
+      <ExerciseMotion subject={exercise} />
 
       {pr && (
         <Card className="mt-4" tone="good">
@@ -106,7 +106,7 @@ export function ExerciseHistoryScreen() {
                   type="monotone"
                   dataKey="e1rm"
                   name="Beste e1RM"
-                  stroke="var(--c-accent)"
+                  stroke="var(--c-series-1)"
                   strokeWidth={2}
                   dot={{ r: 4 }}
                   isAnimationActive={false}
@@ -136,7 +136,7 @@ export function ExerciseHistoryScreen() {
             <li key={h.logId}>
               <Link
                 to={`/trening/okt/${h.logId}`}
-                className="block rounded-2xl border border-line bg-surface px-4 py-3"
+                className="surface pressable block rounded-[22px] px-4 py-3"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold">{formatDate(h.date)}</span>

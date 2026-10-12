@@ -36,12 +36,14 @@ export function Stepper({
 
   return (
     <div className="flex min-w-0 flex-col gap-1">
-      <span className="text-xs font-semibold tracking-wide text-muted uppercase">{label}</span>
-      <div className="flex items-stretch overflow-hidden rounded-xl border border-line bg-surface-2">
+      <span className="text-[11px] font-semibold tracking-[0.04em] text-muted uppercase">
+        {label}
+      </span>
+      <div className="flex items-stretch overflow-hidden rounded-2xl bg-surface shadow-[inset_0_0_0_1px_var(--c-hairline)] focus-within:shadow-[inset_0_0_0_2px_var(--c-accent)]">
         <button
           type="button"
           aria-label={`${label} minus ${formatNumber(step, 2)}`}
-          className="flex h-14 w-12 shrink-0 items-center justify-center text-fg active:bg-surface-3"
+          className="flex h-14 w-12 shrink-0 items-center justify-center text-fg transition-colors active:bg-surface-3"
           onClick={() => commit(value - step)}
         >
           <IconMinus />
@@ -67,7 +69,7 @@ export function Stepper({
             onKeyDown={(e) => {
               if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
             }}
-            className="tabular h-14 w-full min-w-0 bg-transparent text-center text-2xl font-bold text-fg focus:outline-none"
+            className="num h-14 w-full min-w-0 bg-transparent text-center text-[26px] font-bold text-fg focus:outline-none"
           />
           {unit && (
             <span className="pointer-events-none absolute right-1 bottom-0.5 text-[10px] text-muted">
@@ -78,7 +80,7 @@ export function Stepper({
         <button
           type="button"
           aria-label={`${label} pluss ${formatNumber(step, 2)}`}
-          className="flex h-14 w-12 shrink-0 items-center justify-center text-fg active:bg-surface-3"
+          className="flex h-14 w-12 shrink-0 items-center justify-center text-fg transition-colors active:bg-surface-3"
           onClick={() => commit(value + step)}
         >
           <IconPlus />

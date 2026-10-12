@@ -8,7 +8,8 @@ export function AppShell() {
   const [dockVisible, setDockVisible] = useState(false);
   return (
     <div className="safe-top min-h-dvh">
-      <main className={dockVisible ? 'pb-tabbar-timer' : 'pb-tabbar'}>
+      <div className="app-backdrop" aria-hidden="true" />
+      <main className={dockVisible ? 'pb-tabbar-timer relative z-[1]' : 'pb-tabbar relative z-[1]'}>
         <Outlet />
       </main>
       <WorkoutDock onVisibleChange={setDockVisible} />

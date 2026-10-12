@@ -43,7 +43,7 @@ export function ResetScreen() {
         )}
 
         {step === 1 && (
-          <div className="mt-4 rounded-xl border border-bad/50 bg-bad/10 p-3" role="alert">
+          <div className="tone-bad surface mt-4 rounded-2xl p-3.5" role="alert">
             <p className="font-semibold">Er du sikker? Dette kan ikke angres.</p>
             <div className="mt-3 flex gap-2">
               <Button variant="secondary" className="flex-1" onClick={() => setStep(0)}>
@@ -57,10 +57,7 @@ export function ResetScreen() {
         )}
 
         {step === 2 && (
-          <div
-            className="mt-4 flex flex-col gap-3 rounded-xl border border-bad/50 bg-bad/10 p-3"
-            role="alert"
-          >
+          <div className="tone-bad surface mt-4 flex flex-col gap-3 rounded-2xl p-3.5" role="alert">
             <Field label={`Skriv ${CONFIRM_WORD} for å bekrefte`} htmlFor="reset-confirm">
               <TextInput
                 id="reset-confirm"
