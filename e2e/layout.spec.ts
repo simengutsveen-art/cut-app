@@ -23,6 +23,7 @@ const routes = [
   '/mer/innstillinger',
   '/mer/backup',
   '/mer/oppdater',
+  '/mer/installer',
   '/mer/om',
   '/mer/nullstill',
 ];

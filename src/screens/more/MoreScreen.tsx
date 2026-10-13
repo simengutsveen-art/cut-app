@@ -9,6 +9,7 @@ import { IngredientForm } from './edit/IngredientForm';
 import { MealForm } from './edit/MealForm';
 import { SessionForm } from './edit/SessionForm';
 import { GuideScreen } from './GuideScreen';
+import { InstallScreen } from './InstallScreen';
 import { MoreIndex } from './MoreIndex';
 import { ResetScreen } from './ResetScreen';
 import { SeedUpdateScreen } from './SeedUpdateScreen';
@@ -29,6 +30,7 @@ export function MoreScreen() {
       <Route path="innstillinger" element={<SettingsScreen />} />
       <Route path="backup" element={<BackupScreen />} />
       <Route path="oppdater" element={<SeedUpdateScreen />} />
+      <Route path="installer" element={<InstallScreen />} />
       <Route path="om" element={<AboutScreen />} />
       <Route path="nullstill" element={<ResetScreen />} />
       <Route path="*" element={<MoreIndex />} />

@@ -39,9 +39,35 @@ export default defineConfig({
             purpose: 'maskable',
           },
         ],
+        // Android viser et installeringsvindu med skjermbilder (som i en appbutikk).
+        screenshots: [
+          {
+            src: 'screenshots/i-dag.jpg',
+            sizes: '1080x2340',
+            type: 'image/jpeg',
+            form_factor: 'narrow',
+            label: 'I dag: fremdrift, vekt, skritt og dagens økt',
+          },
+          {
+            src: 'screenshots/okt.jpg',
+            sizes: '1080x2340',
+            type: 'image/jpeg',
+            form_factor: 'narrow',
+            label: 'Økt med øvelsesbilder, sett og pausetimer',
+          },
+          {
+            src: 'screenshots/kalender.jpg',
+            sizes: '1080x2340',
+            type: 'image/jpeg',
+            form_factor: 'narrow',
+            label: 'Kalender: hele planen uke for uke',
+          },
+        ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,jpg,webmanifest,ico}'],
+        // Skjermbildene brukes bare av installeringsvinduet, ikke i appen.
+        globIgnores: ['screenshots/**'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,

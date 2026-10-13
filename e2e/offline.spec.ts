@@ -1,4 +1,4 @@
-import { devices, expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { preview, type PreviewServer } from 'vite';
 import { PLAN_START } from './helpers';
 
@@ -9,8 +9,6 @@ import { PLAN_START } from './helpers';
 const PORT = 4175;
 const base = process.env.VITE_BASE ?? '/';
 const url = `http://localhost:${PORT}${base}`;
-
-test.use({ ...devices['iPhone 14'] });
 
 async function allImagesLoaded(page: Page): Promise<{ total: number; broken: string[] }> {
   return page.evaluate(async () => {
@@ -44,6 +42,7 @@ test('offline: alle faner og øvelsesbilder fungerer etter første lasting', asy
     await page.getByRole('navigation', { name: 'Hovedmeny' }).waitFor();
     await page.getByRole('button', { name: 'Start nå' }).click();
     await page.getByRole('button', { name: 'Ja, start planen' }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Uke 1 av 12 · Oppstart');
 
     // Vent til service workeren er installert (precache ferdig) og styrer siden.
     await page.evaluate(() => navigator.serviceWorker.ready.then(() => undefined));

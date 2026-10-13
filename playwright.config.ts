@@ -23,6 +23,11 @@ export default defineConfig({
       name: 'iphone-webkit',
       use: { ...devices['iPhone 14'] },
     },
+    {
+      // Android-telefon med Chrome (Chromium-motoren)
+      name: 'android-chrome',
+      use: { ...devices['Pixel 7'] },
+    },
   ],
   webServer: {
     command: `npx vite preview --port ${port} --strictPort`,

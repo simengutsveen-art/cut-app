@@ -72,13 +72,33 @@ vil. Feiler en test, publiseres ingenting, og den gamle versjonen ligger fortsat
 Hver gang du pusher til `main`, bygges og publiseres appen på nytt. Åpne appen på telefonen, så
 får du et banner: «Ny versjon av appen er klar → Oppdater».
 
-## 3. Installere på iPhone
+## 3. Installere på telefonen
 
-1. Åpne lenka (`https://DITT-BRUKERNAVN.github.io/cut/`) i **Safari** (ikke Chrome).
+Appen viser selv veien: et banner på «I dag» og en egen side under **Mer → Installer på
+Hjem-skjermen**, med veiledning for Android og iPhone og en knapp for å dele lenka.
+
+### iPhone
+
+1. Åpne lenka (`https://DITT-BRUKERNAVN.github.io/cut/`) i **Safari**.
 2. Trykk **Del-knappen** (firkant med pil opp).
 3. Velg **«Legg til på Hjem-skjerm»** og trykk **Legg til**.
 4. Åpne **Cut** fra Hjem-skjermen. Første gang må du ha nett. Etter det fungerer appen offline,
    inkludert alle øvelsesbildene.
+
+### Android
+
+1. Åpne lenka i **Chrome**.
+2. Trykk **Installer** i banneret på «I dag», eller **⋮ → «Installer app»**.
+3. Cut legges på startskjermen og i app-oversikten, som en vanlig app.
+
+Samsung Internet: **≡ → «Legg til side på» → «Startskjerm»**. Firefox: **⋮ → «Installer»**.
+
+**Åpnes lenka fra Messenger, Instagram eller Snapchat**, havner den i appens innebygde nettleser.
+Der kan ingenting installeres. Appen oppdager det og viser «Åpne i Chrome» (Android) eller ber deg
+åpne lenka i Safari (iPhone).
+
+Alt som logges, lagres bare på telefonen det logges på. Den som installerer appen, får planen fra
+seed-fila og kan endre mål, startdato og ukeplan under **Mer → Innstillinger**.
 
 ## 4. Endre mat og øvelser
 

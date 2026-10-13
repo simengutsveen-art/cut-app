@@ -32,8 +32,8 @@ jobs:
       - name: Installer avhengigheter
         run: npm ci
 
-      - name: Installer WebKit for ende-til-ende-testene
-        run: npx playwright install --with-deps webkit
+      - name: Installer WebKit (iPhone) og Chromium (Android) for ende-til-ende-testene
+        run: npx playwright install --with-deps webkit chromium
 
       - name: Sjekk (typecheck, lint, test, build, e2e) og bygg
         run: npm run check && npm run build

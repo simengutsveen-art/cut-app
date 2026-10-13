@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BackAlertCard } from '../../components/BackAlertCard';
+import { InstallBanner } from '../../components/InstallBanner';
 import { PainPicker } from '../../components/PainPicker';
 import { StartPlanButton } from '../../components/PlanControls';
 import { PlanHero } from '../../components/PlanProgress';
@@ -139,6 +140,7 @@ export function TodayScreen() {
   return (
     <Page>
       <PageHeader eyebrow={formatWeekdayLong(today)} title={title} />
+      <InstallBanner />
 
       {(seedUpdate || backupDue) && (
         <div className="mb-4 flex flex-col gap-2">

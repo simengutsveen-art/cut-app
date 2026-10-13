@@ -257,3 +257,10 @@ export const IconDatabase = (p: IconProps) => (
     <path d="M4.5 6v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6M4.5 12v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6" />
   </Svg>
 );
+
+export const IconPhone = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="6" y="2.5" width="12" height="19" rx="2.5" />
+    <path d="M12 8.5v6M9 11.5h6" />
+  </Svg>
+);

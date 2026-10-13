@@ -3,6 +3,7 @@ import {
   IconDatabase,
   IconDownload,
   IconInfo,
+  IconPhone,
   IconPulse,
   IconRefresh,
   IconSliders,
@@ -10,11 +11,13 @@ import {
 } from '../../components/icons';
 import { Badge, LinkRow, ListCard, Page, PageHeader, SectionTitle } from '../../components/ui';
 import { isNewerSeed } from '../../data/seedSync';
+import { useInstall } from '../../hooks/useInstall';
 import { daysBetween, formatDate, todayISO } from '../../lib/dates';
 import { useAppData } from '../../state/appData';
 
 export function MoreIndex() {
   const { seed, installedSeedVersion, lastBackupAt } = useAppData();
+  const install = useInstall();
   const update = isNewerSeed(seed.seedVersion, installedSeedVersion);
   const backupDays = lastBackupAt
     ? daysBetween(todayISO(new Date(lastBackupAt)), todayISO())
@@ -75,6 +78,14 @@ export function MoreIndex() {
 
       <SectionTitle>Annet</SectionTitle>
       <ListCard>
+        <LinkRow
+          to="/mer/installer"
+          icon={<IconPhone size={20} />}
+          title="Installer på Hjem-skjermen"
+          subtitle={
+            install.platform === 'installed' ? 'Installert' : 'Android og iPhone, og del appen'
+          }
+        />
         <LinkRow
           to="/mer/om"
           icon={<IconInfo size={20} />}

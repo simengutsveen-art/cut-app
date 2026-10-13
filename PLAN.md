@@ -92,6 +92,19 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 - **Småpuss:** «Til i dag» i Mat, «42 %» med mellomrom, ingen «Lagre bilde»-meny ved langt trykk på
   øvelsesbilder, lagre-linja i Innstillinger ligger over menylinja.
 
+## Android (13.10.2026)
+
+- **Testet på Android:** hele e2e-pakken kjører nå både på iPhone (WebKit) og Android (Chromium,
+  Pixel 7). Chrome rapporterer ingen installeringsfeil (`Page.getInstallabilityErrors` er tom).
+- **Installering i appen:** `beforeinstallprompt` fanges i `main.tsx` før React starter, og vises som
+  «Installer» i et banner på I dag (kan skjules) og på **Mer → Installer på Hjem-skjermen**.
+  Siden har veiledning for Android (Chrome, Samsung Internet, Firefox) og iPhone, og «Kopier
+  lenke»/«Del».
+- **Innebygde nettlesere** (Messenger, Instagram, Snapchat, TikTok, Android WebView) kan ikke
+  installere. De gjenkjennes på user agent, og på Android får man «Åpne i Chrome» (intent-lenke).
+- **Manifest:** tre skjermbilder (`public/screenshots/`, 1080 × 2340) gir Androids store
+  installeringsvindu. De ligger ikke i service workerens precache.
+
 ## TODO
 
 - **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som
