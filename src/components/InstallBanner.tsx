@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInstall } from '../hooks/useInstall';
 import { showInstallPrompt } from '../installPrompt';
-import { chromeIntentUrl } from '../lib/install';
+import { cx } from '../lib/cx';
+import { chromeIntentUrl, shouldInstallFromChrome } from '../lib/install';
 import { IconPhone, IconX } from './icons';
 import { Button, Card, IconButton } from './ui';
 
@@ -14,6 +15,21 @@ function readDismissed(): boolean {
   } catch {
     return false;
   }
+}
+
+/** «Åpne i Chrome»-knapp (lenke) for Android. */
+export function OpenInChrome({ block }: { block?: boolean }) {
+  return (
+    <a
+      href={chromeIntentUrl(window.location.href)}
+      className={cx(
+        'pressable inline-flex items-center justify-center bg-accent font-semibold text-on-accent',
+        block ? 'min-h-12 w-full rounded-2xl px-4' : 'min-h-11 rounded-xl px-3.5 text-[15px]',
+      )}
+    >
+      Åpne i Chrome
+    </a>
+  );
 }
 
 /** Banner på I dag når appen åpnes i nettleseren på en telefon: «Legg Cut på Hjem-skjermen». */
@@ -32,6 +48,8 @@ export function InstallBanner() {
     }
   };
   const inApp = install.platform === 'in-app';
+  const viaChrome = shouldInstallFromChrome(install);
+  const samsung = viaChrome && !inApp;
 
   return (
     <Card tone="accent" className="mb-4 flex items-start gap-3" aria-label="Installer appen">
@@ -40,25 +58,26 @@ export function InstallBanner() {
       </span>
       <div className="min-w-0 flex-1">
         <p className="font-semibold">
-          {inApp ? 'Åpne Cut i nettleseren' : 'Legg Cut på Hjem-skjermen'}
+          {inApp
+            ? 'Åpne Cut i nettleseren'
+            : samsung
+              ? 'Installer Cut fra Chrome'
+              : 'Legg Cut på Hjem-skjermen'}
         </p>
         <p className="mt-0.5 text-[14px] text-muted">
           {inApp
             ? 'Du er i en innebygd nettleser (f.eks. Messenger, Instagram eller Snapchat). Der kan ikke appen installeres.'
-            : 'Da åpnes den som en vanlig app, i fullskjerm, og virker uten nett.'}
+            : samsung
+              ? 'Fra Samsung Internet blir appen ofte stoppet av Google Play Protect. Fra Chrome går det fint.'
+              : 'Da åpnes den som en vanlig app, i fullskjerm, og virker uten nett.'}
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
-          {install.canPrompt ? (
+          {viaChrome ? (
+            <OpenInChrome />
+          ) : install.canPrompt ? (
             <Button size="sm" onClick={() => void showInstallPrompt()}>
               Installer
             </Button>
-          ) : inApp && install.os === 'android' ? (
-            <a
-              href={chromeIntentUrl(window.location.href)}
-              className="pressable inline-flex min-h-11 items-center rounded-xl bg-accent px-3.5 text-[15px] font-semibold text-on-accent"
-            >
-              Åpne i Chrome
-            </a>
           ) : null}
           <Button size="sm" variant="secondary" onClick={() => navigate('/mer/installer')}>
             Slik gjør du

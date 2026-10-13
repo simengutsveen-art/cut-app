@@ -52,9 +52,25 @@ export function installContext(
   return { platform, os, browser };
 }
 
-/** Lenke som åpner adressen i Chrome fra en innebygd nettleser på Android. */
+/**
+ * Skal appen installeres fra Chrome i stedet? Gjelder innebygde nettlesere på Android og
+ * Samsung Internet: Samsung Internet pakker appen inn selv (WebAPK for eldre Android), og
+ * Google Play Protect blokkerer den med «En utrygg app er blokkert». Fra Chrome går det fint.
+ */
+export function shouldInstallFromChrome(context: InstallContext): boolean {
+  return (
+    context.os === 'android' &&
+    (context.platform === 'in-app' ||
+      (context.platform === 'android' && context.browser === 'samsung'))
+  );
+}
+
+const CHROME_IN_PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.android.chrome';
+
+/** Lenke som åpner adressen i Chrome på Android (og Chrome i Play Butikk hvis Chrome mangler). */
 export function chromeIntentUrl(href: string): string {
   const url = new URL(href);
   const scheme = url.protocol.replace(':', '');
-  return `intent://${url.host}${url.pathname}#Intent;scheme=${scheme};package=com.android.chrome;end`;
+  const fallback = encodeURIComponent(CHROME_IN_PLAY_STORE);
+  return `intent://${url.host}${url.pathname}#Intent;scheme=${scheme};package=com.android.chrome;S.browser_fallback_url=${fallback};end`;
 }

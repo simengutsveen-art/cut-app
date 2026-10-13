@@ -91,7 +91,12 @@ Hjem-skjermen**, med veiledning for Android og iPhone og en knapp for å dele le
 2. Trykk **Installer** i banneret på «I dag», eller **⋮ → «Installer app»**.
 3. Cut legges på startskjermen og i app-oversikten, som en vanlig app.
 
-Samsung Internet: **≡ → «Legg til side på» → «Startskjerm»**. Firefox: **⋮ → «Installer»**.
+Firefox: **⋮ → «Installer»**.
+
+**Samsung-telefoner: bruk Chrome, ikke Samsung Internet.** Installerer man fra Samsung Internet,
+lager nettleseren selv en app for en eldre Android-versjon, og Google Play Protect blokkerer den
+(«En utrygg app er blokkert»). Fra Chrome på samme telefon går det fint. Appen oppdager Samsung
+Internet og viser «Åpne i Chrome» i stedet for «Installer».
 
 **Åpnes lenka fra Messenger, Instagram eller Snapchat**, havner den i appens innebygde nettleser.
 Der kan ingenting installeres. Appen oppdager det og viser «Åpne i Chrome» (Android) eller ber deg

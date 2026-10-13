@@ -61,7 +61,7 @@ test.describe('innebygd nettleser (Instagram på Android)', () => {
     await expect(banner).toContainText('Åpne Cut i nettleseren');
     await expect(banner.getByRole('link', { name: 'Åpne i Chrome' })).toHaveAttribute(
       'href',
-      /^intent:\/\/localhost:\d+\/.*#Intent;scheme=http;package=com\.android\.chrome;end$/,
+      /^intent:\/\/localhost:\d+\/.*#Intent;scheme=http;package=com\.android\.chrome;S\.browser_fallback_url=.+;end$/,
     );
   });
 });
@@ -77,4 +77,39 @@ test('ingen banner når appen kjører fra Hjem-skjermen', async ({ page }) => {
   await startApp(page);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Uke 1');
   await expect(page.getByRole('region', { name: 'Installer appen' })).toHaveCount(0);
+});
+
+test.describe('Samsung Internet', () => {
+  test.use({
+    userAgent:
+      'Mozilla/5.0 (Linux; Android 14; SM-S911B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/26.0 Chrome/122.0.0.0 Mobile Safari/537.36',
+  });
+
+  test('sender til Chrome i stedet for å installere (Play Protect blokkerer)', async ({ page }) => {
+    await startApp(page);
+    // Samsung Internet sender også beforeinstallprompt, men den appen blokkeres av Play Protect.
+    await page.evaluate(() => {
+      const event = new Event('beforeinstallprompt') as Event & {
+        prompt: () => Promise<void>;
+        userChoice: Promise<{ outcome: string }>;
+      };
+      event.prompt = async () => {};
+      event.userChoice = Promise.resolve({ outcome: 'accepted' });
+      window.dispatchEvent(event);
+    });
+    const banner = page.getByRole('region', { name: 'Installer appen' });
+    await expect(banner).toContainText('Installer Cut fra Chrome');
+    await expect(banner.getByRole('link', { name: 'Åpne i Chrome' })).toHaveAttribute(
+      'href',
+      /^intent:\/\/.*package=com\.android\.chrome/,
+    );
+    await expect(banner.getByRole('button', { name: 'Installer' })).toHaveCount(0);
+
+    await banner.getByRole('button', { name: 'Slik gjør du' }).click();
+    await expect(page.getByText('Du bruker Samsung Internet.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Installer Cut' })).toHaveCount(0);
+    await expect(page.getByRole('region', { name: 'En utrygg app er blokkert' })).toContainText(
+      'åpne lenka i Chrome',
+    );
+  });
 });

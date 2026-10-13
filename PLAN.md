@@ -102,6 +102,11 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
   lenke»/«Del».
 - **Innebygde nettlesere** (Messenger, Instagram, Snapchat, TikTok, Android WebView) kan ikke
   installere. De gjenkjennes på user agent, og på Android får man «Åpne i Chrome» (intent-lenke).
+- **Samsung Internet → Chrome:** Samsung Internet lager sin egen WebAPK, som Google Play Protect
+  blokkerer på nyere Android («En utrygg app er blokkert … laget for en eldre versjon av Android»).
+  Fra Chrome går det fint (Googles WebAPK). Appen viser derfor «Åpne i Chrome» i stedet for
+  «Installer» i Samsung Internet, og installeringssiden forklarer meldingen. «Åpne i Chrome» faller
+  tilbake til Chrome i Play Butikk hvis Chrome mangler.
 - **Manifest:** tre skjermbilder (`public/screenshots/`, 1080 × 2340) gir Androids store
   installeringsvindu. De ligger ikke i service workerens precache.
 

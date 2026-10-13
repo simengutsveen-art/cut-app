@@ -3,7 +3,8 @@ import { IconCheck, IconPhone, IconShare } from '../../components/icons';
 import { Button, Card, Page, PageHeader, SectionTitle } from '../../components/ui';
 import { useInstall } from '../../hooks/useInstall';
 import { showInstallPrompt } from '../../installPrompt';
-import { chromeIntentUrl } from '../../lib/install';
+import { OpenInChrome } from '../../components/InstallBanner';
+import { shouldInstallFromChrome } from '../../lib/install';
 
 function appUrl(): string {
   return `${window.location.origin}${import.meta.env.BASE_URL}`;
@@ -57,11 +58,34 @@ function AndroidGuide() {
       <Steps items={ANDROID_STEPS} />
       <ul className="mt-4 flex flex-col gap-1.5 border-t border-[var(--c-hairline)] pt-3 text-[14px] text-muted">
         <li>
-          <b className="text-fg">Samsung Internet:</b> trykk <b>≡</b> nederst → «Legg til side på» →
-          «Startskjerm».
+          <b className="text-fg">Samsung-telefon:</b> bruk Chrome, ikke Samsung Internet (se under).
         </li>
         <li>
           <b className="text-fg">Firefox:</b> trykk <b>⋮</b> → «Installer».
+        </li>
+      </ul>
+    </Card>
+  );
+}
+
+/** Hjelp når Google Play Protect stopper appen (installert fra Samsung Internet). */
+function PlayProtectHelp() {
+  return (
+    <Card aria-label="En utrygg app er blokkert">
+      <p className="font-semibold">Fikk du «En utrygg app er blokkert»?</p>
+      <p className="mt-1 text-[15px] leading-snug">
+        Meldingen kommer fra Google Play Protect når Cut installeres fra <b>Samsung Internet</b>.
+        Samsung Internet pakker nettsiden inn i en app for en eldre Android-versjon, og den stoler
+        Play Protect ikke på. Selve appen er den samme.
+      </p>
+      <ul className="mt-3 flex flex-col gap-1.5 text-[14px] text-muted">
+        <li>
+          <b className="text-fg">Løsning:</b> trykk «Greit», åpne lenka i <b>Chrome</b> og installer
+          derfra.
+        </li>
+        <li>
+          <b className="text-fg">Eller i Samsung Internet:</b> <b>≡</b> → «Legg til side på» →
+          «Startskjerm». Da blir det en snarvei i stedet for en app.
         </li>
       </ul>
     </Card>
@@ -111,7 +135,20 @@ export function InstallScreen() {
         </Card>
       )}
 
-      {install.canPrompt && (
+      {shouldInstallFromChrome(install) && install.platform === 'android' && (
+        <Card tone="warn">
+          <p className="font-semibold">Installer fra Chrome</p>
+          <p className="mt-1 text-[15px]">
+            Du bruker Samsung Internet. Appen den lager, blir ofte stoppet av Google Play Protect
+            («En utrygg app er blokkert»). Åpne Cut i Chrome og installer derfra.
+          </p>
+          <div className="mt-3">
+            <OpenInChrome block />
+          </div>
+        </Card>
+      )}
+
+      {install.canPrompt && !shouldInstallFromChrome(install) && (
         <Card tone="accent">
           <p className="text-[15px]">Telefonen kan installere Cut direkte.</p>
           <Button className="mt-3" block size="lg" onClick={() => void showInstallPrompt()}>
@@ -129,20 +166,27 @@ export function InstallScreen() {
             <b>⋮</b> eller <b>···</b> og velg «Åpne i nettleser».
           </p>
           {install.os === 'android' && (
-            <a
-              href={chromeIntentUrl(window.location.href)}
-              className="pressable mt-3 flex min-h-12 w-full items-center justify-center rounded-2xl bg-accent px-4 font-semibold text-on-accent"
-            >
-              Åpne i Chrome
-            </a>
+            <div className="mt-3">
+              <OpenInChrome block />
+            </div>
           )}
         </Card>
       )}
 
       <SectionTitle>{androidFirst ? 'Android' : 'iPhone'}</SectionTitle>
       {androidFirst ? <AndroidGuide /> : <IphoneGuide />}
+      {androidFirst && (
+        <div className="mt-3">
+          <PlayProtectHelp />
+        </div>
+      )}
       <SectionTitle>{androidFirst ? 'iPhone' : 'Android'}</SectionTitle>
       {androidFirst ? <IphoneGuide /> : <AndroidGuide />}
+      {!androidFirst && (
+        <div className="mt-3">
+          <PlayProtectHelp />
+        </div>
+      )}
 
       <SectionTitle>Del appen</SectionTitle>
       <Card>

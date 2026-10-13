@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chromeIntentUrl, installContext } from '../../src/lib/install';
+import { chromeIntentUrl, installContext, shouldInstallFromChrome } from '../../src/lib/install';
 
 const UA = {
   androidChrome:
@@ -68,7 +68,18 @@ describe('hvor appen kjører', () => {
 
   it('«Åpne i Chrome»-lenke uten #-adressen', () => {
     expect(chromeIntentUrl('https://simengutsveen-art.github.io/cut-app/#/mer')).toBe(
-      'intent://simengutsveen-art.github.io/cut-app/#Intent;scheme=https;package=com.android.chrome;end',
+      'intent://simengutsveen-art.github.io/cut-app/#Intent;scheme=https;package=com.android.chrome;' +
+        'S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.android.chrome;end',
     );
+  });
+
+  it('Samsung Internet og innebygde nettlesere på Android installerer via Chrome', () => {
+    // Samsung Internet lager en app som Google Play Protect blokkerer («En utrygg app er blokkert»).
+    expect(shouldInstallFromChrome(installContext(UA.samsung, false))).toBe(true);
+    expect(shouldInstallFromChrome(installContext(UA.androidInstagram, false))).toBe(true);
+    expect(shouldInstallFromChrome(installContext(UA.androidChrome, false))).toBe(false);
+    expect(shouldInstallFromChrome(installContext(UA.androidFirefox, false))).toBe(false);
+    expect(shouldInstallFromChrome(installContext(UA.iphoneSnapchat, false))).toBe(false);
+    expect(shouldInstallFromChrome(installContext(UA.samsung, true))).toBe(false);
   });
 });
