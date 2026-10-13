@@ -62,6 +62,21 @@ export function mealTotals(
   return totalsForIngredients(meal.ingredientsPerPortion, ingredients);
 }
 
+/** Måltidet med porsjonene ganget med `factor` (1 = som planen). */
+export function scaleMeal<T extends Pick<Meal, 'ingredientsPerPortion'>>(
+  meal: T,
+  factor: number,
+): T {
+  if (factor === 1) return meal;
+  return {
+    ...meal,
+    ingredientsPerPortion: meal.ingredientsPerPortion.map((item) => {
+      const grams = item.grams * factor;
+      return { ...item, grams: grams >= 10 ? Math.round(grams) : Math.round(grams * 10) / 10 };
+    }),
+  };
+}
+
 /** Runder gram «fornuftig» for handle- og batchmengder. */
 export function roundGrams(grams: number): number {
   if (grams >= 100) return Math.round(grams / 10) * 10;

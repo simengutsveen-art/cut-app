@@ -70,9 +70,9 @@ test('eksporter → nullstill → importer → dataene er tilbake', async ({ pag
   await page.getByRole('button', { name: 'Ja, gå videre' }).click();
   await page.getByLabel('Skriv NULLSTILL for å bekrefte').fill('NULLSTILL');
   await page.getByRole('button', { name: 'Slett alt' }).click();
-  await expect(page.getByRole('textbox', { name: 'Morgenvekt' })).toHaveValue('');
-
-  await page.goto('./#/mer/backup');
+  // Etter nullstilling vises oppsettet, med valg om å hente inn en backup.
+  await expect(page.getByRole('heading', { name: 'Velkommen til Cut' })).toBeVisible();
+  await page.getByRole('button', { name: 'Har du en backup? Hent den inn' }).click();
   await page.getByLabel('Backup-fil').setInputFiles(file);
   const preview = page.getByLabel('Forhåndsvisning av backup');
   await expect(preview).toBeVisible();

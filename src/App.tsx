@@ -3,6 +3,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { AppShell } from './components/AppShell';
 import { Lazy } from './components/Lazy';
 import { FoodScreen } from './screens/food/FoodScreen';
+import { SetupScreen } from './screens/setup/SetupScreen';
 import { LogShortcutScreen } from './screens/today/LogShortcutScreen';
 import { TodayScreen } from './screens/today/TodayScreen';
 import { TrainingScreen } from './screens/training/TrainingScreen';
@@ -17,6 +18,8 @@ const MoreScreen = lazy(() =>
 );
 
 const router = createHashRouter([
+  // Oppsettet for en ny bruker vises uten fanelinje.
+  { path: '/oppsett', element: <SetupScreen /> },
   {
     element: <AppShell />,
     children: [

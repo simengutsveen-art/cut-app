@@ -17,9 +17,9 @@ export default defineConfig({
       injectRegister: false,
       manifest: {
         id: base,
-        name: 'Cut – 12 uker',
+        name: 'Cut',
         short_name: 'Cut',
-        description: 'Trening, mat og fremgang for 12-ukers cut',
+        description: 'Trening, mat og fremgang gjennom en cut, uke for uke',
         lang: 'nb',
         dir: 'ltr',
         start_url: base,

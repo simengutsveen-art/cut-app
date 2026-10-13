@@ -4,7 +4,12 @@ import { acceptAdjustment, dismissCheck, undismissCheck } from '../../data/progr
 import { db } from '../../db';
 import { formatDate } from '../../lib/dates';
 import { fmtSigned, formatNumber } from '../../lib/format';
-import { hasActionableChange, type Recommendation } from '../../lib/adjustments';
+import {
+  hasActionableChange,
+  paceFactorFor,
+  scaleLossText,
+  type Recommendation,
+} from '../../lib/adjustments';
 import { useAppData } from '../../state/appData';
 import type { Adjustment } from '../../types';
 
@@ -21,8 +26,9 @@ export function WeeklyCheck({
   accepted: Adjustment | undefined;
   dismissed: boolean;
 }) {
-  const { settings, plan } = useAppData();
+  const { settings, plan, seed } = useAppData();
   const notes = plan.adjustmentRules.notes;
+  const pace = paceFactorFor(seed.settings.plannedLossKgPerWeek, settings.plannedLossKgPerWeek);
 
   return (
     <Card tone={isSunday ? 'accent' : undefined} aria-label="Ukessjekk">
@@ -80,7 +86,7 @@ export function WeeklyCheck({
             </div>
           </dl>
           <div className="mt-3 rounded-2xl bg-surface-2 p-3.5">
-            <p className="text-sm text-muted">{rec.rule.when}</p>
+            <p className="text-sm text-muted">{scaleLossText(rec.rule.when, pace)}</p>
             <p className="mt-1 font-semibold">{rec.rule.action}</p>
             {rec.blockedByFloor ? (
               <p className="mt-2 flex gap-2 text-sm text-bad" role="alert">

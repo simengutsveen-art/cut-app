@@ -1,12 +1,13 @@
 import type { AppSettings, MealPrepRotationEntry, PrepSlots, Slot, WeekMealChoice } from '../types';
 import { addDaysISO, dateInWeek, isoWeekday, planWeek, weekStartISO } from './dates';
 
-/** Rotasjonsoppføringen som gjelder for en planuke. */
+/** Rotasjonsoppføringen som gjelder for en planuke. Etter siste uke i rotasjonen starter den på nytt. */
 export function rotationForWeek(
   rotation: MealPrepRotationEntry[],
   week: number,
 ): MealPrepRotationEntry | undefined {
-  return rotation.find((r) => r.weeks.includes(week));
+  if (week < 1 || rotation.length === 0) return undefined;
+  return rotation.find((r) => r.weeks.includes(week)) ?? rotation[(week - 1) % rotation.length];
 }
 
 export type PrepKey = 'sunday' | 'wednesday';

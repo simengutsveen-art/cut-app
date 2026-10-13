@@ -379,6 +379,10 @@ export const settingsRowSchema = seedSettingsSchema.extend({
   userModified: z.boolean(),
   planStarted: z.boolean().optional(),
   keepAwake: z.boolean().optional(),
+  onboarded: z.boolean().optional(),
+  portionScale: z.number().positive().optional(),
+  activityLevel: z.enum(['lav', 'middels', 'hoy', 'svart_hoy']).optional(),
+  backCare: z.boolean().optional(),
 });
 
 export const dayLogSchema = z.object({

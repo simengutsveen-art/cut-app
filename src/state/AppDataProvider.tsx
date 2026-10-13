@@ -2,6 +2,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import { getBundledSeed } from '../data/seed';
 import { db } from '../db';
+import { scaleMeal } from '../lib/nutrition';
+import { phasesForWeeks } from '../lib/phases';
 import { AppDataContext, type AppData } from './appData';
 
 function byName<T extends { name: string }>(a: T, b: T): number {
@@ -19,12 +21,16 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AppData | null>(() => {
     if (!settings || !meta || !ingredients || !meals || !exercises || !sessions) return null;
     const metaMap = new Map(meta.map((m) => [m.key, m.value]));
-    const plan = metaMap.get('plan') as AppData['plan'] | undefined;
-    if (!plan) return null;
+    const storedPlan = metaMap.get('plan') as AppData['plan'] | undefined;
+    if (!storedPlan) return null;
+    // Fasene følger planens lengde (seed-fila har 12 uker).
+    const plan = { ...storedPlan, phases: phasesForWeeks(storedPlan.phases, settings.weeks) };
     const sortedIngredients = [...ingredients].sort(byName);
-    const sortedMeals = [...meals].sort((a, b) =>
+    const sortedRawMeals = [...meals].sort((a, b) =>
       a.id.localeCompare(b.id, 'nb', { numeric: true }),
     );
+    const portionScale = settings.portionScale ?? 1;
+    const sortedMeals = sortedRawMeals.map((m) => scaleMeal(m, portionScale));
     const sortedExercises = [...exercises].sort(byName);
     const sortedSessions = [...sessions].sort(
       (a, b) => a.weekday - b.weekday || a.id.localeCompare(b.id),
@@ -32,12 +38,15 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     return {
       settings,
       plan,
+      phaseTemplate: storedPlan.phases,
       ingredients: sortedIngredients,
       meals: sortedMeals,
+      rawMeals: sortedRawMeals,
       exercises: sortedExercises,
       sessions: sortedSessions,
       ingredientsById: new Map(ingredients.map((i) => [i.id, i])),
-      mealsById: new Map(meals.map((m) => [m.id, m])),
+      mealsById: new Map(sortedMeals.map((m) => [m.id, m])),
+      rawMealsById: new Map(sortedRawMeals.map((m) => [m.id, m])),
       exercisesById: new Map(exercises.map((e) => [e.id, e])),
       sessionsById: new Map(sessions.map((s) => [s.id, s])),
       seed: getBundledSeed(),

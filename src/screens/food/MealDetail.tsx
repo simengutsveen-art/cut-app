@@ -55,6 +55,11 @@ export function MealDetail() {
         {meal.isMealPrep && <Badge tone="accent">Meal prep · {meal.batchPortions} porsjoner</Badge>}
         {!meal.active && <Badge tone="warn">Deaktivert</Badge>}
         <DislikeWarning hits={hits} />
+        {(settings.portionScale ?? 1) !== 1 && (
+          <Badge>
+            Porsjon tilpasset kalorimålet ({Math.round((settings.portionScale ?? 1) * 100)} %)
+          </Badge>
+        )}
       </div>
       {meal.description && <p className="mb-3 text-muted">{meal.description}</p>}
 

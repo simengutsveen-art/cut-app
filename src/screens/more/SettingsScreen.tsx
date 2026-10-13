@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { EndPlanButton } from '../../components/PlanControls';
+import { Stepper } from '../../components/Stepper';
 import {
   Button,
   Card,
@@ -20,6 +22,14 @@ import { useToday } from '../../hooks/useToday';
 import { isValidISODate, weekdayName } from '../../lib/dates';
 import { formatNumber } from '../../lib/format';
 import { capitalize, SLOT_LABELS } from '../../lib/labels';
+import { MAX_WEEKS, MIN_WEEKS } from '../../lib/phases';
+import {
+  ACTIVITY_LEVELS,
+  computeTargets,
+  dailyStepGoal,
+  flatSteps,
+  type ActivityLevel,
+} from '../../lib/setup';
 import { stableStringify } from '../../lib/util';
 import { useAppData } from '../../state/appData';
 import { SLOTS, WEEKDAY_KEYS, type AppSettings, type NumRange, type ThemePref } from '../../types';
@@ -36,11 +46,15 @@ const SEED_KEYS: (keyof AppSettings)[] = [
   'plannedLossKgPerWeek',
   'weeklySchedule',
   'dislikedFoods',
+  'weeks',
+  'person',
+  'steps',
 ];
 
 export function SettingsScreen() {
   const { settings, sessions, meals, seed, plan } = useAppData();
   const today = useToday();
+  const navigate = useNavigate();
   const [draft, setDraft] = useState<AppSettings>(settings);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -91,6 +105,20 @@ export function SettingsScreen() {
     setSaved(true);
   };
 
+  const goalMid = (draft.goalWeightRangeKg[0] + draft.goalWeightRangeKg[1]) / 2;
+  const suggestedKcal = computeTargets({
+    person: {
+      sex: draft.person.sex === 'kvinne' ? 'kvinne' : 'mann',
+      age: draft.person.age,
+      heightCm: draft.person.heightCm,
+      weightKg: draft.startWeightKg,
+    },
+    activity: draft.activityLevel ?? 'middels',
+    goalKg: goalMid,
+    pacePerWeek: draft.plannedLossKgPerWeek,
+  }).kcalTarget;
+  const portionPercent = Math.round((draft.portionScale ?? 1) * 100);
+
   const rangeFields = (
     label: string,
     key: 'goalWeightRangeKg' | 'goalWaistRangeCm' | 'proteinTargetG',
@@ -121,6 +149,18 @@ export function SettingsScreen() {
     <Page>
       <PageHeader title="Innstillinger" back="/mer" />
 
+      <Card className="mb-4 flex items-center gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold">Oppsett</p>
+          <p className="text-[14px] text-muted">
+            Mål, lengde, treningsdager og øvelser, steg for steg.
+          </p>
+        </div>
+        <Button size="sm" variant="secondary" onClick={() => navigate('/oppsett')}>
+          Kjør oppsettet
+        </Button>
+      </Card>
+
       <Card className="flex flex-col gap-4">
         <Field
           label="Startdato"
@@ -138,6 +178,15 @@ export function SettingsScreen() {
             onChange={(e) => set('startDate', e.target.value)}
           />
         </Field>
+        <Stepper
+          label="Varighet i uker"
+          value={draft.weeks}
+          step={1}
+          min={MIN_WEEKS}
+          max={MAX_WEEKS}
+          decimals={0}
+          onChange={(v) => set('weeks', v)}
+        />
         <div className="grid grid-cols-2 gap-3">
           <Field label="Startvekt">
             <NumberField
@@ -171,6 +220,65 @@ export function SettingsScreen() {
         </Field>
       </Card>
 
+      <SectionTitle>Om deg</SectionTitle>
+      <Card className="flex flex-col gap-4">
+        <Field label="Navn" htmlFor="person-name">
+          <TextInput
+            id="person-name"
+            value={draft.person.name}
+            onChange={(e) => set('person', { ...draft.person, name: e.target.value })}
+          />
+        </Field>
+        <Segmented<'mann' | 'kvinne'>
+          label="Kjønn"
+          value={draft.person.sex === 'kvinne' ? 'kvinne' : 'mann'}
+          onChange={(sex) => set('person', { ...draft.person, sex })}
+          options={[
+            { value: 'mann', label: 'Mann' },
+            { value: 'kvinne', label: 'Kvinne' },
+          ]}
+        />
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Alder">
+            <NumberField
+              label="Alder"
+              integer
+              value={draft.person.age}
+              suffix="år"
+              onCommit={(v) => v !== null && set('person', { ...draft.person, age: v })}
+            />
+          </Field>
+          <Field label="Høyde">
+            <NumberField
+              label="Høyde"
+              integer
+              value={draft.person.heightCm}
+              suffix="cm"
+              onCommit={(v) => v !== null && set('person', { ...draft.person, heightCm: v })}
+            />
+          </Field>
+        </div>
+        <Field
+          label="Aktivitet i hverdagen"
+          htmlFor="activity"
+          hint={
+            ACTIVITY_LEVELS.find((a) => a.value === (draft.activityLevel ?? 'middels'))?.description
+          }
+        >
+          <SelectInput
+            id="activity"
+            value={draft.activityLevel ?? 'middels'}
+            onChange={(e) => set('activityLevel', e.target.value as ActivityLevel)}
+          >
+            {ACTIVITY_LEVELS.map((a) => (
+              <option key={a.value} value={a.value}>
+                {a.label}
+              </option>
+            ))}
+          </SelectInput>
+        </Field>
+      </Card>
+
       <SectionTitle>Kalorier og protein</SectionTitle>
       <Card className="flex flex-col gap-4">
         <Field
@@ -185,6 +293,41 @@ export function SettingsScreen() {
             onCommit={(v) => v !== null && set('currentKcalTarget', v)}
           />
         </Field>
+        {Math.abs(suggestedKcal - draft.currentKcalTarget) >= 100 && (
+          <div className="flex items-center justify-between gap-3 rounded-2xl bg-surface-2 px-3.5 py-2.5">
+            <p className="text-[14px]">
+              Foreslått ut fra deg: <b className="num">{formatNumber(suggestedKcal)} kcal</b>
+            </p>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                set('kcalTarget', suggestedKcal);
+                set('currentKcalTarget', suggestedKcal);
+              }}
+            >
+              Bruk
+            </Button>
+          </div>
+        )}
+        <div>
+          <Stepper
+            label="Porsjoner i matplanen"
+            value={portionPercent}
+            step={5}
+            min={60}
+            max={140}
+            decimals={0}
+            unit="%"
+            onChange={(v) => set('portionScale', v / 100)}
+          />
+          <p className="mt-1.5 text-xs text-muted">
+            Matplanen er laget for ca. {formatNumber(seed.settings.kcalTarget)} kcal. Med{' '}
+            {portionPercent} % blir det ca.{' '}
+            {formatNumber(Math.round((seed.settings.kcalTarget * portionPercent) / 100 / 50) * 50)}{' '}
+            kcal.
+          </p>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Toleranse (±)">
             <NumberField
@@ -206,6 +349,21 @@ export function SettingsScreen() {
           </Field>
         </div>
         {rangeFields('Protein', 'proteinTargetG', 'g', 0)}
+        <Field
+          label="Skrittmål per dag"
+          hint={
+            draft.steps.length > 1
+              ? 'Planen øker skrittene de første ukene. Endrer du tallet, gjelder det hele planen.'
+              : undefined
+          }
+        >
+          <NumberField
+            label="Skrittmål per dag"
+            integer
+            value={dailyStepGoal(draft.steps)}
+            onCommit={(v) => v !== null && set('steps', flatSteps(v, draft.weeks))}
+          />
+        </Field>
         <Field label="Ekstra skritt per dag (fra justeringer)">
           <NumberField
             label="Ekstra skritt"
@@ -295,6 +453,19 @@ export function SettingsScreen() {
         />
       </Card>
 
+      <SectionTitle>Rygg og core</SectionTitle>
+      <Card>
+        <Checkbox
+          checked={draft.backCare !== false}
+          onChange={(v) => {
+            set('backCare', v);
+            void db.settings.update('app', { backCare: v });
+          }}
+          label="Følg opp ryggen"
+          description="Core-rutine og smerteskala på I dag."
+        />
+      </Card>
+
       <SectionTitle>Utseende</SectionTitle>
       <Card>
         <Segmented<ThemePref>
@@ -331,7 +502,7 @@ export function SettingsScreen() {
       <div className="mt-6 flex flex-col gap-2">
         <EndPlanButton today={today} />
         <InlineConfirm
-          label="Tilbakestill innstillinger til planen"
+          label="Tilbakestill til standardplanen"
           message="Mål, ukeplan og standardmåltider settes tilbake til seed-fila. Startdatoen og godtatte justeringer beholdes."
           confirmLabel="Tilbakestill"
           variant="primary"
@@ -347,6 +518,8 @@ export function SettingsScreen() {
               startDate: settings.planStarted ? settings.startDate : fresh.startDate,
               planStarted: settings.planStarted,
               theme: settings.theme,
+              keepAwake: settings.keepAwake,
+              onboarded: true,
             };
             await db.settings.put(next);
             setDraft(next);

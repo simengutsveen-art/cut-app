@@ -128,6 +128,9 @@ export function TodayScreen() {
       ? `${planStatusLabel(status, settings.weeks)} · ${phase.name}`
       : planStatusLabel(status, settings.weeks);
 
+  // Core-rutine og smerteskala (kan slås av i oppsettet eller Innstillinger)
+  const backCare = settings.backCare !== false;
+
   // Startdato valgt fram i tid under Innstillinger
   const plannedStart =
     settings.planStarted && daysBetween(today, settings.startDate) > 0 ? settings.startDate : null;
@@ -201,7 +204,7 @@ export function TodayScreen() {
         <PlanHero today={today} />
       )}
 
-      {alert.show && (
+      {backCare && alert.show && (
         <div className="mt-4">
           <BackAlertCard reason={alert.reason} />
         </div>
@@ -362,36 +365,40 @@ export function TodayScreen() {
       </SectionTitle>
       <DaySummary day={day} compact />
 
-      <SectionTitle
-        action={
-          <Link to="/mer/core" className="text-[15px] font-medium text-accent">
-            Rutinen
-          </Link>
-        }
-      >
-        Core og rygg
-      </SectionTitle>
-      <Card>
-        <Checkbox
-          checked={coreDone}
-          onChange={(v) => {
-            setCoreDone(v);
-            void patchDayLog(db, today, { coreDone: v });
-          }}
-          label="Core-rutinen er gjort"
-          description={plan.coreRoutine.when}
-        />
-        <div className="mt-4 border-t border-[var(--c-hairline)] pt-4">
-          <PainPicker
-            value={pain}
-            scale={plan.coreRoutine.painScale}
-            onChange={(v) => {
-              setPain(v);
-              void patchDayLog(db, today, { pain: v });
-            }}
-          />
-        </div>
-      </Card>
+      {backCare && (
+        <>
+          <SectionTitle
+            action={
+              <Link to="/mer/core" className="text-[15px] font-medium text-accent">
+                Rutinen
+              </Link>
+            }
+          >
+            Core og rygg
+          </SectionTitle>
+          <Card>
+            <Checkbox
+              checked={coreDone}
+              onChange={(v) => {
+                setCoreDone(v);
+                void patchDayLog(db, today, { coreDone: v });
+              }}
+              label="Core-rutinen er gjort"
+              description={plan.coreRoutine.when}
+            />
+            <div className="mt-4 border-t border-[var(--c-hairline)] pt-4">
+              <PainPicker
+                value={pain}
+                scale={plan.coreRoutine.painScale}
+                onChange={(v) => {
+                  setPain(v);
+                  void patchDayLog(db, today, { pain: v });
+                }}
+              />
+            </div>
+          </Card>
+        </>
+      )}
 
       <SectionTitle>Notat</SectionTitle>
       <DayNote

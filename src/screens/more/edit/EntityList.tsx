@@ -51,7 +51,7 @@ export function EntityList() {
           subtitle: `${formatNumber(i.per100g.kcal)} kcal / 100 g · ${capitalize(i.category)}`,
         }))
       : table === 'meals'
-        ? app.meals.map((m) => ({
+        ? app.rawMeals.map((m) => ({
             ...m,
             name: `${m.id} ${m.name}`,
             subtitle: `${SLOT_LABELS[m.slot]} · ${formatNumber(mealTotals(m, app.ingredientsById).kcal)} kcal`,

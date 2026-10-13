@@ -319,11 +319,15 @@ function DaySheet({ day, onClose }: { day: CalendarDay; onClose: () => void }) {
           ? `${formatNumber(log.steps)} av ${formatNumber(goal)}`
           : `mål ${formatNumber(goal)}`,
     },
-    { label: 'Core-rutine', value: log?.coreDone ? 'Gjort' : '–' },
-    {
-      label: 'Smerte',
-      value: log?.pain != null ? `${log.pain}${pain ? ` (${pain.level})` : ''}` : '–',
-    },
+    ...(settings.backCare === false
+      ? []
+      : [
+          { label: 'Core-rutine', value: log?.coreDone ? 'Gjort' : '–' },
+          {
+            label: 'Smerte',
+            value: log?.pain != null ? `${log.pain}${pain ? ` (${pain.level})` : ''}` : '–',
+          },
+        ]),
   ];
 
   return (

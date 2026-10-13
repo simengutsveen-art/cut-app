@@ -110,6 +110,27 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 - **Manifest:** tre skjermbilder (`public/screenshots/`, 1080 × 2340) gir Androids store
   installeringsvindu. De ligger ikke i service workerens precache.
 
+## Oppsett for nye brukere (13.10.2026)
+
+- **Veiviser** (`/oppsett`, uten fanelinje) ved første oppstart: om deg → mål og tempo → hverdagen →
+  trening → rygg og mat → oppsummering. Nye installasjoner får `onboarded: false`. Eksisterende
+  databaser og backuper uten feltet regnes som ferdige, så Simens app endres ikke.
+- **Kalorier:** Mifflin-St Jeor × aktivitetsfaktor (1,45 / 1,55 / 1,7 / 1,85) − tempo × 7 700 / 7, rundet
+  til 50. Gulv: høyeste av 1 500 (mann) / 1 200 (kvinne), hvileforbrenningen og målet − 300. Protein
+  2,0–2,3 g og fett 0,8–1,0 g per kg målvekt. Gir 1 853 kcal hvileforbrenning for Simen, som i planen.
+- **Lengde 4–24 uker:** `phasesForWeeks` bruker fasene i seed-fila som mal: oppstart (2 uker, 1 under
+  8 uker), bygg-blokker på maks fem uker med lett uke imellom, test sist. 12 uker gir planen uendret.
+  Meal prep-rotasjonen går i ring etter uke 12.
+- **Porsjoner:** `portionScale` (kalorimål / 2 400, 60–140 %) gjelder måltidene i hele appen.
+  Redigering (Rediger data) viser og lagrer grammene slik de står i planen.
+- **Justeringer:** grensene i reglene er skrevet for 0,4 kg/uke. For andre tempo skaleres vekttapet
+  før reglene sjekkes, og tallene i regelteksten skaleres likt.
+- **Ryggoppfølging** (`backCare`) kan slås av: da skjules core og smerte på I dag og i kalenderen.
+- **Øvelser:** i oppsettet kan øvelser fjernes og legges til per økt (nye får 3 × 8–12, RIR 2, 2 min
+  pause). Treningsfanen har «Endre øvelser» til Rediger data, og viser dagene fra ukeplanen.
+- **Tester:** `startApp` i e2e trykker «Bruk standardplanen». `e2e/setup.spec.ts` går gjennom hele
+  oppsettet (Kari, 16 uker, tre dager, egne øvelser).
+
 ## TODO
 
 - **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som

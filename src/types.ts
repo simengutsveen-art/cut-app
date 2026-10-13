@@ -274,6 +274,14 @@ export interface AppSettings extends SeedSettings {
   planStarted?: boolean;
   /** Hold skjermen på under økter (standard: på) */
   keepAwake?: boolean;
+  /** false = oppsettet for en ny bruker er ikke gjort ennå (ny installasjon). Mangler = ferdig. */
+  onboarded?: boolean;
+  /** Porsjonsstørrelse i matplanen (1 = slik planen er laget, ca. 2 400 kcal) */
+  portionScale?: number;
+  /** Aktivitetsnivå i hverdagen (brukes til å regne ut kalorimål) */
+  activityLevel?: 'lav' | 'middels' | 'hoy' | 'svart_hoy';
+  /** Følg opp ryggen med core-rutine og smerteskala (standard: på) */
+  backCare?: boolean;
 }
 
 export interface ExtraFood {

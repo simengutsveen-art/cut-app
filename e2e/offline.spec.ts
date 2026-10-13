@@ -39,6 +39,7 @@ test('offline: alle faner og øvelsesbilder fungerer etter første lasting', asy
   try {
     await page.clock.install({ time: PLAN_START });
     await page.goto(url);
+    await page.getByRole('button', { name: 'Bruk standardplanen' }).click();
     await page.getByRole('navigation', { name: 'Hovedmeny' }).waitFor();
     await page.getByRole('button', { name: 'Start nå' }).click();
     await page.getByRole('button', { name: 'Ja, start planen' }).click();

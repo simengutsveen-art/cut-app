@@ -34,5 +34,8 @@ publiseres ingenting. Appen spør selv om oppdatering når en ny versjon er ute.
 - Mobil først: trykkflater minst 44 × 44 px, ingen horisontal scrolling på 375 px (testes i
   `e2e/layout.spec.ts`).
 - Endre plan-data i `seed-data.json` og øk `seedVersion`. Da får appen «Oppdater plan».
+- Nye installasjoner starter i oppsettet (`src/screens/setup/`, `src/lib/setup.ts`). E2E-hjelperen
+  `startApp` trykker «Bruk standardplanen». Lengde, faser (`src/lib/phases.ts`) og porsjoner
+  (`portionScale`) følger innstillingene, så ikke anta 12 uker eller 2 400 kcal i koden.
 - Installering: Samsung Internet sendes til Chrome (Google Play Protect blokkerer appen Samsung
   Internet lager). Se `src/lib/install.ts`.

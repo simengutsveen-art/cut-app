@@ -142,6 +142,25 @@ export interface RecommendInput {
   currentKcalTarget: number;
   kcalFloor: number;
   acceptedAdjustments: Adjustment[];
+  /**
+   * Planlagt tempo i reglene delt på brukerens tempo (1 = som reglene er skrevet).
+   * Velger man 0,6 kg/uke i stedet for 0,4, er grensene i reglene 1,5 ganger så høye.
+   */
+  paceFactor?: number;
+}
+
+/** Faktoren for `paceFactor`: tempoet reglene er skrevet for, delt på brukerens tempo. */
+export function paceFactorFor(rulesPerWeek: number, userPerWeek: number): number {
+  return rulesPerWeek > 0 && userPerWeek > 0 ? rulesPerWeek / userPerWeek : 1;
+}
+
+/** Tallene (kg/uke) i en regeltekst for et annet tempo: «0,3–0,7» → «0,45–1,05». */
+export function scaleLossText(text: string, paceFactor: number): string {
+  if (paceFactor === 1) return text;
+  return text.replace(/\d+,\d+/g, (n) => {
+    const value = Number(n.replace(',', '.')) / paceFactor;
+    return String(Math.round(value * 100) / 100).replace('.', ',');
+  });
 }
 
 /** Følger adjustmentRules i rekkefølgen de står. Første regel som slår til, gjelder. */
@@ -158,7 +177,7 @@ export function recommend(input: RecommendInput): Recommendation {
     return { kind: 'no-data', week, missing };
   }
   const drop = waistDrop(input.waist, week, input.startWaistCm) ?? 0;
-  const vars = { lossPerWeek: loss, waistDrop: drop };
+  const vars = { lossPerWeek: loss * (input.paceFactor ?? 1), waistDrop: drop };
   const rule = rules.rules.find((r) => evaluateCondition(r.condition, vars));
   if (!rule) return { kind: 'no-data', week, missing: [] };
 

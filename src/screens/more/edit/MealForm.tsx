@@ -52,8 +52,8 @@ export function MealForm() {
   const { id = '' } = useParams();
   const [params] = useSearchParams();
   const isNew = id === 'ny';
-  const { mealsById } = useAppData();
-  const stored = isNew ? undefined : mealsById.get(id);
+  const { rawMealsById } = useAppData();
+  const stored = isNew ? undefined : rawMealsById.get(id);
   const [blank] = useState(() => blankMeal((params.get('slot') as Slot) ?? 'lunsj'));
   if (!isNew && !stored) return <NotFound back={BACK} />;
   return <MealEditor key={id} isNew={isNew} stored={stored ?? blank} />;
@@ -61,7 +61,7 @@ export function MealForm() {
 
 function MealEditor({ isNew, stored }: { isNew: boolean; stored: Meal }) {
   const navigate = useNavigate();
-  const { ingredients, ingredientsById, meals, settings } = useAppData();
+  const { ingredients, ingredientsById, rawMeals: meals, settings } = useAppData();
   const { draft, update, markClean, current, dirty } = useDraft(stored);
   const [error, setError] = useState<string | null>(null);
   // Etter at et nytt element er lagret, åpnes det under sin nye adresse.

@@ -41,6 +41,7 @@ export function settingsFromSeed(seed: SeedData): AppSettings {
     theme: 'dark',
     userModified: false,
     planStarted: false,
+    onboarded: false,
   };
 }
 

@@ -26,6 +26,7 @@ const routes = [
   '/mer/installer',
   '/mer/om',
   '/mer/nullstill',
+  '/oppsett',
 ];
 
 test.use({ viewport: { width: 375, height: 740 } });

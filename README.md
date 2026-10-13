@@ -1,6 +1,7 @@
-# Cut – 12-ukers cut
+# Cut
 
-En installerbar PWA (web-app) for iPhone som erstatter _12-ukers cut-plan_ og `Cut-tracker.xlsx`.
+En installerbar PWA (web-app) for iPhone og Android som erstatter _12-ukers cut-plan_ og
+`Cut-tracker.xlsx`, og som kan settes opp for hvem som helst.
 Trening med animerte øvelser, mat, meal prep, handleliste, vekt, livvidde, ukessjekk, core/rygg og en
 kalender som viser hvor langt du har kommet og hvor mye som er igjen. Alt på norsk, og alt fungerer uten
 nett etter første lasting.
@@ -102,8 +103,27 @@ Internet og viser «Åpne i Chrome» i stedet for «Installer».
 Der kan ingenting installeres. Appen oppdager det og viser «Åpne i Chrome» (Android) eller ber deg
 åpne lenka i Safari (iPhone).
 
-Alt som logges, lagres bare på telefonen det logges på. Den som installerer appen, får planen fra
-seed-fila og kan endre mål, startdato og ukeplan under **Mer → Innstillinger**.
+Alt som logges, lagres bare på telefonen det logges på.
+
+### Oppsett for nye brukere
+
+Første gang appen åpnes, kommer en veiviser i seks steg:
+
+1. **Om deg:** navn, kjønn, alder, høyde, vekt og livvidde.
+2. **Mål og tempo:** målvekt, tempo (0,25 / 0,5 / 0,75 kg i uka) og lengde (4–24 uker, med forslag).
+   Fasene (oppstart, bygg, lett uke og test) fordeles automatisk.
+3. **Hverdagen:** aktivitetsnivå og skrittmål.
+4. **Trening:** treningsdager, hvilken økt hver dag og øvelsene i hver økt (fjern og legg til).
+5. **Rygg og mat:** core-rutine og smerteskala av/på, og mat du ikke liker.
+6. **Planen din:** kalorier (Mifflin-St Jeor × aktivitet − underskudd for tempoet), protein, porsjoner i
+   matplanen og fasene. Kalorimålet kan overstyres.
+
+Matplanen er laget for ca. 2 400 kcal. Porsjonene skaleres til kalorimålet (60–140 %), så kcal,
+handleliste og oppskrifter stemmer. Justeringsreglene i ukessjekken følger tempoet som er valgt.
+
+**«Bruk standardplanen»** hopper over oppsettet og gir planen i seed-fila (12 uker, 2 400 kcal, fem økter).
+**«Har du en backup? Hent den inn»** henter data fra en backup i stedet. Alt kan endres senere under
+**Mer → Innstillinger**, og **«Kjør oppsettet»** der går gjennom veiviseren på nytt med valgene som står nå.
 
 ## 4. Endre mat og øvelser
 

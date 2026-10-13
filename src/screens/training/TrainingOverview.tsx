@@ -34,10 +34,17 @@ import {
 import { dayPlanFor, phaseForWeek, prescriptionForWeek } from '../../lib/prescription';
 import { formatSets } from '../../lib/progression';
 import { useAppData } from '../../state/appData';
-import type { Session, WorkoutLog } from '../../types';
+import { WEEKDAY_KEYS, type Session, type WorkoutLog } from '../../types';
 
 export function TrainingOverview() {
   const { settings, plan, sessions, sessionsById, exercisesById } = useAppData();
+  // Dagene økta står på i ukeplanen («mandag og torsdag»), eller at den ikke er i planen.
+  const scheduledDays = (sessionId: string) => {
+    const days = WEEKDAY_KEYS.filter((d) => settings.weeklySchedule[d] === sessionId).map((d) =>
+      weekdayName(Number(d)),
+    );
+    return days.length ? days.join(' og ') : 'ikke i ukeplanen';
+  };
   const today = useToday();
   const navigate = useNavigate();
   const ctx = useWorkoutContext();
@@ -199,7 +206,15 @@ export function TrainingOverview() {
         </ul>
       </ListCard>
 
-      <SectionTitle>Alle økter</SectionTitle>
+      <SectionTitle
+        action={
+          <Link to="/mer/data/okter" className="text-[15px] font-medium text-accent">
+            Endre øvelser
+          </Link>
+        }
+      >
+        Alle økter
+      </SectionTitle>
       <div className="flex flex-col gap-2.5">
         {sessions
           .filter((s) => s.active)
@@ -223,7 +238,7 @@ export function TrainingOverview() {
                 <div className="font-semibold tracking-[-0.01em]">{s.name}</div>
                 <div className="truncate text-[13px] text-muted">
                   {prescriptionForWeek(s, plan.phases, status.week).length} øvelser ·{' '}
-                  {weekdayName(s.weekday)}
+                  {scheduledDays(s.id)}
                 </div>
               </div>
               <Button

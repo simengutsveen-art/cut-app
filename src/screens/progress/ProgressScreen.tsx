@@ -7,7 +7,7 @@ import { Card, NumberField, Page, PageHeader, SectionTitle } from '../../compone
 import { setWaist } from '../../data/progressOps';
 import { db } from '../../db';
 import { useToday } from '../../hooks/useToday';
-import { recommend } from '../../lib/adjustments';
+import { paceFactorFor, recommend } from '../../lib/adjustments';
 import {
   daysBetween,
   formatDate,
@@ -34,7 +34,7 @@ import { PhotosSection } from './PhotosSection';
 import { WeeklyCheck } from './WeeklyCheck';
 
 export function ProgressScreen() {
-  const { settings, plan } = useAppData();
+  const { settings, plan, seed } = useAppData();
   const today = useToday();
   const dayLogs = useLiveQuery(() => db.dayLogs.toArray(), []);
   const measurements = useLiveQuery(() => db.measurements.toArray(), []);
@@ -129,6 +129,7 @@ export function ProgressScreen() {
     currentKcalTarget: settings.currentKcalTarget,
     kcalFloor: settings.kcalFloor,
     acceptedAdjustments: adjustments ?? [],
+    paceFactor: paceFactorFor(seed.settings.plannedLossKgPerWeek, settings.plannedLossKgPerWeek),
   });
   const accepted = (adjustments ?? []).find((a) => a.week === checkWeek);
   const todayWaist = (measurements ?? []).find((m) => m.date === today)?.waistCm ?? null;
