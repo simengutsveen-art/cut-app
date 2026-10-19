@@ -34,6 +34,8 @@ publiseres ingenting. Appen spør selv om oppdatering når en ny versjon er ute.
 - Mobil først: trykkflater minst 44 × 44 px, ingen horisontal scrolling på 375 px (testes i
   `e2e/layout.spec.ts`).
 - Endre plan-data i `seed-data.json` og øk `seedVersion`. Da får appen «Oppdater plan».
+- Øvelsesbilder: `npm run images` henter fra Free Exercise DB. Øvelser som ikke finnes der, tegnes i
+  `scripts/draw-exercises.mjs` (`npm run images:draw`) og får ID som starter med `Cut_`.
 - Nye installasjoner starter i oppsettet (`src/screens/setup/`, `src/lib/setup.ts`). E2E-hjelperen
   `startApp` trykker «Bruk standardplanen». Lengde, faser (`src/lib/phases.ts`) og porsjoner
   (`portionScale`) følger innstillingene, så ikke anta 12 uker eller 2 400 kcal i koden.

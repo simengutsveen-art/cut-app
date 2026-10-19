@@ -111,4 +111,12 @@ describe('øvelsesbilder', () => {
     );
     expect(missing, 'Kjør «npm run images»').toEqual([]);
   });
+
+  it('alle øvelser og core-øvelser har bilde', () => {
+    const seed = realSeed();
+    const without = [...seed.exercises, ...seed.coreRoutine.items]
+      .filter((x) => !x.imageSourceId)
+      .map((x) => x.name);
+    expect(without).toEqual([]);
+  });
 });

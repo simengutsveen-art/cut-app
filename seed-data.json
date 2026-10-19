@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "seedVersion": "2026-10-09",
+  "seedVersion": "2026-10-19",
   "generatedFrom": "12-ukers cut-plan (Claude Docs) + Cut-tracker.xlsx",
   "disclaimer": "Næringsverdier er typiske verdier fra norske deklarasjoner (ca.). Priser er fra SeSum 9. okt. 2026 (priceSource=sesum-2026-10-09) eller anslag (priceSource=anslag). Ikke medisinske råd.",
   "settings": {
@@ -2530,7 +2530,7 @@
       },
       {
         "name": "McGill curl-up",
-        "imageSourceId": null,
+        "imageSourceId": "Cut_McGill_Curl-Up",
         "dose": "6 + 4 + 2 reps à 10 s",
         "cue": "Ett kne bøyd og hendene under korsryggen. Løft hode og skuldre et par cm. Bytt bein halvveis."
       },
@@ -2542,7 +2542,7 @@
       },
       {
         "name": "Bird dog",
-        "imageSourceId": null,
+        "imageSourceId": "Cut_Bird_Dog",
         "dose": "6 + 4 + 2 reps à 10 s per side",
         "cue": "Strekk motsatt arm og bein. Hold hoften helt rolig."
       },

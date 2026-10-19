@@ -41,6 +41,7 @@ export function AboutScreen() {
       <Card>
         <p>
           Øvelsesbildene er fra <span className="font-semibold">{src.name}</span> ({src.license}).
+          Bird dog og McGill curl-up finnes ikke der og er tegnet for appen.
         </p>
         <p className="mt-1 text-sm break-all">
           <a href={src.repo} target="_blank" rel="noreferrer" className="text-accent underline">

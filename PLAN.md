@@ -131,6 +131,17 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 - **Tester:** `startApp` i e2e trykker «Bruk standardplanen». `e2e/setup.spec.ts` går gjennom hele
   oppsettet (Kari, 16 uker, tre dager, egne øvelser).
 
+## Egne øvelsesbilder (19.10.2026)
+
+- **Bird dog og McGill curl-up** finnes ikke i Free Exercise DB (heller ikke i Everkinetic). wger og
+  Wikimedia Commons har bare sluttstillingen, med ulike personer og lisenser som krever kreditering.
+  De er derfor tegnet for appen (`scripts/draw-exercises.mjs`, `npm run images:draw`): samme figur
+  i start- og sluttstilling, 850 × 567 JPG som de andre bildene, så animasjonen virker likt.
+- Egne tegninger har ID som starter med `Cut_`. `npm run images` henter dem ikke, og appen prøver
+  ikke Free Exercise DB for dem. `seedVersion` 2026-10-19 gir «Oppdater plan» med bildene i
+  core-rutinen.
+- Enhetstesten sjekker at alle øvelser og core-øvelser i seed-fila har bilde.
+
 ## TODO
 
 - **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som

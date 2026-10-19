@@ -44,6 +44,7 @@ Nyttige kommandoer:
 | `npm run e2e`                       | ende-til-ende-tester (Playwright, WebKit, iPhone 14). Første gang: `npx playwright install webkit` |
 | `npm run build` / `npm run preview` | produksjonsbygg og forhåndsvisning på <http://localhost:4173>                                      |
 | `npm run images`                    | henter øvelsesbilder fra Free Exercise DB for nye `imageSourceId` i seed-fila                      |
+| `npm run images:draw`               | tegner øvelsene som mangler i Free Exercise DB (`Cut_…`), med start- og sluttbilde                 |
 | `npm run icons`                     | lager app-ikonene på nytt fra `public/icons/icon.svg`                                              |
 
 ## 2. Legge appen på GitHub Pages (gratis HTTPS)
@@ -203,4 +204,6 @@ eller tømmer nettstedsdata i Safari, forsvinner loggene. Appen ber om varig lag
 ## Kreditering
 
 Øvelsesbildene er fra [Free Exercise DB](https://github.com/yuhonas/free-exercise-db)
-(Unlicense / public domain) og ligger i `public/exercises/`.
+(Unlicense / public domain) og ligger i `public/exercises/`. Bird dog og McGill curl-up finnes ikke
+der. De er tegnet for appen med `npm run images:draw` (`scripts/draw-exercises.mjs`), og ID-ene
+starter med `Cut_`.

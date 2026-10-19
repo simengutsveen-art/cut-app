@@ -4,6 +4,8 @@ import type { Exercise } from '../types';
 import { IconPause, IconPlay } from './icons';
 
 const REMOTE_BASE = 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
+/** Øvelser som ikke finnes i Free Exercise DB, er tegnet for appen (scripts/draw-exercises.mjs). */
+const OWN_PREFIX = 'Cut_';
 
 function localImageUrl(imageSourceId: string, index: 0 | 1): string {
   return `${import.meta.env.BASE_URL}exercises/${encodeURIComponent(imageSourceId)}/${index}.jpg`;
@@ -34,7 +36,8 @@ function useSources(subject: ImageSubject, index: 0 | 1): string[] {
     if (customUrl) list.push(customUrl);
     if (subject.imageSourceId) {
       list.push(localImageUrl(subject.imageSourceId, index));
-      list.push(remoteImageUrl(subject.imageSourceId, index));
+      if (!subject.imageSourceId.startsWith(OWN_PREFIX))
+        list.push(remoteImageUrl(subject.imageSourceId, index));
     }
     return list;
   }, [customUrl, subject.imageSourceId, index]);

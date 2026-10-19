@@ -3,6 +3,7 @@
 //
 // - henter bare bilder som brukes i seed-data.json (øvelser og core-rutinen)
 // - hopper over bilder som allerede finnes
+// - hopper over egne tegninger (ID-er som starter med «Cut_», lages med npm run images:draw)
 // - skriver en tydelig feilmelding hvis en ID ikke finnes
 //
 // Kjør: npm run images
@@ -33,6 +34,7 @@ for (const item of seed.coreRoutine?.items ?? []) use(item.imageSourceId, `core 
 
 const jobs = [];
 for (const id of ids.keys()) {
+  if (id.startsWith('Cut_')) continue;
   if (!/^[A-Za-z0-9_\-()',.]+$/.test(id)) {
     console.error(`✗ Ugyldig imageSourceId «${id}» (brukt av ${ids.get(id).join(', ')})`);
     process.exitCode = 1;
