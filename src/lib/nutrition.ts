@@ -1,4 +1,12 @@
-import type { ExtraFood, Ingredient, Macros, Meal, MealIngredient, SeedIngredient } from '../types';
+import type {
+  ExtraFood,
+  Ingredient,
+  Macros,
+  Meal,
+  MealIngredient,
+  SeedIngredient,
+  Slot,
+} from '../types';
 import { round } from './util';
 
 export interface Totals extends Macros {
@@ -144,7 +152,7 @@ export function dislikedHits(
 /** Sum for en dag: valgte måltider + ekstra poster. */
 export function dayTotals(
   meals: (Pick<Meal, 'ingredientsPerPortion'> | undefined)[],
-  extras: Pick<ExtraFood, 'kcal' | 'protein'>[],
+  extras: Pick<ExtraFood, 'kcal' | 'protein' | 'carbs' | 'fat'>[],
   ingredients: IngredientLookup,
 ): Totals {
   let totals = ZERO_TOTALS;
@@ -152,9 +160,29 @@ export function dayTotals(
     if (meal) totals = addTotals(totals, mealTotals(meal, ingredients));
   }
   for (const extra of extras) {
-    totals = addTotals(totals, { kcal: extra.kcal, protein: extra.protein });
+    totals = addTotals(totals, {
+      kcal: extra.kcal,
+      protein: extra.protein,
+      carbs: extra.carbs,
+      fat: extra.fat,
+    });
   }
   return totals;
+}
+
+/** Spist hittil: avkryssede måltider + hele fleksipotten. */
+export function eatenTotals(
+  meals: Partial<Record<Slot, Pick<Meal, 'ingredientsPerPortion'> | undefined>>,
+  eaten: Partial<Record<Slot, boolean>> | undefined,
+  extras: Pick<ExtraFood, 'kcal' | 'protein' | 'carbs' | 'fat'>[],
+  ingredients: IngredientLookup,
+): Totals {
+  const slots = Object.keys(meals) as Slot[];
+  return dayTotals(
+    slots.filter((s) => eaten?.[s]).map((s) => meals[s]),
+    extras,
+    ingredients,
+  );
 }
 
 export type TargetStatus = 'under' | 'ok' | 'over';
@@ -172,6 +200,13 @@ export function rangeStatus(value: number, [min, max]: [number, number]): Target
   if (v < min) return 'under';
   if (v > max) return 'over';
   return 'ok';
+}
+
+/** Status for inntaket: under målet på en dag som ikke er over betyr bare at noe gjenstår. */
+export type IntakeStatus = TargetStatus | 'remaining';
+
+export function intakeStatus(status: TargetStatus, dayOver: boolean): IntakeStatus {
+  return status === 'under' && !dayOver ? 'remaining' : status;
 }
 
 /** Fargetone for status mot mål: grønn = i rute, gul = under, rød = over. */

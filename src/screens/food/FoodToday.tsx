@@ -18,7 +18,7 @@ import {
   Sheet,
   TextInput,
 } from '../../components/ui';
-import { addExtra, removeExtra, setMeal } from '../../data/dayLogs';
+import { addExtra, removeExtra, setEaten, setMeal } from '../../data/dayLogs';
 import { db } from '../../db';
 import { useDayPlan, type DayPlan } from '../../hooks/useDayPlan';
 import { useToday } from '../../hooks/useToday';
@@ -26,10 +26,10 @@ import { cx } from '../../lib/cx';
 import { addDaysISO, formatDate, formatWeekdayLong } from '../../lib/dates';
 import { fmtNok, fmtSigned, formatNumber, parseDecimal } from '../../lib/format';
 import { capitalize, SLOT_LABELS } from '../../lib/labels';
-import { dislikedHits, mealTotals, statusTone } from '../../lib/nutrition';
+import { dislikedHits, mealTotals, statusTone, type IntakeStatus } from '../../lib/nutrition';
 import { useAppData } from '../../state/appData';
-import { SLOTS, type Meal, type Slot } from '../../types';
-import { DislikeWarning, MacroLine } from './MealBits';
+import { SLOTS, type ExtraFood, type Meal, type Slot } from '../../types';
+import { DislikeWarning, EatenCheck, MacroLine } from './MealBits';
 
 export function FoodToday() {
   const today = useToday();
@@ -70,7 +70,13 @@ export function FoodToday() {
       <SectionTitle>Måltider</SectionTitle>
       <div className="flex flex-col gap-2">
         {SLOTS.map((slot) => (
-          <SlotCard key={slot} slot={slot} day={day} onPick={() => setPicking(slot)} />
+          <SlotCard
+            key={slot}
+            slot={slot}
+            day={day}
+            onPick={() => setPicking(slot)}
+            onEaten={(eaten) => void setEaten(db, date, slot, eaten)}
+          />
         ))}
       </div>
 
@@ -98,6 +104,8 @@ export function FoodToday() {
                 <span className="block font-medium">{x.name}</span>
                 <span className="tabular text-sm text-muted">
                   {formatNumber(x.kcal)} kcal · {formatNumber(x.protein, 1)} g protein
+                  {x.carbs !== undefined && <> · {formatNumber(x.carbs, 1)} g karbo</>}
+                  {x.fat !== undefined && <> · {formatNumber(x.fat, 1)} g fett</>}
                 </span>
               </span>
               <IconButton
@@ -136,40 +144,57 @@ export function FoodToday() {
 
 const STATUS_TEXT = { ok: 'I rute', under: 'Under målet', over: 'Over målet' } as const;
 
+const STATUS_CLASS: Record<IntakeStatus, string> = {
+  ok: 'text-good',
+  under: 'text-warn',
+  over: 'text-bad',
+  remaining: 'text-muted',
+};
+
+const RING_TONE: Record<IntakeStatus, 'accent' | 'good' | 'warn' | 'bad'> = {
+  ...statusTone,
+  remaining: 'accent',
+};
+
 export function DaySummary({ day, compact }: { day: DayPlan; compact?: boolean }) {
   const { settings } = useAppData();
   const target = settings.currentKcalTarget;
   const [pMin, pMax] = settings.proteinTargetG;
+  const { eaten } = day;
   const rings = [
     {
       label: 'Kcal',
-      value: day.totals.kcal,
+      value: eaten.kcal,
       max: target,
-      main: formatNumber(day.totals.kcal),
+      main: formatNumber(eaten.kcal),
       unit: 'kcal',
       target: `mål ${formatNumber(target)} ± ${formatNumber(settings.kcalTolerance)}`,
       status: day.kcal,
+      left: `${formatNumber(Math.max(0, target - eaten.kcal))} kcal igjen`,
     },
     {
       label: 'Protein',
-      value: day.totals.protein,
+      value: eaten.protein,
       max: pMin,
-      main: formatNumber(day.totals.protein),
+      main: formatNumber(eaten.protein),
       unit: 'g protein',
       target: `mål ${pMin}–${pMax} g`,
       status: day.protein,
+      left: `${formatNumber(Math.max(0, pMin - eaten.protein))} g igjen`,
     },
   ];
   const minis = [
     {
       label: 'Karbo',
-      value: `${formatNumber(day.totals.carbs)} g`,
+      value: `${formatNumber(eaten.carbs, 1)} g`,
       hint: compact ? null : `mål ${settings.carbTargetG.join('–')}`,
+      testId: 'day-carbs',
     },
     {
       label: 'Fett',
-      value: `${formatNumber(day.totals.fat)} g`,
+      value: `${formatNumber(eaten.fat, 1)} g`,
       hint: compact ? null : `mål ${settings.fatTargetG.join('–')}`,
+      testId: 'day-fat',
     },
     { label: 'Dagens pris', value: fmtNok(day.totals.priceNok), hint: null, testId: 'day-price' },
   ];
@@ -182,7 +207,7 @@ export function DaySummary({ day, compact }: { day: DayPlan; compact?: boolean }
               value={r.value}
               max={r.max}
               label={r.label}
-              tone={statusTone[r.status]}
+              tone={RING_TONE[r.status]}
               size={118}
               stroke={11}
             >
@@ -190,18 +215,17 @@ export function DaySummary({ day, compact }: { day: DayPlan; compact?: boolean }
               <span className="mt-1 text-[11px] font-medium text-muted">{r.unit}</span>
             </Ring>
             <p className="mt-2 text-[13px] text-muted">{r.target}</p>
-            <p
-              className={cx(
-                'text-[13px] font-semibold',
-                r.status === 'ok' ? 'text-good' : r.status === 'under' ? 'text-warn' : 'text-bad',
-              )}
-            >
-              {STATUS_TEXT[r.status]}
+            <p className={cx('text-[13px] font-semibold', STATUS_CLASS[r.status])}>
+              {r.status === 'remaining' ? r.left : STATUS_TEXT[r.status]}
             </p>
           </div>
         ))}
       </div>
-      <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-[var(--c-hairline)] pt-3.5">
+      <p className="tabular mt-3 text-center text-[13px] text-muted" data-testid="day-planned">
+        Planlagt: {formatNumber(day.totals.kcal)} kcal · {formatNumber(day.totals.protein)} g
+        protein
+      </p>
+      <dl className="mt-3 grid grid-cols-3 gap-2 border-t border-[var(--c-hairline)] pt-3.5">
         {minis.map((m) => (
           <div key={m.label} className="min-w-0">
             <dt className="text-[12px] text-muted">{m.label}</dt>
@@ -216,42 +240,59 @@ export function DaySummary({ day, compact }: { day: DayPlan; compact?: boolean }
   );
 }
 
-function SlotCard({ slot, day, onPick }: { slot: Slot; day: DayPlan; onPick: () => void }) {
+function SlotCard({
+  slot,
+  day,
+  onPick,
+  onEaten,
+}: {
+  slot: Slot;
+  day: DayPlan;
+  onPick: () => void;
+  onEaten: (eaten: boolean) => void;
+}) {
   const { ingredientsById, settings } = useAppData();
   const meal = day.meals[slot];
   const chosen = !!day.log.meals[slot];
+  const eaten = !!day.log.eaten?.[slot];
   const totals = meal ? mealTotals(meal, ingredientsById) : null;
   const hits = meal ? dislikedHits(meal, ingredientsById, settings.dislikedFoods) : [];
   return (
-    <button
-      type="button"
-      onClick={onPick}
-      aria-label={`${SLOT_LABELS[slot]}: ${meal?.name ?? 'ikke valgt'}. Trykk for å bytte.`}
-      className="surface pressable flex w-full items-center gap-3 rounded-[22px] px-4 py-3.5 text-left"
-    >
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-2 text-xs font-semibold tracking-wide text-muted uppercase">
-          {SLOT_LABELS[slot]}
-          {!chosen && <span className="font-normal normal-case">(standard)</span>}
-        </span>
-        <span className="block font-semibold">
-          {meal ? (
-            <>
-              <span className="text-muted">{meal.id}</span> {meal.name}
-            </>
-          ) : (
-            'Velg måltid'
+    <div className="surface flex items-center rounded-[22px] pl-1.5">
+      <EatenCheck checked={eaten} onChange={onEaten} label={`${SLOT_LABELS[slot]} spist`} />
+      <button
+        type="button"
+        onClick={onPick}
+        aria-label={`${SLOT_LABELS[slot]}: ${meal?.name ?? 'ikke valgt'}. Trykk for å bytte.`}
+        className="pressable flex min-w-0 flex-1 items-center gap-3 rounded-r-[22px] py-3.5 pr-4 pl-1.5 text-left"
+      >
+        <span className="min-w-0 flex-1">
+          <span className="flex items-center gap-2 text-xs font-semibold tracking-wide text-muted uppercase">
+            {SLOT_LABELS[slot]}
+            {!chosen && <span className="font-normal normal-case">(standard)</span>}
+            {eaten && (
+              <span className="font-semibold tracking-normal text-good normal-case">Spist</span>
+            )}
+          </span>
+          <span className="block font-semibold">
+            {meal ? (
+              <>
+                <span className="text-muted">{meal.id}</span> {meal.name}
+              </>
+            ) : (
+              'Velg måltid'
+            )}
+          </span>
+          {totals && <MacroLine totals={totals} />}
+          {hits.length > 0 && (
+            <span className="mt-1 block">
+              <DislikeWarning hits={hits} />
+            </span>
           )}
         </span>
-        {totals && <MacroLine totals={totals} />}
-        {hits.length > 0 && (
-          <span className="mt-1 block">
-            <DislikeWarning hits={hits} />
-          </span>
-        )}
-      </span>
-      <IconChevronRight className="shrink-0 text-muted" />
-    </button>
+        <IconChevronRight className="shrink-0 text-muted" />
+      </button>
+    </div>
   );
 }
 
@@ -335,14 +376,25 @@ function ExtraSheet({
 }: {
   open: boolean;
   onClose: () => void;
-  onAdd: (extra: { name: string; kcal: number; protein: number }) => void;
+  onAdd: (extra: Omit<ExtraFood, 'id'>) => void;
 }) {
   const [name, setName] = useState('');
   const [kcal, setKcal] = useState('');
   const [protein, setProtein] = useState('');
+  const [carbs, setCarbs] = useState('');
+  const [fat, setFat] = useState('');
   const kcalN = parseDecimal(kcal);
-  const proteinN = protein.trim() === '' ? 0 : parseDecimal(protein);
-  const valid = name.trim() !== '' && kcalN !== null && kcalN >= 0 && proteinN !== null;
+  const optional = (v: string) => (v.trim() === '' ? 0 : parseDecimal(v));
+  const proteinN = optional(protein);
+  const carbsN = optional(carbs);
+  const fatN = optional(fat);
+  const valid =
+    name.trim() !== '' &&
+    kcalN !== null &&
+    kcalN >= 0 &&
+    proteinN !== null &&
+    carbsN !== null &&
+    fatN !== null;
   return (
     <Sheet open={open} title="Legg til i fleksipotten" onClose={onClose}>
       <form
@@ -350,10 +402,18 @@ function ExtraSheet({
         onSubmit={(e) => {
           e.preventDefault();
           if (!valid) return;
-          onAdd({ name: name.trim(), kcal: Math.round(kcalN!), protein: proteinN ?? 0 });
+          onAdd({
+            name: name.trim(),
+            kcal: Math.round(kcalN!),
+            protein: proteinN ?? 0,
+            carbs: carbsN ?? 0,
+            fat: fatN ?? 0,
+          });
           setName('');
           setKcal('');
           setProtein('');
+          setCarbs('');
+          setFat('');
         }}
       >
         <Field label="Navn" htmlFor="extra-name">
@@ -380,6 +440,22 @@ function ExtraSheet({
               inputMode="decimal"
               value={protein}
               onChange={(e) => setProtein(e.target.value)}
+            />
+          </Field>
+          <Field label="Karbo (g)" htmlFor="extra-carbs">
+            <TextInput
+              id="extra-carbs"
+              inputMode="decimal"
+              value={carbs}
+              onChange={(e) => setCarbs(e.target.value)}
+            />
+          </Field>
+          <Field label="Fett (g)" htmlFor="extra-fat">
+            <TextInput
+              id="extra-fat"
+              inputMode="decimal"
+              value={fat}
+              onChange={(e) => setFat(e.target.value)}
             />
           </Field>
         </div>

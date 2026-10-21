@@ -289,6 +289,8 @@ export interface ExtraFood {
   name: string;
   kcal: number;
   protein: number;
+  carbs?: number;
+  fat?: number;
 }
 
 export interface DayLog {
@@ -297,6 +299,8 @@ export interface DayLog {
   weightKg?: number | null;
   steps?: number | null;
   meals: Partial<Record<Slot, string>>;
+  /** Måltider som er krysset av som spist */
+  eaten?: Partial<Record<Slot, boolean>>;
   extras: ExtraFood[];
   coreDone: boolean;
   /** Smerte 0–10 */

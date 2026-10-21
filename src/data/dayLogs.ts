@@ -31,6 +31,16 @@ export function setMeal(db: CutDB, date: string, slot: Slot, mealId: string | nu
   });
 }
 
+/** Kryss av (eller fjern avkrysning for) et måltid som spist. */
+export function setEaten(db: CutDB, date: string, slot: Slot, eaten: boolean) {
+  return updateDayLog(db, date, (log) => {
+    const next = { ...log.eaten };
+    if (eaten) next[slot] = true;
+    else delete next[slot];
+    log.eaten = next;
+  });
+}
+
 export function addExtra(db: CutDB, date: string, extra: Omit<ExtraFood, 'id'>) {
   return updateDayLog(db, date, (log) => {
     log.extras.push({ ...extra, id: newId('x') });

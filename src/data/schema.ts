@@ -390,12 +390,15 @@ export const dayLogSchema = z.object({
   weightKg: z.number().positive().nullable().optional(),
   steps: z.number().int().nonnegative().nullable().optional(),
   meals: z.partialRecord(slotSchema, z.string()),
+  eaten: z.partialRecord(slotSchema, z.boolean()).optional(),
   extras: z.array(
     z.object({
       id: z.string(),
       name: z.string(),
       kcal: z.number(),
       protein: z.number(),
+      carbs: z.number().optional(),
+      fat: z.number().optional(),
     }),
   ),
   coreDone: z.boolean(),

@@ -255,8 +255,11 @@ export interface CsvRow {
   date: string;
   weightKg?: number | null;
   steps?: number | null;
+  /** Spist (avkryssede måltider + fleksipott) */
   kcal: number;
   protein: number;
+  plannedKcal: number;
+  plannedProtein: number;
   coreDone: boolean;
   pain?: number | null;
   note?: string;
@@ -274,7 +277,18 @@ function csvText(s: string | undefined): string {
 
 /** Semikolonseparert med desimalkomma og BOM, så norsk Excel åpner den riktig. */
 export function dayLogsToCsv(rows: CsvRow[]): string {
-  const header = ['Dato', 'Vekt (kg)', 'Skritt', 'Kcal', 'Protein (g)', 'Core', 'Smerte', 'Notat'];
+  const header = [
+    'Dato',
+    'Vekt (kg)',
+    'Skritt',
+    'Kcal spist',
+    'Protein spist (g)',
+    'Kcal planlagt',
+    'Protein planlagt (g)',
+    'Core',
+    'Smerte',
+    'Notat',
+  ];
   const lines = rows
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((r) =>
@@ -284,6 +298,8 @@ export function dayLogsToCsv(rows: CsvRow[]): string {
         r.steps ?? '',
         Math.round(r.kcal),
         csvNumber(r.protein, 1),
+        Math.round(r.plannedKcal),
+        csvNumber(r.plannedProtein, 1),
         r.coreDone ? 'ja' : 'nei',
         r.pain ?? '',
         csvText(r.note),

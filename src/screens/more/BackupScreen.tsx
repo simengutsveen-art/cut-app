@@ -13,7 +13,7 @@ import {
 import { db } from '../../db';
 import { formatDate, todayISO } from '../../lib/dates';
 import { defaultMealsForDate, effectiveMeals } from '../../lib/mealPrep';
-import { dayTotals } from '../../lib/nutrition';
+import { dayTotals, eatenTotals } from '../../lib/nutrition';
 import { useAppData } from '../../state/appData';
 import { SLOTS } from '../../types';
 
@@ -110,17 +110,17 @@ export function BackupScreen() {
         log.meals,
         defaultMealsForDate(log.date, app.settings, app.plan.mealPrepRotation),
       );
-      const totals = dayTotals(
-        SLOTS.map((s) => app.mealsById.get(meals[s])),
-        log.extras,
-        app.ingredientsById,
-      );
+      const bySlot = Object.fromEntries(SLOTS.map((s) => [s, app.mealsById.get(meals[s])]));
+      const planned = dayTotals(Object.values(bySlot), log.extras, app.ingredientsById);
+      const eaten = eatenTotals(bySlot, log.eaten, log.extras, app.ingredientsById);
       return {
         date: log.date,
         weightKg: log.weightKg,
         steps: log.steps,
-        kcal: totals.kcal,
-        protein: totals.protein,
+        kcal: eaten.kcal,
+        protein: eaten.protein,
+        plannedKcal: planned.kcal,
+        plannedProtein: planned.protein,
         coreDone: log.coreDone,
         pain: log.pain,
         note: log.note,

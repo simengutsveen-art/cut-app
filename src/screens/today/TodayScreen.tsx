@@ -30,7 +30,7 @@ import {
   SectionTitle,
   TextArea,
 } from '../../components/ui';
-import { patchDayLog } from '../../data/dayLogs';
+import { patchDayLog, setEaten } from '../../data/dayLogs';
 import { isNewerSeed } from '../../data/seedSync';
 import { startWorkout } from '../../data/workouts';
 import { db } from '../../db';
@@ -57,6 +57,7 @@ import { dayPlanFor, phaseForWeek } from '../../lib/prescription';
 import { stepGoal } from '../../lib/progress';
 import { useAppData } from '../../state/appData';
 import { DaySummary } from '../food/FoodToday';
+import { EatenChips } from '../food/MealBits';
 
 const BACKUP_REMINDER_DAYS = 7;
 
@@ -364,6 +365,10 @@ export function TodayScreen() {
         Mat
       </SectionTitle>
       <DaySummary day={day} compact />
+      <EatenChips
+        eaten={day.log.eaten}
+        onChange={(slot, eaten) => void setEaten(db, day.log.date, slot, eaten)}
+      />
 
       {backCare && (
         <>

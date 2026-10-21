@@ -142,6 +142,17 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
   core-rutinen.
 - Enhetstesten sjekker at alle øvelser og core-øvelser i seed-fila har bilde.
 
+## Føre det som er spist (21.10.2026)
+
+- **Kryss av måltider:** hvert måltid på Mat har en rund avkrysning («Frokost spist» osv.), og I dag har
+  fire avkrysninger under matkortet. Lagres som `DayLog.eaten` (valgfritt felt, ingen ny
+  `db.version`). Bytter man måltid på en avkrysset plass, forblir den avkrysset.
+- **Ringene viser spist hittil** (avkryssede måltider + hele fleksipotten), ikke hele planen. Planlagt
+  total står under ringene. Under målet på dagen i dag eller senere: «750 kcal igjen» i nøytral farge.
+  Tidligere dager som endte under målet: «Under målet» i gult. Dagens pris er fortsatt planlagt pris.
+- **Fleksipotten** har valgfrie felt for karbo og fett (tomt = 0). Fleksipotten regnes alltid som spist.
+- **CSV-eksporten** har kolonner for både spist og planlagt kcal og protein.
+
 ## TODO
 
 - **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som

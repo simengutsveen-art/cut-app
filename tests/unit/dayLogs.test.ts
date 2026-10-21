@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addExtra, patchDayLog, removeExtra, setMeal } from '../../src/data/dayLogs';
+import { addExtra, patchDayLog, removeExtra, setEaten, setMeal } from '../../src/data/dayLogs';
 import { freshDb } from '../helpers';
 
 describe('dagslogg', () => {
@@ -24,6 +24,32 @@ describe('dagslogg', () => {
     expect(log.meals).toEqual({});
     expect(log.extras).toEqual([]);
     expect(log.weightKg).toBe(80.2);
+    db.close();
+  });
+
+  it('krysser av og fjerner avkrysning for et måltid', async () => {
+    const db = freshDb();
+    await setEaten(db, '2026-10-12', 'frokost', true);
+    await setEaten(db, '2026-10-12', 'middag', true);
+    expect((await db.dayLogs.get('2026-10-12'))!.eaten).toEqual({ frokost: true, middag: true });
+
+    await setEaten(db, '2026-10-12', 'frokost', false);
+    expect((await db.dayLogs.get('2026-10-12'))!.eaten).toEqual({ middag: true });
+    db.close();
+  });
+
+  it('bytte av måltid beholder avkrysningen', async () => {
+    const db = freshDb();
+    await setEaten(db, '2026-10-12', 'lunsj', true);
+    await setMeal(db, '2026-10-12', 'lunsj', 'L3');
+    expect((await db.dayLogs.get('2026-10-12'))!.eaten).toEqual({ lunsj: true });
+    db.close();
+  });
+
+  it('fleksipost med karbo og fett lagres', async () => {
+    const db = freshDb();
+    await addExtra(db, '2026-10-12', { name: 'Bar', kcal: 200, protein: 20, carbs: 18, fat: 7 });
+    expect((await db.dayLogs.get('2026-10-12'))!.extras[0]).toMatchObject({ carbs: 18, fat: 7 });
     db.close();
   });
 });

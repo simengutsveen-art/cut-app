@@ -62,3 +62,15 @@ test('startdato valgt fram i tid vises som planlagt start', async ({ page }) => 
   await expect(card).toContainText('Planen starter mandag 19. oktober');
   await expect(card.getByRole('button', { name: 'Start i dag i stedet' })).toBeVisible();
 });
+
+test('kryss av måltider fra I dag', async ({ page }) => {
+  await startApp(page);
+  const kcal = page.getByRole('meter', { name: 'Kcal' });
+  await expect(kcal).toHaveAttribute('aria-valuenow', '0');
+  await page.getByRole('checkbox', { name: 'Frokost spist' }).check();
+  await expect(kcal).toHaveAttribute('aria-valuenow', '664');
+
+  await page.goto('./#/mat');
+  await expect(page.getByRole('checkbox', { name: 'Frokost spist' })).toBeChecked();
+  await expect(page.getByRole('meter', { name: 'Kcal' })).toHaveAttribute('aria-valuenow', '664');
+});

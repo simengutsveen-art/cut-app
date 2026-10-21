@@ -3,6 +3,8 @@ import {
   amountLines,
   dayTotals,
   dislikedHits,
+  eatenTotals,
+  intakeStatus,
   kcalStatus,
   mealTotals,
   rangeStatus,
@@ -118,5 +120,52 @@ describe('mål', () => {
   it('protein i området', () => {
     expect(rangeStatus(186.3, [170, 190])).toBe('ok');
     expect(rangeStatus(150, [170, 190])).toBe('under');
+  });
+});
+
+describe('spist hittil', () => {
+  const day = { frokost: meal('F1'), lunsj: meal('L1'), middag: meal('D1'), kveldsmat: meal('K1') };
+
+  it('teller bare avkryssede måltider', () => {
+    const t = eatenTotals(day, { frokost: true, middag: true }, [], ingredients);
+    const expectedKcal =
+      mealTotals(meal('F1'), ingredients).kcal + mealTotals(meal('D1'), ingredients).kcal;
+    expect(t.kcal).toBeCloseTo(expectedKcal, 6);
+    expect(t.protein).toBeCloseTo(46.2 + 50.4, 0);
+  });
+
+  it('ingen avkrysning gir null', () => {
+    expect(eatenTotals(day, undefined, [], ingredients).kcal).toBe(0);
+    expect(eatenTotals(day, { lunsj: false }, [], ingredients).kcal).toBe(0);
+  });
+
+  it('fleksipotten regnes som spist, med karbo og fett', () => {
+    const extras = [
+      { id: 'x1', name: 'Bar', kcal: 200, protein: 20, carbs: 18, fat: 7 },
+      { id: 'x2', name: 'Kaffe', kcal: 10, protein: 1 },
+    ];
+    const t = eatenTotals(day, {}, extras, ingredients);
+    expect(t).toMatchObject({ kcal: 210, protein: 21, carbs: 18, fat: 7 });
+  });
+
+  it('planlagt dagstotal tar også med karbo og fett fra fleksipotten', () => {
+    const t = dayTotals([], [{ kcal: 200, protein: 20, carbs: 18, fat: 7 }], ingredients);
+    expect(t).toMatchObject({ kcal: 200, protein: 20, carbs: 18, fat: 7 });
+  });
+});
+
+describe('status for inntak', () => {
+  it('under målet i dag betyr «igjen»', () => {
+    expect(intakeStatus('under', false)).toBe('remaining');
+  });
+
+  it('under målet på en dag som er over, er «under»', () => {
+    expect(intakeStatus('under', true)).toBe('under');
+  });
+
+  it('i rute og over målet er uendret', () => {
+    expect(intakeStatus('ok', false)).toBe('ok');
+    expect(intakeStatus('over', false)).toBe('over');
+    expect(intakeStatus('over', true)).toBe('over');
   });
 });

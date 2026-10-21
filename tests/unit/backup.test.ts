@@ -24,6 +24,7 @@ async function populated() {
       weightKg: 80.2,
       steps: 9500,
       meals: { lunsj: 'L3' },
+      eaten: { frokost: true, lunsj: true },
       extras: [],
       coreDone: true,
       pain: 2,
@@ -32,7 +33,10 @@ async function populated() {
       date: '2026-10-13',
       weightKg: 80.0,
       meals: {},
-      extras: [{ id: 'x1', name: 'Bar', kcal: 200, protein: 20 }],
+      extras: [
+        { id: 'x1', name: 'Bar', kcal: 200, protein: 20 },
+        { id: 'x2', name: 'Skyr', kcal: 120, protein: 18, carbs: 8, fat: 0.4 },
+      ],
       coreDone: false,
       note: 'Sliten; "lang dag"',
     },
@@ -137,14 +141,18 @@ describe('backup', () => {
         date: '2026-10-12',
         weightKg: 80.2,
         steps: 9500,
-        kcal: 2347.4,
-        protein: 186.3,
+        kcal: 1310.2,
+        protein: 98.4,
+        plannedKcal: 2347.4,
+        plannedProtein: 186.3,
         coreDone: true,
         pain: 2,
       },
     ]);
     const lines = csv.slice(1).split('\r\n');
-    expect(lines[0]).toBe('Dato;Vekt (kg);Skritt;Kcal;Protein (g);Core;Smerte;Notat');
-    expect(lines[1]).toBe('12.10.2026;80,2;9500;2347;186,3;ja;2;');
+    expect(lines[0]).toBe(
+      'Dato;Vekt (kg);Skritt;Kcal spist;Protein spist (g);Kcal planlagt;Protein planlagt (g);Core;Smerte;Notat',
+    );
+    expect(lines[1]).toBe('12.10.2026;80,2;9500;1310;98,4;2347;186,3;ja;2;');
   });
 });
