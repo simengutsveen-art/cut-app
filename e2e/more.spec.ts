@@ -49,6 +49,11 @@ test('lag en ny øvelse og legg den i økt 4', async ({ page }) => {
 });
 
 test('eksporter → nullstill → importer → dataene er tilbake', async ({ page }) => {
+  // WebKit på macOS kan dele filer, og da viser appen «Del» i stedet for å laste ned.
+  // Slå av Web Share så testen alltid får en nedlasting, uansett plattform.
+  await page.addInitScript(() => {
+    navigator.canShare = () => false;
+  });
   await startApp(page);
   const weight = page.getByRole('textbox', { name: 'Morgenvekt' });
   await weight.fill('80,2');
