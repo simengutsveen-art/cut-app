@@ -3,7 +3,7 @@
 /*
  * Designsystem for Cut.
  * Rolig og flatt: mørkt tema er standard (treningssenter). Nøytral, nesten svart bakgrunn, litt
- * lysere kort med tynn kant, én dempet blå aksent. Grønn/gul/rød bare som status.
+ * lysere kort med tynn kant, én volt-aksent (gulgrønn). Grønn/gul/rød bare som status.
  * Grafseriene er validert for fargeblindhet.
  */
 :root,
@@ -17,9 +17,9 @@
   --c-hairline: rgb(255 255 255 / 0.08);
   --c-fg: #ececef;
   --c-muted: #9a9aa3;
-  --c-accent: #6aa6d9;
-  --c-accent-strong: #8dbbe3;
-  --c-on-accent: #0a1622;
+  --c-accent: #d4f34a;
+  --c-accent-strong: #e3f88a;
+  --c-on-accent: #141a00;
   --c-good: #4cc38a;
   --c-warn: #e5b54a;
   --c-bad: #e8695f;
@@ -42,8 +42,8 @@
   --c-hairline: rgb(0 0 0 / 0.08);
   --c-fg: #111114;
   --c-muted: #5f5f68;
-  --c-accent: #2f6ea6;
-  --c-accent-strong: #245a8a;
+  --c-accent: #4f6b00;
+  --c-accent-strong: #405700;
   --c-on-accent: #ffffff;
   --c-good: #1d7a4c;
   --c-warn: #8a6100;
