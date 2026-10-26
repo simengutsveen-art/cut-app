@@ -153,6 +153,19 @@ Etter hver milepæl: `npm run check` (typecheck → lint → test → build → 
 - **Fleksipotten** har valgfrie felt for karbo og fett (tomt = 0). Fleksipotten regnes alltid som spist.
 - **CSV-eksporten** har kolonner for både spist og planlagt kcal og protein.
 
+## Rolig mørk (26.10.2026)
+
+- **Uttrykk:** erstatter glød og korn fra redesignet 12.10. Nøytral, nesten svart bakgrunn (`#111113`),
+  lysere grå kort, dempet blå aksent (`#6aa6d9`, mørkere `#2f6ea6` i lyst tema). Grønn, gul og rød
+  bare som status. Lyst tema har samme flate stil.
+- **Typografi:** ingen små overskrifter med store bokstaver. Overlinjer er vanlig, dempet tekst
+  («Onsdag 14. oktober»). Ukeoversikten i Trening viser «Man», «Tir», «Ons» osv.
+- **Fanelinje:** vanlig linje i full bredde nederst med tynn skillelinje. Aktiv fane vises bare med farge.
+- **Kort og lister:** farget kant bare på varsel- og feilkort. Ukeoversikt og måltider er grupperte
+  rader med tynne skillelinjer, som i iOS-innstillinger. Knappene er flate.
+- **Bevegelse:** trinnvis inntoning ved fanebytte er fjernet. Trykkfeedback, ringer som tegnes og ark
+  som glir opp er beholdt.
+
 ## TODO
 
 - **Krydder, hvitløk, chili, karri og buljongterning** står i oppskriftsstegene, men finnes ikke som

@@ -54,7 +54,7 @@ export function ExerciseHistoryScreen() {
       <ExerciseMotion subject={exercise} />
 
       {pr && (
-        <Card className="mt-4" tone="good">
+        <Card className="mt-4">
           <div className="flex items-center gap-2">
             <IconTrophy className="text-good" />
             <div>
@@ -136,7 +136,7 @@ export function ExerciseHistoryScreen() {
             <li key={h.logId}>
               <Link
                 to={`/trening/okt/${h.logId}`}
-                className="surface pressable block rounded-[22px] px-4 py-3"
+                className="surface pressable block rounded-2xl px-4 py-3"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold">{formatDate(h.date)}</span>

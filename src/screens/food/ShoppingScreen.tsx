@@ -159,7 +159,7 @@ export function ShoppingScreen() {
         </section>
       ))}
 
-      <Card className="mt-6" tone="accent">
+      <Card className="mt-6">
         <div className="flex items-baseline justify-between">
           <span className="font-semibold">Sum å kjøpe</span>
           <span className="tabular text-2xl font-bold" data-testid="shopping-total">

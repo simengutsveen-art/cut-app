@@ -72,7 +72,7 @@ function Summary({ summary }: { summary: SeedUpdateSummary }) {
   return (
     <>
       <SectionTitle>Oppsummering</SectionTitle>
-      <Card tone="good" role="status">
+      <Card role="status">
         <p className="font-semibold">Planen er oppdatert til {summary.toVersion}.</p>
         <p className="text-sm text-muted">
           {summary.added.length} nye · {summary.updated.length} oppdatert ·{' '}

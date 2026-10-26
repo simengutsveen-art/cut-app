@@ -28,7 +28,7 @@ export function EatenCheck({
           setShown(e.target.checked);
           onChange(e.target.checked);
         }}
-        className="peer pressable h-8 w-8 cursor-pointer appearance-none rounded-full bg-surface-2 shadow-[inset_0_0_0_2px_var(--c-surface-3)] checked:bg-good checked:shadow-[0_6px_18px_-8px_var(--c-good)]"
+        className="peer pressable h-8 w-8 cursor-pointer appearance-none rounded-full bg-surface-2 shadow-[inset_0_0_0_2px_var(--c-surface-3)] checked:bg-good checked:shadow-none"
       />
       <IconCheck
         size={18}

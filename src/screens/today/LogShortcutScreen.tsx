@@ -50,7 +50,7 @@ export function LogShortcutScreen() {
     <Page>
       <PageHeader title="Registrering" />
       {result?.ok && (
-        <Card tone="good" role="status">
+        <Card role="status">
           <p className="flex items-center gap-2 text-lg font-bold">
             <IconCheck className="text-good" /> Lagret
           </p>

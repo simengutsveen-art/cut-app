@@ -51,9 +51,9 @@ function ActiveWorkoutPill({ log }: { log: WorkoutLog }) {
   return (
     <Link
       to={`/trening/okt/${log.id}`}
-      className="glass pressable flex min-h-13 items-center gap-3 rounded-[22px] px-4 py-2.5"
+      className="glass pressable flex min-h-13 items-center gap-3 rounded-2xl px-4 py-2.5"
     >
-      <span className="pulse-today h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true" />
+      <span className="h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true" />
       <span className="flex-1 font-semibold">
         {name} pågår · {done} sett
       </span>
@@ -94,7 +94,7 @@ function RestTimer({ log }: { log: WorkoutLog }) {
       aria-live={finished ? 'assertive' : 'off'}
       aria-label="Pausetimer"
       className={cx(
-        'glass relative overflow-hidden rounded-[22px]',
+        'glass relative overflow-hidden rounded-2xl',
         finished && 'shadow-[inset_0_0_0_1.5px_var(--c-good)]',
       )}
     >

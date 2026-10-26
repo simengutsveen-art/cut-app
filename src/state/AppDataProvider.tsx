@@ -69,7 +69,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       const color = getComputedStyle(root).getPropertyValue('--c-bg').trim();
       document
         .querySelector('meta[name="theme-color"]')
-        ?.setAttribute('content', color || (resolved === 'light' ? '#f3f3f6' : '#0b0b10'));
+        ?.setAttribute('content', color || (resolved === 'light' ? '#f2f2f4' : '#111113'));
     };
     apply();
     if (theme !== 'system' || !window.matchMedia) return;

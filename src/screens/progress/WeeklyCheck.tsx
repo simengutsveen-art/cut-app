@@ -31,7 +31,7 @@ export function WeeklyCheck({
   const pace = paceFactorFor(seed.settings.plannedLossKgPerWeek, settings.plannedLossKgPerWeek);
 
   return (
-    <Card tone={isSunday ? 'accent' : undefined} aria-label="Ukessjekk">
+    <Card aria-label="Ukessjekk">
       <div className="flex items-start justify-between gap-2">
         <div>
           <h2 className="text-lg font-bold">Ukessjekk · uke {rec.week}</h2>

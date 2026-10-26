@@ -15,8 +15,7 @@ export function AppShell() {
   }
   return (
     <div className="safe-top min-h-dvh">
-      <div className="app-backdrop" aria-hidden="true" />
-      <main className={dockVisible ? 'pb-tabbar-timer relative z-[1]' : 'pb-tabbar relative z-[1]'}>
+      <main className={dockVisible ? 'pb-tabbar-timer' : 'pb-tabbar'}>
         <Outlet />
       </main>
       <WorkoutDock onVisibleChange={setDockVisible} />

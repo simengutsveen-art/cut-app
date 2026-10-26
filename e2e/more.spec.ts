@@ -49,6 +49,10 @@ test('lag en ny øvelse og legg den i økt 4', async ({ page }) => {
 });
 
 test('eksporter → nullstill → importer → dataene er tilbake', async ({ page }) => {
+  // WebKit på macOS kan dele filer og viser da «Del / lagre fila». Testen gjelder nedlastingen.
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'canShare', { value: undefined, configurable: true });
+  });
   await startApp(page);
   const weight = page.getByRole('textbox', { name: 'Morgenvekt' });
   await weight.fill('80,2');

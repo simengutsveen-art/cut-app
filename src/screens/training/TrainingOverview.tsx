@@ -91,7 +91,7 @@ export function TrainingOverview() {
       />
 
       {active ? (
-        <Card tone="accent" className="rounded-[26px]">
+        <Card>
           <p className="eyebrow text-accent">Økt pågår</p>
           <h2 className="mt-1 text-[24px] font-bold tracking-[-0.025em]">
             {sessionsById.get(active.sessionId)?.name}
@@ -115,7 +115,7 @@ export function TrainingOverview() {
           onStart={() => void start(todaySession)}
         />
       ) : (
-        <Card className="rounded-[26px]">
+        <Card>
           <p className="eyebrow">I dag</p>
           <h2 className="mt-1 text-[24px] font-bold tracking-[-0.025em]">Hviledag: lang tur</h2>
           <p className="mt-1 text-[15px] text-muted">Restitusjon er en del av planen.</p>
@@ -171,7 +171,7 @@ export function TrainingOverview() {
                         : 'bg-surface-2',
                   )}
                 >
-                  <span className="text-[10px] font-semibold uppercase opacity-80">
+                  <span className="text-[11px] font-semibold capitalize opacity-80">
                     {weekdayName(isoWeekday(date), 'short')}
                   </span>
                   <span className="num mt-0.5 text-[16px] font-bold">

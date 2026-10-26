@@ -146,7 +146,7 @@ function ActiveWorkout({ log }: { log: WorkoutLog }) {
         back="/trening"
         actions={<StopWorkoutButton compact log={log} onStopped={afterStop} />}
       />
-      <div className="surface mb-4 rounded-[22px] p-4">
+      <div className="surface mb-4 rounded-2xl p-4">
         <div className="flex items-baseline justify-between gap-2">
           <p className="text-[15px] font-semibold" aria-live="polite">
             {totalDone} av {totalSets} sett ferdig
@@ -255,7 +255,7 @@ function DoneWorkout({ log }: { log: WorkoutLog }) {
         title={session?.name ?? 'Økt'}
         back="/trening"
       />
-      <Card tone="good" className="mb-4 rounded-[26px]" aria-label="Oppsummering">
+      <Card className="mb-4 rounded-2xl" aria-label="Oppsummering">
         <p className="eyebrow text-good">Oppsummering</p>
         <dl className="mt-3 grid grid-cols-4 gap-2">
           {tiles.map((t) => (

@@ -232,8 +232,7 @@ export function SetupScreen() {
   const { title, subtitle } = TITLES[step];
   return (
     <div className="safe-top min-h-dvh">
-      <div className="app-backdrop" aria-hidden="true" />
-      <Page key={step} className="relative z-[1] pb-36">
+      <Page key={step} className="pb-36">
         <header className="pt-5 pb-5">
           <div className="flex items-center justify-between gap-2">
             <p className="eyebrow">
@@ -258,7 +257,7 @@ export function SetupScreen() {
               style={{ width: `${((index + 1) / STEPS.length) * 100}%` }}
             />
           </div>
-          <h1 className="mt-4 text-[30px] leading-[1.08] font-bold tracking-[-0.03em]">{title}</h1>
+          <h1 className="mt-4 text-[28px] leading-tight font-bold tracking-[-0.02em]">{title}</h1>
           <p className="mt-1.5 text-[15px] text-muted">{subtitle}</p>
         </header>
 
@@ -270,7 +269,7 @@ export function SetupScreen() {
         {step === 'oppsummering' && <SummaryStep draft={draft} update={update} />}
       </Page>
 
-      <div className="glass fixed inset-x-0 bottom-0 z-20 px-4 pt-3 pb-[max(14px,env(safe-area-inset-bottom))]">
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--c-hairline)] bg-bg px-4 pt-3 pb-[max(14px,env(safe-area-inset-bottom))]">
         <div className="mx-auto flex max-w-xl flex-col gap-2">
           {error && (
             <p className="text-[14px] font-medium text-bad" role="alert">
@@ -327,16 +326,15 @@ function Welcome({
   ];
   return (
     <div className="safe-top min-h-dvh">
-      <div className="app-backdrop" aria-hidden="true" />
-      <Page className="relative z-[1] flex min-h-dvh flex-col justify-center pt-10 pb-10">
+      <Page className="flex min-h-dvh flex-col justify-center pt-10 pb-10">
         <img
           src={`${import.meta.env.BASE_URL}icons/icon-192.png`}
           alt=""
           width={72}
           height={72}
-          className="h-[72px] w-[72px] rounded-[20px] shadow-[0_18px_40px_-18px_var(--c-accent)]"
+          className="h-[72px] w-[72px] rounded-[18px]"
         />
-        <h1 className="mt-6 text-[34px] leading-[1.05] font-bold tracking-[-0.03em]">
+        <h1 className="mt-6 text-[32px] leading-tight font-bold tracking-[-0.02em]">
           Velkommen til Cut
         </h1>
         <p className="mt-3 text-[17px] leading-snug text-muted">
@@ -849,7 +847,7 @@ function SummaryStep({ draft, update }: StepProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <Card tone="accent" aria-label="Kalorier">
+      <Card aria-label="Kalorier">
         <p className="eyebrow">Kalorier per dag</p>
         <p className="num mt-1 text-[34px] leading-none font-bold">
           {formatNumber(kcal)} <span className="text-[17px] font-semibold text-muted">kcal</span>

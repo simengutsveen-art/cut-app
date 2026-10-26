@@ -133,7 +133,7 @@ export function formatDayMonthRange(startISO: string, endISO: string): string {
 export function weekdayName(weekday: number, style: 'long' | 'short' = 'long'): string {
   // 2024-01-01 var en mandag.
   const date = addDays(new Date(2024, 0, 1), weekday - 1);
-  return format(date, style === 'long' ? 'EEEE' : 'EEEEEE', { locale: nb });
+  return format(date, style === 'long' ? 'EEEE' : 'EEE', { locale: nb });
 }
 
 export function formatTime(ms: number): string {

@@ -4,7 +4,7 @@ import { startApp } from './helpers';
 test('første oppstart seeder, og «I dag» viser riktig uke', async ({ page }) => {
   await startApp(page, new Date('2026-10-14T09:00:00+02:00'));
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Uke 1 av 12 · Oppstart');
-  await expect(page.getByText('onsdag 14. oktober', { exact: true })).toBeVisible();
+  await expect(page.getByText('Onsdag 14. oktober', { exact: true })).toBeVisible();
 });
 
 test('planen venter på «Start nå», og uke 1 starter den dagen', async ({ page }) => {

@@ -483,7 +483,7 @@ export function SettingsScreen() {
         />
       </Card>
 
-      <div className="sticky-above-tabbar z-10 mt-6 flex flex-col gap-2 rounded-2xl bg-bg/90 py-2 backdrop-blur">
+      <div className="sticky-above-tabbar z-10 mt-6 flex flex-col gap-2 bg-bg py-2">
         {error && (
           <p className="text-sm text-bad" role="alert">
             {error}

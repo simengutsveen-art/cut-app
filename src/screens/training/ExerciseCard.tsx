@@ -56,7 +56,7 @@ export function ExerciseCard({
   return (
     <article
       className={cx(
-        'surface overflow-hidden rounded-[22px] transition-shadow',
+        'surface overflow-hidden rounded-2xl transition-shadow',
         allDone ? 'tone-good' : open && 'tone-accent',
       )}
       aria-label={exercise.name}
@@ -229,7 +229,7 @@ function SetList({
   return (
     <div>
       <div
-        className="grid grid-cols-[32px_minmax(0,1fr)_minmax(0,1.3fr)_44px] items-center gap-2 px-2 pb-1.5 text-[11px] font-semibold tracking-[0.04em] text-muted uppercase"
+        className="grid grid-cols-[32px_minmax(0,1fr)_minmax(0,1.3fr)_44px] items-center gap-2 px-2 pb-1.5 text-xs font-medium text-muted"
         aria-hidden="true"
       >
         <span className="text-center">Sett</span>
@@ -412,9 +412,7 @@ function SetEditor({
         />
       </div>
       <fieldset>
-        <legend className="mb-1.5 text-[11px] font-semibold tracking-[0.04em] text-muted uppercase">
-          RIR (valgfritt)
-        </legend>
+        <legend className="mb-1.5 text-[13px] font-medium text-muted">RIR (valgfritt)</legend>
         <div className="flex gap-1.5">
           {RIR_CHOICES.map((r) => (
             <button

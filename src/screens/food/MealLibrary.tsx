@@ -58,7 +58,7 @@ export function MealLibrary() {
               <li key={meal.id}>
                 <Link
                   to={`/mat/bibliotek/${meal.id}`}
-                  className="surface pressable flex flex-col gap-1 rounded-[22px] px-4 py-3.5"
+                  className="surface pressable flex flex-col gap-1 rounded-2xl px-4 py-3.5"
                 >
                   <span className="flex flex-wrap items-center gap-2">
                     <span className="font-semibold">

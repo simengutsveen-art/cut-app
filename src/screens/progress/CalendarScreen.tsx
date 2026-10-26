@@ -71,7 +71,7 @@ export function CalendarScreen() {
         }
       />
 
-      <Card className="rounded-[26px]">
+      <Card>
         <div className="flex items-end justify-between gap-3">
           <p className="num text-[30px] leading-none font-bold tracking-[-0.02em]">
             {progress.finished ? 'Ferdig' : `Dag ${progress.dayNumber}`}
@@ -181,7 +181,7 @@ function PhaseCard({
     <section
       aria-label={name}
       className={cx(
-        'surface overflow-hidden rounded-[24px]',
+        'surface overflow-hidden rounded-2xl',
         isCurrent &&
           'shadow-[inset_0_0_0_1.5px_color-mix(in_srgb,var(--c-accent)_55%,transparent)]',
       )}

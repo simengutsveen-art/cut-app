@@ -38,7 +38,7 @@ export function PlanHero({ today }: { today: string }) {
   const percent = Math.round(progress.fraction * 100);
 
   return (
-    <section className="surface overflow-hidden rounded-[26px]" aria-label="Fremdrift i planen">
+    <section className="surface overflow-hidden rounded-2xl" aria-label="Fremdrift i planen">
       <Link
         to="/fremgang/kalender"
         className="flex items-center gap-4 p-4 pb-3 transition-colors active:bg-surface-2"

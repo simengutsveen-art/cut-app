@@ -261,7 +261,7 @@ export function ProgressScreen() {
 
 function Stat({ label, value, hint }: { label: string; value: string; hint: string }) {
   return (
-    <div className="surface rounded-[22px] p-3.5">
+    <div className="surface rounded-2xl p-3.5">
       <dt className="text-[13px] font-medium text-muted">{label}</dt>
       <dd className="num mt-1 text-[26px] leading-none font-bold">{value}</dd>
       <dd className="mt-1.5 text-[12px] text-muted">{hint}</dd>
@@ -271,8 +271,8 @@ function Stat({ label, value, hint }: { label: string; value: string; hint: stri
 
 function LinkRowCard({ to, title, text }: { to: string; title: string; text: string }) {
   return (
-    <Link to={to} className="surface pressable flex items-center gap-3 rounded-[22px] p-4">
-      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/12 text-accent">
+    <Link to={to} className="surface pressable flex items-center gap-3 rounded-2xl p-4">
+      <span className="flex h-8 w-8 items-center justify-center text-accent">
         <IconCalendar size={22} />
       </span>
       <span className="min-w-0 flex-1">

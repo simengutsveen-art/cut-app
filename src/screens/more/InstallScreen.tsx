@@ -129,7 +129,7 @@ export function InstallScreen() {
       />
 
       {install.platform === 'installed' && (
-        <Card tone="good" className="flex items-center gap-3">
+        <Card className="flex items-center gap-3">
           <IconCheck size={22} className="shrink-0 text-good" />
           <p className="text-[15px]">Cut er installert. Du bruker appen fra Hjem-skjermen.</p>
         </Card>
@@ -149,7 +149,7 @@ export function InstallScreen() {
       )}
 
       {install.canPrompt && !shouldInstallFromChrome(install) && (
-        <Card tone="accent">
+        <Card>
           <p className="text-[15px]">Telefonen kan installere Cut direkte.</p>
           <Button className="mt-3" block size="lg" onClick={() => void showInstallPrompt()}>
             <IconPhone size={20} /> Installer Cut

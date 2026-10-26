@@ -22,12 +22,11 @@ import { IconCheck, IconChevronLeft, IconChevronRight, IconX } from './icons';
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'good';
 
 const buttonVariants: Record<ButtonVariant, string> = {
-  primary:
-    'bg-accent text-on-accent shadow-[0_10px_28px_-14px_var(--c-accent)] hover:bg-accent-strong',
-  secondary: 'bg-surface-2 text-fg shadow-[inset_0_0_0_1px_var(--c-hairline)] hover:bg-surface-3',
+  primary: 'bg-accent text-on-accent hover:bg-accent-strong',
+  secondary: 'bg-surface-2 text-fg hover:bg-surface-3',
   ghost: 'bg-transparent text-accent hover:bg-surface-2',
   danger: 'bg-bad text-on-status',
-  good: 'bg-good text-on-status shadow-[0_10px_28px_-14px_var(--c-good)]',
+  good: 'bg-good text-on-status',
 };
 
 export function Button({
@@ -46,10 +45,10 @@ export function Button({
     <button
       type={type}
       className={cx(
-        'pressable inline-flex items-center justify-center gap-2 font-semibold tracking-[-0.01em] disabled:opacity-40',
+        'pressable inline-flex items-center justify-center gap-2 font-semibold disabled:opacity-40',
         size === 'sm' && 'min-h-11 rounded-xl px-3.5 text-[15px]',
-        size === 'md' && 'min-h-12 rounded-2xl px-4 text-base',
-        size === 'lg' && 'min-h-14 rounded-2xl px-5 text-[17px]',
+        size === 'md' && 'min-h-12 rounded-xl px-4 text-base',
+        size === 'lg' && 'min-h-14 rounded-xl px-5 text-[17px]',
         block && 'w-full',
         buttonVariants[variant],
         className,
@@ -85,9 +84,7 @@ export function IconButton({
 // ---------- Layout ----------
 
 export function Page({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={cx('stagger relative mx-auto w-full max-w-xl px-4', className)}>{children}</div>
-  );
+  return <div className={cx('relative mx-auto w-full max-w-xl px-4', className)}>{children}</div>;
 }
 
 export function PageHeader({
@@ -110,7 +107,7 @@ export function PageHeader({
       {back && (
         <IconButton
           label="Tilbake"
-          className="mb-2 -ml-1 bg-surface-2/70 shadow-[inset_0_0_0_1px_var(--c-hairline)]"
+          className="mb-1 -ml-2.5"
           onClick={() => (back === true ? navigate(-1) : navigate(back))}
         >
           <IconChevronLeft size={22} />
@@ -119,7 +116,7 @@ export function PageHeader({
       <div className="flex items-end gap-2">
         <div className="min-w-0 flex-1">
           {eyebrow && <p className="eyebrow mb-1">{eyebrow}</p>}
-          <h1 className="text-[30px] leading-[1.08] font-bold tracking-[-0.03em] break-words">
+          <h1 className="text-[28px] leading-tight font-bold tracking-[-0.02em] break-words">
             {title}
           </h1>
           {subtitle && <p className="mt-1.5 text-[15px] text-muted">{subtitle}</p>}
@@ -130,7 +127,8 @@ export function PageHeader({
   );
 }
 
-type Tone = 'good' | 'warn' | 'bad' | 'accent';
+/** Kort får bare farget kant ved advarsler. */
+type Tone = 'warn' | 'bad';
 
 export function Card({
   children,
@@ -143,10 +141,7 @@ export function Card({
   tone?: Tone;
 } & Omit<HTMLAttributes<HTMLElement>, 'className' | 'children'>) {
   return (
-    <section
-      className={cx('surface rounded-[22px] p-4', tone && `tone-${tone}`, className)}
-      {...rest}
-    >
+    <section className={cx('surface rounded-2xl p-4', tone && `tone-${tone}`, className)} {...rest}>
       {children}
     </section>
   );
@@ -154,8 +149,8 @@ export function Card({
 
 export function SectionTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
   return (
-    <div className="mt-8 mb-3 flex items-end justify-between gap-2">
-      <h2 className="text-[19px] leading-tight font-semibold tracking-[-0.02em]">{children}</h2>
+    <div className="mt-8 mb-2.5 flex items-end justify-between gap-2">
+      <h2 className="text-lg leading-tight font-semibold">{children}</h2>
       {action}
     </div>
   );
@@ -173,7 +168,7 @@ export function Badge({
   return (
     <span
       className={cx(
-        'inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold tracking-[0.01em]',
+        'inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-medium',
         tone === 'neutral' && 'bg-surface-3 text-fg',
         tone === 'good' && 'bg-good/15 text-good',
         tone === 'warn' && 'bg-warn/15 text-warn',
@@ -206,12 +201,12 @@ export function LinkRow({
       className="flex min-h-14 items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2 active:bg-surface-2"
     >
       {icon && (
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/12 text-accent">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center text-accent">
           {icon}
         </span>
       )}
       <div className="min-w-0 flex-1">
-        <div className="font-medium tracking-[-0.01em]">{title}</div>
+        <div className="font-medium">{title}</div>
         {subtitle && <div className="text-sm text-muted">{subtitle}</div>}
       </div>
       {right}
@@ -222,7 +217,7 @@ export function LinkRow({
 
 export function ListCard({ children }: { children: ReactNode }) {
   return (
-    <div className="surface divide-y divide-[var(--c-hairline)] overflow-hidden rounded-[22px]">
+    <div className="surface divide-y divide-[var(--c-hairline)] overflow-hidden rounded-2xl">
       {children}
     </div>
   );
@@ -240,11 +235,7 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div
-      role="tablist"
-      aria-label={label}
-      className="flex gap-1 rounded-2xl bg-surface-2 p-1 shadow-[inset_0_0_0_1px_var(--c-hairline)]"
-    >
+    <div role="tablist" aria-label={label} className="flex gap-1 rounded-xl bg-surface-2 p-1">
       {options.map((o) => (
         <button
           key={o.value}
@@ -253,8 +244,8 @@ export function Segmented<T extends string>({
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
           className={cx(
-            'pressable min-h-10 flex-1 rounded-xl px-2 text-sm font-semibold',
-            value === o.value ? 'surface text-fg' : 'text-muted hover:text-fg',
+            'min-h-10 flex-1 rounded-lg px-2 text-sm font-medium transition-colors',
+            value === o.value ? 'bg-surface-3 text-fg' : 'text-muted hover:text-fg',
           )}
         >
           {o.label}
@@ -266,7 +257,7 @@ export function Segmented<T extends string>({
 
 export function EmptyState({ children }: { children: ReactNode }) {
   return (
-    <p className="rounded-[22px] bg-surface-2/60 px-4 py-6 text-center text-[15px] text-muted shadow-[inset_0_0_0_1px_var(--c-hairline)]">
+    <p className="rounded-2xl border border-dashed border-[var(--c-hairline)] px-4 py-6 text-center text-[15px] text-muted">
       {children}
     </p>
   );
@@ -297,7 +288,7 @@ export function Field({
 }
 
 export const inputClass =
-  'field min-h-12 w-full rounded-2xl border-0 px-3.5 text-fg placeholder:text-muted/60';
+  'field min-h-12 w-full rounded-xl border-0 px-3.5 text-fg placeholder:text-muted/60';
 
 export function TextInput({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cx(inputClass, className)} {...rest} />;
@@ -439,7 +430,7 @@ export function Checkbox({
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          className="peer pressable h-7 w-7 cursor-pointer appearance-none rounded-full bg-surface-2 shadow-[inset_0_0_0_2px_var(--c-surface-3)] checked:bg-accent checked:shadow-[0_6px_18px_-8px_var(--c-accent)]"
+          className="peer pressable h-7 w-7 cursor-pointer appearance-none rounded-full bg-surface-2 shadow-[inset_0_0_0_2px_var(--c-surface-3)] checked:bg-accent checked:shadow-none"
         />
         <IconCheck
           size={16}
@@ -492,7 +483,7 @@ export function Sheet({
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       <div
-        className="animate-fade absolute inset-0 bg-black/55 backdrop-blur-[2px]"
+        className="animate-fade absolute inset-0 bg-[var(--c-scrim)]"
         aria-hidden="true"
         onClick={onClose}
       />
@@ -502,11 +493,11 @@ export function Sheet({
         aria-modal="true"
         aria-label={typeof title === 'string' ? title : undefined}
         tabIndex={-1}
-        className="animate-sheet safe-bottom surface relative flex max-h-[88dvh] w-full max-w-xl flex-col rounded-t-[28px] focus:outline-none"
+        className="animate-sheet safe-bottom surface relative flex max-h-[88dvh] w-full max-w-xl flex-col rounded-t-[20px] focus:outline-none"
       >
         <div className="mx-auto mt-2 h-1.5 w-10 rounded-full bg-surface-3" aria-hidden="true" />
         <div className="flex items-center gap-2 px-4 pt-1 pb-2">
-          <h2 className="min-w-0 flex-1 text-[19px] font-semibold tracking-[-0.02em]">{title}</h2>
+          <h2 className="min-w-0 flex-1 text-lg font-semibold">{title}</h2>
           <IconButton label="Lukk" onClick={onClose} className="bg-surface-2">
             <IconX size={20} />
           </IconButton>
@@ -543,7 +534,7 @@ export function InlineConfirm({
     );
   }
   return (
-    <div className="tone-bad surface animate-fade rounded-[22px] p-3.5" role="alert">
+    <div className="tone-bad surface animate-fade rounded-2xl p-3.5" role="alert">
       <p className="mb-3 text-sm">{message}</p>
       <div className="flex gap-2">
         <Button variant="secondary" className="flex-1" onClick={() => setAsking(false)}>

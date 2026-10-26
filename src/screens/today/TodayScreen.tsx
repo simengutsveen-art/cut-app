@@ -51,6 +51,7 @@ import {
   todayISO,
 } from '../../lib/dates';
 import { formatNumber } from '../../lib/format';
+import { capitalize } from '../../lib/labels';
 import { prepEventOnDate } from '../../lib/mealPrep';
 import { backAlert } from '../../lib/pain';
 import { dayPlanFor, phaseForWeek } from '../../lib/prescription';
@@ -143,7 +144,7 @@ export function TodayScreen() {
 
   return (
     <Page>
-      <PageHeader eyebrow={formatWeekdayLong(today)} title={title} />
+      <PageHeader eyebrow={capitalize(formatWeekdayLong(today))} title={title} />
       <InstallBanner />
 
       {(seedUpdate || backupDue) && (
@@ -169,7 +170,7 @@ export function TodayScreen() {
       )}
 
       {status.kind === 'waiting' ? (
-        <Card tone="accent" className="rounded-[26px] p-5" aria-label="Start planen">
+        <Card className="p-5" aria-label="Start planen">
           <div className="flex items-center gap-4">
             <Ring value={0} max={1} label="Planen er ikke startet" size={76} stroke={8}>
               <span className="num text-[18px] font-bold">{settings.weeks * 7}</span>
@@ -296,7 +297,7 @@ export function TodayScreen() {
         Dagens økt
       </SectionTitle>
       {activeWorkout ? (
-        <Card tone="accent">
+        <Card>
           <p className="eyebrow text-accent">Økt pågår</p>
           <h2 className="mt-1 text-[22px] font-bold tracking-[-0.02em]">
             {sessionsById.get(activeWorkout.sessionId)?.name}
@@ -429,7 +430,7 @@ function MetricTile({
   footer: ReactNode;
 }) {
   return (
-    <div className="surface flex min-w-0 flex-col gap-2 rounded-[22px] p-3">
+    <div className="surface flex min-w-0 flex-col gap-2 rounded-2xl p-3">
       <label
         htmlFor={htmlFor}
         className="flex items-center gap-1.5 text-[13px] font-semibold text-muted"
@@ -528,7 +529,7 @@ function ReminderLink({
   return (
     <Link
       to={to}
-      className="surface pressable flex min-h-14 items-center gap-3 rounded-[22px] px-4 py-3"
+      className="surface pressable flex min-h-14 items-center gap-3 rounded-2xl px-4 py-3"
     >
       <span
         className={cx(

@@ -68,7 +68,7 @@ export function FoodToday() {
       <DaySummary day={day} />
 
       <SectionTitle>Måltider</SectionTitle>
-      <div className="flex flex-col gap-2">
+      <div className="surface divide-y divide-[var(--c-hairline)] overflow-hidden rounded-2xl">
         {SLOTS.map((slot) => (
           <SlotCard
             key={slot}
@@ -94,12 +94,9 @@ export function FoodToday() {
           Ingen ekstra poster. Legg til snacks, drikke eller middag ute.
         </p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="surface divide-y divide-[var(--c-hairline)] overflow-hidden rounded-2xl">
           {day.log.extras.map((x) => (
-            <li
-              key={x.id}
-              className="surface flex items-center gap-3 rounded-[20px] py-1 pr-1 pl-4"
-            >
+            <li key={x.id} className="flex items-center gap-3 py-1 pr-1 pl-4">
               <span className="min-w-0 flex-1">
                 <span className="block font-medium">{x.name}</span>
                 <span className="tabular text-sm text-muted">
@@ -199,7 +196,7 @@ export function DaySummary({ day, compact }: { day: DayPlan; compact?: boolean }
     { label: 'Dagens pris', value: fmtNok(day.totals.priceNok), hint: null, testId: 'day-price' },
   ];
   return (
-    <Card className="rounded-[26px]">
+    <Card>
       <div className="grid grid-cols-2 gap-3">
         {rings.map((r) => (
           <div key={r.label} className="flex flex-col items-center text-center">
@@ -258,21 +255,19 @@ function SlotCard({
   const totals = meal ? mealTotals(meal, ingredientsById) : null;
   const hits = meal ? dislikedHits(meal, ingredientsById, settings.dislikedFoods) : [];
   return (
-    <div className="surface flex items-center rounded-[22px] pl-1.5">
+    <div className="flex items-center pl-1.5">
       <EatenCheck checked={eaten} onChange={onEaten} label={`${SLOT_LABELS[slot]} spist`} />
       <button
         type="button"
         onClick={onPick}
         aria-label={`${SLOT_LABELS[slot]}: ${meal?.name ?? 'ikke valgt'}. Trykk for å bytte.`}
-        className="pressable flex min-w-0 flex-1 items-center gap-3 rounded-r-[22px] py-3.5 pr-4 pl-1.5 text-left"
+        className="flex min-w-0 flex-1 items-center gap-3 py-3.5 pr-4 pl-1.5 text-left transition-colors active:bg-surface-2"
       >
         <span className="min-w-0 flex-1">
-          <span className="flex items-center gap-2 text-xs font-semibold tracking-wide text-muted uppercase">
+          <span className="flex items-center gap-2 text-[13px] font-medium text-muted">
             {SLOT_LABELS[slot]}
-            {!chosen && <span className="font-normal normal-case">(standard)</span>}
-            {eaten && (
-              <span className="font-semibold tracking-normal text-good normal-case">Spist</span>
-            )}
+            {!chosen && <span className="font-normal">(standard)</span>}
+            {eaten && <span className="font-semibold text-good">Spist</span>}
           </span>
           <span className="block font-semibold">
             {meal ? (

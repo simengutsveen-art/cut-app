@@ -36,10 +36,8 @@ export function Stepper({
 
   return (
     <div className="flex min-w-0 flex-col gap-1">
-      <span className="text-[11px] font-semibold tracking-[0.04em] text-muted uppercase">
-        {label}
-      </span>
-      <div className="flex items-stretch overflow-hidden rounded-2xl bg-surface shadow-[inset_0_0_0_1px_var(--c-hairline)] focus-within:shadow-[inset_0_0_0_2px_var(--c-accent)]">
+      <span className="text-[13px] font-medium text-muted">{label}</span>
+      <div className="flex items-stretch overflow-hidden rounded-xl bg-surface shadow-[inset_0_0_0_1px_var(--c-hairline)] focus-within:shadow-[inset_0_0_0_2px_var(--c-accent)]">
         <button
           type="button"
           aria-label={`${label} minus ${formatNumber(step, 2)}`}

@@ -28,7 +28,7 @@ export function DayMark({ date, today, planned, done }: DayMarkProps) {
           'num flex h-9 w-9 items-center justify-center rounded-full text-[15px] font-semibold',
           done && 'bg-good text-on-status',
           done && isToday && 'ring-2 ring-accent ring-offset-2 ring-offset-surface',
-          !done && isToday && 'pulse-today bg-accent text-on-accent',
+          !done && isToday && 'bg-accent text-on-accent',
           !done && !isToday && planned && !past && 'text-fg ring-[1.5px] ring-muted ring-inset',
           !done &&
             !isToday &&

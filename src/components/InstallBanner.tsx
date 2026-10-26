@@ -52,7 +52,7 @@ export function InstallBanner() {
   const samsung = viaChrome && !inApp;
 
   return (
-    <Card tone="accent" className="mb-4 flex items-start gap-3" aria-label="Installer appen">
+    <Card className="mb-4 flex items-start gap-3" aria-label="Installer appen">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/15 text-accent">
         <IconPhone size={22} />
       </span>

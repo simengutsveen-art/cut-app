@@ -26,7 +26,7 @@ export function SessionCard({
   const exercises = prescription.map((p) => exercisesById.get(p.exerciseId)).filter((e) => !!e);
   const sets = prescription.reduce((n, p) => n + p.sets, 0);
   return (
-    <Card tone={done ? 'good' : undefined} className="rounded-[26px]">
+    <Card>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="eyebrow">{done ? 'Fullført' : (eyebrow ?? 'Planlagt i dag')}</p>

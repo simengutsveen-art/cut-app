@@ -81,7 +81,7 @@ function PrepCard({ event, done, isToday }: { event: PrepEvent; done: boolean; i
   ];
   const dayName = capitalize(weekdayName(PREP_WEEKDAY[event.key]));
   return (
-    <Card tone={done ? 'good' : isToday ? 'accent' : undefined}>
+    <Card>
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="text-lg font-bold">

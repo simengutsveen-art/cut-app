@@ -26,8 +26,8 @@ export default defineConfig({
         scope: base,
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#090b0f',
-        theme_color: '#090b0f',
+        background_color: '#111113',
+        theme_color: '#111113',
         categories: ['health', 'fitness'],
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
